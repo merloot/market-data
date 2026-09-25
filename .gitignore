@@ -1,0 +1,11 @@
+/bin
+*.exe
+*.out
+
+.ide
+.vscode
+
+.env
+.env.local
+
+/tmp/
