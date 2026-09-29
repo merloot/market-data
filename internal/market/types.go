@@ -19,7 +19,7 @@ type CurrencyData struct {
 }
 
 type MarketData struct {
-	CurrencyPrice     float64
+	CurrentPrice     float64
 	MarketCap         float64
 	CirculatingSupply float64
 	TotalSupply       float64
@@ -28,7 +28,7 @@ type MarketData struct {
 
 
 type MarketDataChart struct {
-	Price [][2]float64
-	MarketCap [][2]float64
+	Prices [][2]float64
+	MarketCaps [][2]float64
 	TotalVolume [][2]float64
 }
