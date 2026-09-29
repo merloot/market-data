@@ -10,9 +10,11 @@ type Provider interface {
 
 	GetLogo(ctx context.Context, currency string) (string, error)
 
-	CheckCurrentData(ctx context.Context, currencies []string) (map[string]CurrencyData, error)
+	CheckCurrencyData(ctx context.Context, currencies []CurrencyToFind) (map[string]CurrencyData, error)
 
-	GetMarketDataList(ctx context.Context, currency string, days int) (MarketDataChart, error)
+	GetMarketDataList(ctx context.Context, currencies []string) (map[string]MarketData, error)
 
-	GetMarketDataRange(ctx context.Context, currency string, form, to time.Time) (MarketDataChart, error)
+	GetMarketDataChart(ctx context.Context, currency string, days int) (MarketDataChart, error)
+
+	GetMarketDataChartRange(ctx context.Context, currency string, from, to time.Time) (MarketDataChart, error)
 }
