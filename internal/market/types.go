@@ -26,7 +26,6 @@ type MarketData struct {
 	LastUpdated       time.Time
 }
 
-
 type MarketDataChart struct {
 	Prices [][2]float64
 	MarketCaps [][2]float64
