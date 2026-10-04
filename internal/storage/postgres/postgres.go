@@ -2,18 +2,13 @@ package postgres
 
 import (
 	"context"
-	"embed"
 	"fmt"
 	"log/slog"
 	"time"
 
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/jackc/pgx/v5/stdlib"
 	"github.com/merloot/market-data/internal/config"
-	"github.com/pressly/goose/v3"
 )
-
-var migrationsFS embed.FS
 
 type Repo struct {
 	pool *pgxpool.Pool
@@ -56,26 +51,14 @@ func New(ctx context.Context, cfg config.DatabaseConfig, opts ...Options) (*Repo
 	return repo, nil
 }
 
+func (r *Repo) poolConn() *pgxpool.Pool {
+	return r.pool
+}
+
 func (r *Repo) Close() {
 	if r.pool != nil {
 		r.pool.Close()
 	}
-}
-
-func (r *Repo) Migrate(ctx context.Context) error {
-	goose.SetBaseFS(migrationsFS)
-	defer goose.SetBaseFS(nil)
-
-	if err := goose.SetDialect("postgres"); err != nil {
-		return fmt.Errorf("Goose dialect : %w", err)
-	}
-
-	db := stdlib.OpenDBFromPool(r.pool)
-	if err := goose.UpContext(ctx, db, "migrations"); err != nil {
-		return fmt.Errorf("Goose up: %w", err)
-	}
-
-	return nil
 }
 
 func (r *Repo) pingWithRetry(ctx context.Context, timeout time.Duration, retries int) error {
