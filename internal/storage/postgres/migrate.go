@@ -10,7 +10,9 @@ import (
 	"github.com/pressly/goose/v3"
 )
 
+//go:embed migrations/*.sql
 var migrationsFS embed.FS
+
 var migrationDIR = "migrations"
 
 func init() {
