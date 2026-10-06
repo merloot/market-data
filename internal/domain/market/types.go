@@ -10,6 +10,15 @@ type Currency struct {
 	Provider      string
 }
 
+type MarketDataHistory struct {
+	Currency          string
+	Price             float64
+	MarketCap         float64
+	CirculatingSupply float64
+	TotalSupply       float64
+	Timestamp         time.Time
+}
+
 type CurrencyToFind struct {
 	Provider string
 	Symbol   string
@@ -34,6 +43,14 @@ type MarketDataChart struct {
 	Prices      [][2]float64
 	MarketCaps  [][2]float64
 	TotalVolume [][2]float64
+}
+
+type MarketDataRow struct {
+	Currency      string
+	Price         float64
+	MarketCap     float64
+	PriceDiff     float64
+	MarketCapDiff float64
 }
 
 const (
