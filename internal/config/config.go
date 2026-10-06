@@ -9,6 +9,8 @@ import (
 type Config struct {
 	Database DatabaseConfig
 	HTTP     HTTPConfig
+	Redis    RedisConfig
+	Queue    QueueConfig
 }
 
 func Load() (*Config, error) {
