@@ -1,4 +1,4 @@
-package market_test
+package coingecko_test
 
 import (
 	"context"
@@ -7,7 +7,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/merloot/market-data/internal/market"
+	"github.com/merloot/market-data/internal/domain/market"
+	"github.com/merloot/market-data/internal/provider/coingecko"
 )
 
 func TestCoinGecko_GetMarketDataList(t *testing.T) {
@@ -48,7 +49,7 @@ func TestCoinGecko_GetMarketDataList(t *testing.T) {
 	}))
 	defer srv.Close()
 
-	p := market.NewCoinGeckoWithBaseUrl("", srv.URL)
+	p := coingecko.NewWithBaseUrl("", srv.URL)
 
 	got, err := p.GetMarketDataList(context.Background(), []string{"btc", "eth"})
 	if err != nil {
@@ -75,7 +76,7 @@ func TestCoinGecko_RateLimited(t *testing.T) {
 	}))
 	defer srv.Close()
 
-	p := market.NewCoinGeckoWithBaseUrl("", srv.URL)
+	p := coingecko.NewWithBaseUrl("", srv.URL)
 	_, err := p.GetMarketDataList(context.Background(), []string{"btc"})
 
 	if !errors.Is(err, market.ErrRateLimited) {
@@ -91,8 +92,8 @@ func TestCoinGecko_HTTPError(t *testing.T) {
 	}))
 	defer srv.Close()
 
-	p := market.NewCoinGeckoWithBaseUrl("", srv.URL)
-	_, err := p.GetMarketDataList(context.Background(),[]string{"btc"})
+	p := coingecko.NewWithBaseUrl("", srv.URL)
+	_, err := p.GetMarketDataList(context.Background(), []string{"btc"})
 
 	if !errors.Is(err, market.ErrUpstream) {
 		t.Fatalf("Error = %v,want ErrUpstream", err)
