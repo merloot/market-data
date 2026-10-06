@@ -19,7 +19,7 @@ func main() {
 	_ = godotenv.Load()
 
 	if err := run(); err != nil {
-		fmt.Errorf("Worker failed: %w", err)
+		slog.Error("Worker failed", "err", err)
 		os.Exit(1)
 	}
 }
