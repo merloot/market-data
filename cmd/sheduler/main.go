@@ -50,7 +50,7 @@ func run() error {
 	}
 
 	if len(tasks) == 0 {
-		fmt.Errorf("No tasks to schedule")
+		return fmt.Errorf("No tasks to schedule")
 	}
 
 	log.Info("Tasks ready", "total", len(tasks), "backend", cfg.Queue.Backend)
