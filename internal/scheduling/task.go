@@ -12,8 +12,3 @@ type Task struct {
 type Scheduler interface {
 	Run(ctx context.Context) error
 }
-
-type Builder interface {
-	Name() string
-	Build() ([]Task, error)
-}

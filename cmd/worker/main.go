@@ -10,9 +10,9 @@ import (
 
 	"github.com/joho/godotenv"
 	"github.com/merloot/market-data/internal/config"
-	"github.com/merloot/market-data/internal/scheduling/asynq"
-	"github.com/merloot/market-data/internal/scheduling/river"
 	"github.com/merloot/market-data/internal/worker"
+	"github.com/merloot/market-data/internal/worker/asynq"
+	"github.com/merloot/market-data/internal/worker/river"
 )
 
 func main() {
@@ -50,7 +50,7 @@ func run() error {
 	defer cleanup()
 
 	log.Info("Worker staring", "backend", cfg.Queue.Backend)
-	if err := w.Run(ctx); err != nil {
+	if err := w.Run(ctx); err != nil && err != context.Canceled {
 		return err
 	}
 

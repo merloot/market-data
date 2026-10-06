@@ -6,6 +6,11 @@ import (
 	"log/slog"
 )
 
+type Builder interface {
+	Name() string
+	Build() ([]Task, error)
+}
+
 type Registry struct {
 	builders []Builder
 	log      *slog.Logger
