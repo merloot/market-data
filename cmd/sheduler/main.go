@@ -10,9 +10,9 @@ import (
 
 	"github.com/joho/godotenv"
 	"github.com/merloot/market-data/internal/config"
-	"github.com/merloot/market-data/internal/schedule"
-	asynqshedule "github.com/merloot/market-data/internal/schedule/asynq"
-	riverschedule "github.com/merloot/market-data/internal/schedule/river"
+	"github.com/merloot/market-data/internal/scheduling"
+	"github.com/merloot/market-data/internal/scheduling/asynq"
+	"github.com/merloot/market-data/internal/scheduling/river"
 	"github.com/merloot/market-data/internal/storage/postgres"
 )
 
@@ -42,7 +42,7 @@ func run() error {
 	}
 	defer repo.Close()
 
-	registry := schedule.NewRegistry(log, nil)
+	registry := scheduling.NewRegistry(log, nil)
 
 	tasks, err := registry.Tasks(ctx)
 	if err != nil {
@@ -73,21 +73,21 @@ func run() error {
 func buildScheduler(
 	ctx context.Context,
 	cfg *config.Config,
-	tasks []schedule.Task,
+	tasks []scheduling.Task,
 	log *slog.Logger,
-) (schedule.Scheduler, func(), error) {
+) (scheduling.Scheduler, func(), error) {
 	switch cfg.Queue.Backend {
 	case "redis":
-		s, err := asynqshedule.Build(ctx, cfg.Redis.Addr, tasks, log)
+		s, err := asynq.NewSchedule(ctx, cfg.Redis.Addr, tasks, log)
 		if err != nil {
 			return nil, nil, err
 		}
 		return s, func() {}, nil
 
 	case "postgres":
-		s, cleanup, err := riverschedule.Build(ctx, cfg.Database.URL, tasks, log)
+		s, cleanup, err := river.NewSchedule(ctx, cfg.Database.URL, tasks, log)
 		if err != nil {
-			return nil, nil, nil
+			return nil, nil, err
 		}
 		return s, cleanup, nil
 	default:

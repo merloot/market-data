@@ -13,7 +13,7 @@ import (
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/merloot/market-data/internal/schedule"
+	"github.com/merloot/market-data/internal/scheduling"
 )
 
 type Scheduler struct {
@@ -21,10 +21,10 @@ type Scheduler struct {
 	log    *slog.Logger
 }
 
-func Build(
+func NewSchedule(
 	ctx context.Context,
 	dsn string,
-	tasks []schedule.Task,
+	tasks []scheduling.Task,
 	log *slog.Logger,
 ) (*Scheduler, func(), error) {
 	pool, err := pgxpool.New(ctx, dsn)
@@ -57,7 +57,7 @@ func (s *Scheduler) Run(ctx context.Context) error {
 	return s.client.Start(ctx)
 }
 
-func buildPeriodicJobs(tasks []schedule.Task) ([]*river.PeriodicJob, error) {
+func buildPeriodicJobs(tasks []scheduling.Task) ([]*river.PeriodicJob, error) {
 	jobs := make([]*river.PeriodicJob, 0, len(tasks))
 	for _, task := range tasks {
 		schedule, err := parseSpec(task.Spec)
