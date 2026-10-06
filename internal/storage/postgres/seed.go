@@ -45,7 +45,7 @@ func loadSeedData() ([]SeedCurrency, error) {
 			return nil, fmt.Errorf("Currency[%d]: coin_name is required", i)
 		}
 		if c.Provider == "" {
-			return nil, fmt.Errorf("Currency[%d]: provider is required", c.CoinName)
+			return nil, fmt.Errorf("Currency[%q]: provider is required", c.CoinName)
 		}
 	}
 

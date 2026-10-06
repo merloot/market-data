@@ -5,6 +5,7 @@ import (
 	"errors"
 	"testing"
 
+	marketdomain "github.com/merloot/market-data/internal/domain/market"
 	"github.com/merloot/market-data/internal/market"
 )
 
@@ -13,19 +14,19 @@ func TestService_GetMarketDataList_MergesProviders(t *testing.T) {
 
 	cg := &fakeProvider{
 		name:       "coingecko",
-		marketData: map[string]market.MarketData{"btc": {CurrentPrice: 50000}},
+		marketData: map[string]marketdomain.MarketData{"btc": {CurrentPrice: 50000}},
 	}
 
 	cmc := &fakeProvider{
 		name:       "coinmarketcap",
-		marketData: map[string]market.MarketData{"eth": {CurrentPrice: 3000}},
+		marketData: map[string]marketdomain.MarketData{"eth": {CurrentPrice: 3000}},
 	}
 
 	svc := market.NewService(cg, cmc)
 
-	got, err := svc.GetMarketDataList(context.Background(), []market.Currency{
-		{Provider: "coingecko", Currency: "btc"},
-		{Provider: "coinmarketcap", Currency: "eth"},
+	got, err := svc.GetMarketDataList(context.Background(), []marketdomain.Currency{
+		{Provider: "coingecko", CoinName: "btc"},
+		{Provider: "coinmarketcap", CoinName: "eth"},
 	})
 
 	if err != nil {
@@ -44,7 +45,7 @@ func TestService_GetMarketDataList_PartialFailure(t *testing.T) {
 
 	ok := &fakeProvider{
 		name:       "coingecko",
-		marketData: map[string]market.MarketData{"btc": {CurrentPrice: 500}},
+		marketData: map[string]marketdomain.MarketData{"btc": {CurrentPrice: 500}},
 	}
 
 	broken := &fakeProvider{
@@ -54,9 +55,9 @@ func TestService_GetMarketDataList_PartialFailure(t *testing.T) {
 
 	svc := market.NewService(ok, broken)
 
-	got, err := svc.GetMarketDataList(context.Background(), []market.Currency{
-		{Provider: "coingecko", Currency: "btc"},
-		{Provider: "coinmarketcap", Currency: "eth"},
+	got, err := svc.GetMarketDataList(context.Background(), []marketdomain.Currency{
+		{Provider: "coingecko", CoinName: "btc"},
+		{Provider: "coinmarketcap", CoinName: "eth"},
 	})
 
 	if err == nil {
@@ -73,11 +74,11 @@ func TestService_GetMarketDataList_UnknownProvider(t *testing.T) {
 
 	svc := market.NewService()
 
-	_, err := svc.GetMarketDataList(context.Background(), []market.Currency{
-		{Provider: "nope", Currency: "btc"},
+	_, err := svc.GetMarketDataList(context.Background(), []marketdomain.Currency{
+		{Provider: "nope", CoinName: "btc"},
 	})
-	if !errors.Is(err, market.ErrProviderNotFound) {
-		t.Fatalf("Error = %v, want ErrProviderNotFound", err)
+	if !errors.Is(err, marketdomain.ErrNotFound) {
+		t.Fatalf("Error = %v, want ErrNotFound", err)
 	}
 }
 
@@ -86,15 +87,15 @@ func TestService_GetMarketDataListGroupByProvider(t *testing.T) {
 
 	cg := &fakeProvider{
 		name:       "coingecko",
-		marketData: map[string]market.MarketData{},
+		marketData: map[string]marketdomain.MarketData{},
 	}
 
 	svc := market.NewService(cg)
 
-	_, _ = svc.GetMarketDataList(context.Background(), []market.Currency{
-		{Currency: "btc", Provider: "coingecko"},
-		{Currency: "eth", Provider: "coingecko"},
-		{Currency: "sol", Provider: "coingecko"},
+	_, _ = svc.GetMarketDataList(context.Background(), []marketdomain.Currency{
+		{CoinName: "btc", Provider: "coingecko"},
+		{CoinName: "eth", Provider: "coingecko"},
+		{CoinName: "sol", Provider: "coingecko"},
 	})
 
 	if len(cg.gotCodes) != 3 {

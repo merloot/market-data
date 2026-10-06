@@ -4,15 +4,15 @@ import (
 	"context"
 	"time"
 
-	"github.com/merloot/market-data/internal/market"
+	"github.com/merloot/market-data/internal/domain/market"
 )
 
 type fakeProvider struct {
 	name       string
 	marketData map[string]market.MarketData
-	chart market.MarketDataChart
-	err error
-	gotCodes []string
+	chart      market.MarketDataChart
+	err        error
+	gotCodes   []string
 }
 
 func (p *fakeProvider) Provider() string {
