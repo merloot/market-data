@@ -5,7 +5,7 @@ import (
 	"errors"
 	"time"
 
-	"github.com/merloot/market-data/internal/market"
+	"github.com/merloot/market-data/internal/domain/market"
 )
 
 var ErrNotFound = errors.New("Not found")

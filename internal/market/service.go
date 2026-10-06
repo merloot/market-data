@@ -2,7 +2,10 @@ package market
 
 import (
 	"context"
+	"fmt"
 	"time"
+
+	"github.com/merloot/market-data/internal/domain/market"
 )
 
 type Service struct {
@@ -20,22 +23,22 @@ func NewService(impls ...Provider) *Service {
 func (s *Service) impl(provider string) (Provider, error) {
 	p, ok := s.impls[provider]
 	if !ok {
-		return nil, ErrProviderNotFound
+		return nil, fmt.Errorf("%w:, %q", market.ErrNotFound, provider)
 	}
 	return p, nil
 }
 
-func (s *Service) GetLogo(ctx context.Context, c Currency) (string, error) {
+func (s *Service) GetLogo(ctx context.Context, c market.Currency) (string, error) {
 	p, err := s.impl(c.Provider)
 	if err != nil {
 		return "", err
 	}
-	return p.GetLogo(ctx, c.Currency)
+	return p.GetLogo(ctx, c.CoinName)
 }
 
-func (s *Service) CheckCurrencyData(ctx context.Context, currencies []CurrencyToFind) (map[string]CurrencyData, error) {
+func (s *Service) CheckCurrencyData(ctx context.Context, currencies []market.CurrencyToFind) (map[string]market.CurrencyData, error) {
 	grouped := groupToFind(currencies)
-	return fanOut(ctx, grouped, func(ctx context.Context, provider string, items []CurrencyToFind) (map[string]CurrencyData, error) {
+	return fanOut(ctx, grouped, func(ctx context.Context, provider string, items []market.CurrencyToFind) (map[string]market.CurrencyData, error) {
 		p, err := s.impl(provider)
 
 		if err != nil {
@@ -45,9 +48,9 @@ func (s *Service) CheckCurrencyData(ctx context.Context, currencies []CurrencyTo
 	})
 }
 
-func (s *Service) GetMarketDataList(ctx context.Context, currencies []Currency) (map[string]MarketData, error) {
+func (s *Service) GetMarketDataList(ctx context.Context, currencies []market.Currency) (map[string]market.MarketData, error) {
 	grouped := groupByCurrencies(currencies)
-	return fanOut(ctx, grouped, func(ctx context.Context, provider string, codes []string) (map[string]MarketData, error) {
+	return fanOut(ctx, grouped, func(ctx context.Context, provider string, codes []string) (map[string]market.MarketData, error) {
 		p, err := s.impl(provider)
 		if err != nil {
 			return nil, err
@@ -56,19 +59,19 @@ func (s *Service) GetMarketDataList(ctx context.Context, currencies []Currency) 
 	})
 }
 
-func (s *Service) GetMarketDataChart(ctx context.Context, currency Currency, days int) (MarketDataChart, error) {
+func (s *Service) GetMarketDataChart(ctx context.Context, currency market.Currency, days int) (market.MarketDataChart, error) {
 	p, err := s.impl(currency.Provider)
 	if err != nil {
-		return MarketDataChart{}, err
+		return market.MarketDataChart{}, err
 	}
 
-	return p.GetMarketDataChart(ctx, currency.Currency, days)
+	return p.GetMarketDataChart(ctx, currency.CoinName, days)
 }
 
-func (s *Service) GetMarketDataChartRange(ctx context.Context, currency Currency, from, to time.Time) (MarketDataChart, error) {
+func (s *Service) GetMarketDataChartRange(ctx context.Context, currency market.Currency, from, to time.Time) (market.MarketDataChart, error) {
 	p, err := s.impl(currency.Provider)
 	if err != nil {
-		return MarketDataChart{}, err
+		return market.MarketDataChart{}, err
 	}
-	return p.GetMarketDataChartRange(ctx, currency.Currency, from, to)
+	return p.GetMarketDataChartRange(ctx, currency.CoinName, from, to)
 }

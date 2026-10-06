@@ -29,7 +29,7 @@ func Build(
 ) (*Scheduler, func(), error) {
 	pool, err := pgxpool.New(ctx, dsn)
 	if err != nil {
-		return nil, nil, fmt.Errorf("Pool: %", err)
+		return nil, nil, fmt.Errorf("Pool: %w", err)
 	}
 
 	jobs, err := buildPeriodicJobs(tasks)

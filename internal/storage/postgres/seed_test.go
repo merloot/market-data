@@ -24,23 +24,14 @@ func (s *Seeder) Currency(t *testing.T, name, logoURL string) *Seeder {
 
 	if logoURL == "" {
 		_, err := s.repo.pool.Exec(ctx,
-			`
-			INSERT INTO currency () VALUES ()
-			`,
+			``,
 			name,
 		)
 		if err != nil {
 			t.Fatalf("Seed currency %s: %v", name, err)
 		}
 	}
-	_, err := s.repo.pool.Exec(ctx, `
-		INSERT INTO market_data_history
-			()
-		VALUES
-			(),
-			()
-		ON CONFLICT DO NOTHING
-	`, name, now, yesterday)
+	_, err := s.repo.pool.Exec(ctx, ``, name, now, yesterday)
 	if err != nil {
 		t.Fatalf("Seed history %s: %v", name, err)
 	}
