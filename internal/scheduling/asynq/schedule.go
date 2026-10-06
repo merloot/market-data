@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/hibiken/asynq"
-	"github.com/merloot/market-data/internal/schedule"
+	"github.com/merloot/market-data/internal/scheduling"
 )
 
 type Scheduler struct {
@@ -15,7 +15,7 @@ type Scheduler struct {
 	log       *slog.Logger
 }
 
-func Build(ctx context.Context, redisAddr string, tasks []schedule.Task, log *slog.Logger) (*Scheduler, error) {
+func NewSchedule(ctx context.Context, redisAddr string, tasks []scheduling.Task, log *slog.Logger) (*Scheduler, error) {
 	s := asynq.NewScheduler(
 		asynq.RedisClientOpt{Addr: redisAddr},
 		&asynq.SchedulerOpts{
@@ -32,7 +32,7 @@ func Build(ctx context.Context, redisAddr string, tasks []schedule.Task, log *sl
 	return &Scheduler{scheduler: s, log: log}, nil
 }
 
-func registerTask(ctx context.Context, s *asynq.Scheduler, task schedule.Task, log *slog.Logger) error {
+func registerTask(ctx context.Context, s *asynq.Scheduler, task scheduling.Task, log *slog.Logger) error {
 	t := asynq.NewTask(task.Type, task.Payload)
 
 	entryID, err := s.Register(

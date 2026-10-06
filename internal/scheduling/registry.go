@@ -1,10 +1,15 @@
-package schedule
+package scheduling
 
 import (
 	"context"
 	"fmt"
 	"log/slog"
 )
+
+type Builder interface {
+	Name() string
+	Build() ([]Task, error)
+}
 
 type Registry struct {
 	builders []Builder
