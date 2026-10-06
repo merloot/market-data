@@ -19,7 +19,7 @@ func main() {
 	_ = godotenv.Load()
 
 	if err := run(); err != nil {
-		fmt.Errorf("Worker failed", "err", err)
+		fmt.Errorf("Worker failed: %w", err)
 		os.Exit(1)
 	}
 }
@@ -30,7 +30,7 @@ func run() error {
 
 	cfg, err := config.Load()
 	if err != nil {
-		return fmt.Errorf("Config: $w", err)
+		return fmt.Errorf("Config: %w", err)
 	}
 
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
