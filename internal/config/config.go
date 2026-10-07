@@ -11,6 +11,7 @@ type Config struct {
 	HTTP     HTTPConfig
 	Redis    RedisConfig
 	Queue    QueueConfig
+	Realtime RealtimeConfig
 }
 
 func Load() (*Config, error) {
