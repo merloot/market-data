@@ -7,6 +7,8 @@ import (
 )
 
 func TestCalcChange(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name     string
 		currency float64
@@ -30,6 +32,8 @@ func TestCalcChange(t *testing.T) {
 }
 
 func TestFormatChart(t *testing.T) {
+	t.Parallel()
+
 	chart := market.MarketDataChart{
 		Prices: [][2]float64{
 			{17000000000, 50000},
@@ -44,7 +48,7 @@ func TestFormatChart(t *testing.T) {
 	got := formatChart("BTC", chart)
 
 	if len(got) != 2 {
-		t.Fatalf("Got %d points, want 2",len(got))
+		t.Fatalf("Got %d points, want 2", len(got))
 	}
 
 	if got[0].Currency != "BTC" {
@@ -55,12 +59,11 @@ func TestFormatChart(t *testing.T) {
 		t.Errorf("Price = %v want 50000", got[0].Price)
 	}
 
-	
 	if got[1].Price != 50100 {
 		t.Errorf("Price = %v want 50100", got[1].Price)
 	}
 
-	if got[0].Timestamp.IsZero(){
+	if got[0].Timestamp.IsZero() {
 		t.Error("TImestamp is zero")
 	}
 }
