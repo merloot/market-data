@@ -2,13 +2,16 @@ package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log/slog"
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
 	"github.com/joho/godotenv"
+
 	"github.com/merloot/market-data/internal/config"
 	"github.com/merloot/market-data/internal/scheduling"
 	"github.com/merloot/market-data/internal/scheduling/asynq"
@@ -19,6 +22,7 @@ import (
 
 func main() {
 	_ = godotenv.Load()
+
 	if err := run(); err != nil {
 		slog.Error("Scheduler failed", "err", err)
 		os.Exit(1)
@@ -26,45 +30,54 @@ func main() {
 }
 
 func run() error {
-	log := slog.New(slog.NewJSONHandler(os.Stdout, nil))
+	log := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
+		Level: slog.LevelInfo,
+	}))
 	slog.SetDefault(log)
 
 	cfg, err := config.Load()
 	if err != nil {
-		return err
+		return fmt.Errorf("Config: %w", err)
 	}
 
-	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
-	defer cancel()
+	initCtx, initCancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer initCancel()
 
-	repo, err := postgres.New(ctx, cfg.Database, postgres.WithLogger(log), postgres.WithPingRetries(5))
+	repo, err := postgres.New(initCtx, cfg.Database,
+		postgres.WithLogger(log),
+		postgres.WithPingRetries(5),
+	)
 	if err != nil {
 		return fmt.Errorf("Postgres: %w", err)
 	}
 	defer repo.Close()
 
-	registry := scheduling.NewRegistry(log, oracle.NewBuild())
+	registry := scheduling.NewRegistry(log,
+		oracle.NewBuild(),
+	)
 
-	tasks, err := registry.Tasks(ctx)
+	tasks, err := registry.Tasks(initCtx)
 	if err != nil {
 		return fmt.Errorf("Build tasks: %w", err)
 	}
-
 	if len(tasks) == 0 {
 		return fmt.Errorf("No tasks to schedule")
 	}
 
 	log.Info("Tasks ready", "total", len(tasks), "backend", cfg.Queue.Backend)
 
-	scheduler, cleanup, err := buildScheduler(ctx, cfg, tasks, log)
+	scheduler, cleanup, err := buildScheduler(initCtx, cfg, tasks, log)
 	if err != nil {
 		return fmt.Errorf("Build scheduler: %w", err)
 	}
 	defer cleanup()
 
-	log.Info("Scheduler starting", "backend", cfg.Queue.Backend)
-	if err := scheduler.Run(ctx); err != nil && err != context.Canceled {
-		return err
+	runCtx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer stop()
+
+	log.Info("scheduler starting", "backend", cfg.Queue.Backend)
+	if err := scheduler.Run(runCtx); err != nil && !errors.Is(err, context.Canceled) {
+		return fmt.Errorf("Run: %w", err)
 	}
 
 	log.Info("Scheduler stopped")
@@ -91,7 +104,8 @@ func buildScheduler(
 			return nil, nil, err
 		}
 		return s, cleanup, nil
+
 	default:
-		return nil, func() {}, fmt.Errorf("Unknown queue backend: %q", cfg.Queue.Backend)
+		return nil, nil, fmt.Errorf("Unknown queue backend: %q", cfg.Queue.Backend)
 	}
 }
