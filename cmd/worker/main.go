@@ -2,25 +2,28 @@ package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log/slog"
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
 	"github.com/joho/godotenv"
+	goredis "github.com/redis/go-redis/v9"
+
 	"github.com/merloot/market-data/internal/config"
 	"github.com/merloot/market-data/internal/market"
 	"github.com/merloot/market-data/internal/provider/coingecko"
 	"github.com/merloot/market-data/internal/realtime"
 	"github.com/merloot/market-data/internal/realtime/memory"
-	"github.com/merloot/market-data/internal/realtime/redis"
+	redisrealtime "github.com/merloot/market-data/internal/realtime/redis"
 	"github.com/merloot/market-data/internal/storage/postgres"
 	"github.com/merloot/market-data/internal/tasks/oracle"
 	"github.com/merloot/market-data/internal/worker"
 	"github.com/merloot/market-data/internal/worker/asynq"
 	"github.com/merloot/market-data/internal/worker/river"
-	goredis "github.com/redis/go-redis/v9"
 )
 
 func main() {
@@ -41,46 +44,65 @@ func run() error {
 		return fmt.Errorf("Config: %w", err)
 	}
 
-	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
-	defer cancel()
+	initCtx, initCancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer initCancel()
 
-	repo, err := postgres.New(ctx, cfg.Database, postgres.WithLogger(log), postgres.WithPingRetries(5))
+	repo, err := postgres.New(initCtx, cfg.Database,
+		postgres.WithLogger(log),
+		postgres.WithPingRetries(5),
+	)
+	if err != nil {
+		return fmt.Errorf("Postgres: %w", err)
+	}
+	defer repo.Close()
 
 	rdb := goredis.NewClient(&goredis.Options{Addr: cfg.Redis.Addr})
 	defer rdb.Close()
 
-	// TODO add config
+	// TODO: вынести в config.
 	cg := coingecko.New("")
 
 	currencyRepository := postgres.NewCurrencyRepository(repo)
 	marketDataHistoryRepository := postgres.NewMarketDataHistoryRepository(repo)
 	provider := market.NewService(cg)
-	publisher, err := buildPublisher(cfg,rdb)
+
+	publisher, err := buildPublisher(cfg, rdb)
 	if err != nil {
 		return fmt.Errorf("Publisher: %w", err)
 	}
 
-	oracleService := oracle.NewService(log, currencyRepository, marketDataHistoryRepository, provider, publisher)
+	oracleService := oracle.NewService(
+		log,
+		currencyRepository,
+		marketDataHistoryRepository,
+		provider,
+		publisher,
+	)
 
 	registry, err := worker.NewRegistry(log,
 		oracle.NewHandler(oracleService, log),
 	)
-
 	if err != nil {
 		return fmt.Errorf("Registry: %w", err)
 	}
 
-	log.Info("Handlers registered", "count", len(registry.Types()), "types", registry.Types())
+	log.Info("Handlers registered",
+		"count", len(registry.Types()),
+		"types", registry.Types(),
+	)
 
-	w, cleanup, err := buildWorker(ctx, cfg, registry, log)
+	w, cleanup, err := buildWorker(initCtx, cfg, registry, log)
 	if err != nil {
 		return fmt.Errorf("Build worker: %w", err)
 	}
 	defer cleanup()
 
-	log.Info("Worker staring", "backend", cfg.Queue.Backend)
-	if err := w.Run(ctx); err != nil && err != context.Canceled {
-		return err
+	runCtx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer stop()
+
+	log.Info("Worker starting", "backend", cfg.Queue.Backend)
+	if err := w.Run(runCtx); err != nil && !errors.Is(err, context.Canceled) {
+		return fmt.Errorf("Run: %w", err)
 	}
 
 	log.Info("Worker stopped")
@@ -118,7 +140,7 @@ func buildPublisher(cfg *config.Config, rdb *goredis.Client) (realtime.EventPubl
 	case "memory":
 		return memory.NewPublisher(), nil
 	case "redis":
-		return redis.NewPublisher(rdb), nil
+		return redisrealtime.NewPublisher(rdb), nil
 	default:
 		return nil, fmt.Errorf("Unknown realtime backend: %q", cfg.Realtime.Backend)
 	}
