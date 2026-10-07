@@ -12,6 +12,8 @@ import (
 	"github.com/merloot/market-data/internal/config"
 	"github.com/merloot/market-data/internal/market"
 	"github.com/merloot/market-data/internal/provider/coingecko"
+	"github.com/merloot/market-data/internal/realtime"
+	"github.com/merloot/market-data/internal/realtime/memory"
 	"github.com/merloot/market-data/internal/realtime/redis"
 	"github.com/merloot/market-data/internal/storage/postgres"
 	"github.com/merloot/market-data/internal/tasks/oracle"
@@ -52,15 +54,18 @@ func run() error {
 
 	currencyRepository := postgres.NewCurrencyRepository(repo)
 	marketDataHistoryRepository := postgres.NewMarketDataHistoryRepository(repo)
-	publisher := redis.NewPublisher(rdb)
 	provider := market.NewService(cg)
+	publisher, err := buildPublisher(cfg,rdb)
+	if err != nil {
+		return fmt.Errorf("Publisher: %w", err)
+	}
 
 	oracleService := oracle.NewService(log, currencyRepository, marketDataHistoryRepository, provider, publisher)
 
 	registry, err := worker.NewRegistry(log,
 		oracle.NewHandler(oracleService, log),
 	)
-	
+
 	if err != nil {
 		return fmt.Errorf("Registry: %w", err)
 	}
@@ -105,5 +110,16 @@ func buildWorker(
 
 	default:
 		return nil, nil, fmt.Errorf("Unknown queue backend: %q", cfg.Queue.Backend)
+	}
+}
+
+func buildPublisher(cfg *config.Config, rdb *goredis.Client) (realtime.EventPublisher, error) {
+	switch cfg.Realtime.Backend {
+	case "memory":
+		return memory.NewPublisher(), nil
+	case "redis":
+		return redis.NewPublisher(rdb), nil
+	default:
+		return nil, fmt.Errorf("Unknown realtime backend: %q", cfg.Realtime.Backend)
 	}
 }
