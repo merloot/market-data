@@ -77,7 +77,7 @@ func (f *fakeProvider) GetMarketDataList(
 	return f.list, nil
 }
 
-func (f *fakeProvider) GetMarketChart(
+func (f *fakeProvider) GetMarketDataChart(
 	context.Context,
 	market.Currency,
 	int,
@@ -85,7 +85,7 @@ func (f *fakeProvider) GetMarketChart(
 	return f.chart, nil
 }
 
-func (f *fakeProvider) GetMarketChartRange(
+func (f *fakeProvider) GetMarketDataChartRange(
 	context.Context,
 	market.Currency,
 	time.Time,

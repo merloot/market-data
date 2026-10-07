@@ -9,11 +9,11 @@ import (
 
 type Builder struct{}
 
-func NewBuilder() *Builder { return &Builder{} }
+func NewBuild() *Builder { return &Builder{} }
 
 func (b *Builder) Name() string { return "oracle" }
 
-func (b *Builder) Builder(_ context.Context) ([]scheduling.Task, error) {
+func (b *Builder) Build(_ context.Context) ([]scheduling.Task, error) {
 	payload, err := json.Marshal(Payload{})
 	if err != nil {
 		return nil, err

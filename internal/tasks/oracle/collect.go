@@ -43,7 +43,7 @@ func (s *Service) fetchFromLastUpdated(
 	if time.Since(last) <= timeWindowMax {
 		return nil, nil
 	}
-	chart, err := s.provider.GetMarketChartRange(ctx, currency, last, time.Now())
+	chart, err := s.provider.GetMarketDataChartRange(ctx, currency, last, time.Now())
 	if err != nil {
 		return nil, fmt.Errorf("Chart range %s: %w", currency.CoinName, err)
 	}
@@ -56,7 +56,7 @@ func (s *Service) fetchAllTimeRanges(
 ) ([]market.MarketDataHistory, error) {
 	var all []market.MarketDataHistory
 	for _, days := range []int{1, 90, 365} {
-		chart, err := s.provider.GetMarketChart(ctx, currency, days)
+		chart, err := s.provider.GetMarketDataChart(ctx, currency, days)
 		if err != nil {
 			return nil, fmt.Errorf("Chart %s/%dd: %w", currency.CoinName, days, err)
 		}
