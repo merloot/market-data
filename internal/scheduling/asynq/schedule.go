@@ -72,3 +72,8 @@ func (s *Scheduler) Run(ctx context.Context) error {
 		return err
 	}
 }
+
+func (s *Scheduler) Stop(_ context.Context) error {
+	s.scheduler.Shutdown()
+	return nil
+}
