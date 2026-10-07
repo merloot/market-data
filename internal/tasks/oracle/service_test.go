@@ -2,6 +2,7 @@ package oracle_test
 
 import (
 	"context"
+	"io"
 	"log/slog"
 	"testing"
 	"time"
@@ -9,6 +10,8 @@ import (
 	"github.com/merloot/market-data/internal/domain/market"
 	"github.com/merloot/market-data/internal/tasks/oracle"
 )
+
+var testLogger = slog.New(slog.NewTextHandler(io.Discard, nil))
 
 type fakeCurrencyRepository struct {
 	list         []market.Currency
@@ -114,6 +117,8 @@ func (f *fakeEvents) PublishMarketCapUpdated(_ context.Context, event market.Mar
 }
 
 func TestService_Execute_SavesAndPublishes(t *testing.T) {
+	t.Parallel()
+
 	currencies := &fakeCurrencyRepository{list: []market.Currency{
 		{CoinName: "BTC", Provider: market.ProviderCoinGecko},
 	}}
@@ -123,7 +128,7 @@ func TestService_Execute_SavesAndPublishes(t *testing.T) {
 	}}
 	events := &fakeEvents{}
 
-	svc := oracle.NewService(slog.Default(), currencies, history, provider, events)
+	svc := oracle.NewService(testLogger, currencies, history, provider, events)
 
 	if err := svc.Execute(context.Background()); err != nil {
 		t.Fatalf("Err = %v", err)
@@ -141,8 +146,10 @@ func TestService_Execute_SavesAndPublishes(t *testing.T) {
 }
 
 func TestService_Execute_NoCurrencies(t *testing.T) {
+	t.Parallel()
+
 	svc := oracle.NewService(
-		slog.Default(),
+		testLogger,
 		&fakeCurrencyRepository{},
 		&fakeMarketDataHistoryRepository{},
 		&fakeProvider{},
@@ -155,6 +162,8 @@ func TestService_Execute_NoCurrencies(t *testing.T) {
 }
 
 func TestService_Execute_SkipsZeroPrice(t *testing.T) {
+	t.Parallel()
+
 	currencies := &fakeCurrencyRepository{list: []market.Currency{
 		{CoinName: "BTC", Provider: market.ProviderCoinGecko},
 	}}
@@ -165,7 +174,7 @@ func TestService_Execute_SkipsZeroPrice(t *testing.T) {
 	}}
 	events := &fakeEvents{}
 
-	svc := oracle.NewService(slog.Default(), currencies, history, provider, events)
+	svc := oracle.NewService(testLogger, currencies, history, provider, events)
 
 	if err := svc.Execute(context.Background()); err != nil {
 		t.Fatalf("Err = %v", err)
@@ -177,6 +186,8 @@ func TestService_Execute_SkipsZeroPrice(t *testing.T) {
 }
 
 func TestService_Execute_FetchMissingLogos(t *testing.T) {
+	t.Parallel()
+
 	currencies := &fakeCurrencyRepository{
 		list: []market.Currency{
 			{CoinName: "BTC", Provider: market.ProviderCoinGecko},
@@ -194,7 +205,7 @@ func TestService_Execute_FetchMissingLogos(t *testing.T) {
 	}
 	events := &fakeEvents{}
 
-	scv := oracle.NewService(slog.Default(), currencies, history, provider, events)
+	scv := oracle.NewService(testLogger, currencies, history, provider, events)
 
 	if err := scv.Execute(context.Background()); err != nil {
 		t.Fatalf("Err = %v", err)
