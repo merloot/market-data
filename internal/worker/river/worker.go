@@ -2,9 +2,10 @@ package river
 
 import (
 	"context"
-	"encoding/json"
+	"errors"
 	"fmt"
 	"log/slog"
+	"time"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -18,6 +19,17 @@ type Worker struct {
 	log    *slog.Logger
 }
 
+type oracleWorker struct {
+	river.WorkerDefaults[oracleArgs]
+	registry *worker.Registry
+	log      *slog.Logger
+}
+
+func (w *oracleWorker) Work(ctx context.Context, job *river.Job[oracleArgs]) error {
+	w.log.Info("River job receiver", "type", job.Kind)
+	return w.registry.Handle(ctx, job.Kind, job.Args.Payload)
+}
+
 func NewWorker(
 	ctx context.Context,
 	dsn string,
@@ -29,14 +41,19 @@ func NewWorker(
 		return nil, nil, fmt.Errorf("Pool: %w", err)
 	}
 
+	types := make(map[string]bool)
 	workers := river.NewWorkers()
 	for _, t := range registry.Types() {
-		river.AddWorker(workers, &genericWorker{
-			taskType: t,
-			registry: registry,
-			log:      log,
-		})
-		log.Info("River handler registered", "type", t)
+		types[t] = true
+
+		// TODO
+		if types["market-data-oracle"] {
+			river.AddWorker(workers, &oracleWorker{
+				registry: registry,
+				log:      log,
+			})
+			log.Info("River handler registered", "type", t)
+		}
 	}
 
 	client, err := river.NewClient(riverpgxv5.New(pool), &river.Config{
@@ -54,25 +71,22 @@ func NewWorker(
 }
 
 func (w *Worker) Run(ctx context.Context) error {
-	w.log.Info("River worker starting")
-	return w.client.Start(ctx)
-}
+	w.log.Info("River worker starting", "ctxErr", ctx.Err())
 
-type jobArgs struct {
-	KindName string          `json:"kind"`
-	Payload  json.RawMessage `json:"payload"`
-}
+	startErrCh := make(chan error, 1)
+	go func() {
+		startErrCh <- w.client.Start(ctx)
+	}()
 
-func (j jobArgs) Kind() string { return j.KindName }
+	<-ctx.Done()
+	w.log.Info("River worker stopping", "ctxErr", ctx.Err())
 
-type genericWorker struct {
-	river.WorkerDefaults[jobArgs]
-	taskType string
-	registry *worker.Registry
-	log      *slog.Logger
-}
+	stopCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
 
-func (w *genericWorker) Work(ctx context.Context, job *river.Job[jobArgs]) error {
-	w.log.Info("River job received", "type", w.taskType)
-	return w.registry.Handle(ctx, w.taskType, job.Args.Payload)
+	if err := w.client.Stop(stopCtx); err != nil && !errors.Is(err, context.Canceled) {
+		w.log.Error("River client stop", "err", err)
+	}
+
+	return ctx.Err()
 }
