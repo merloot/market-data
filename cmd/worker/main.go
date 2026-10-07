@@ -10,9 +10,15 @@ import (
 
 	"github.com/joho/godotenv"
 	"github.com/merloot/market-data/internal/config"
+	"github.com/merloot/market-data/internal/market"
+	"github.com/merloot/market-data/internal/provider/coingecko"
+	"github.com/merloot/market-data/internal/realtime/redis"
+	"github.com/merloot/market-data/internal/storage/postgres"
+	"github.com/merloot/market-data/internal/tasks/oracle"
 	"github.com/merloot/market-data/internal/worker"
 	"github.com/merloot/market-data/internal/worker/asynq"
 	"github.com/merloot/market-data/internal/worker/river"
+	goredis "github.com/redis/go-redis/v9"
 )
 
 func main() {
@@ -36,7 +42,25 @@ func run() error {
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer cancel()
 
-	registry, err := worker.NewRegistry(log)
+	repo, err := postgres.New(ctx, cfg.Database, postgres.WithLogger(log), postgres.WithPingRetries(5))
+
+	rdb := goredis.NewClient(&goredis.Options{Addr: cfg.Redis.Addr})
+	defer rdb.Close()
+
+	// TODO add config
+	cg := coingecko.New("")
+
+	currencyRepository := postgres.NewCurrencyRepository(repo)
+	marketDataHistoryRepository := postgres.NewMarketDataHistoryRepository(repo)
+	publisher := redis.NewPublisher(rdb)
+	provider := market.NewService(cg)
+
+	oracleService := oracle.NewService(log, currencyRepository, marketDataHistoryRepository, provider, publisher)
+
+	registry, err := worker.NewRegistry(log,
+		oracle.NewHandler(oracleService, log),
+	)
+	
 	if err != nil {
 		return fmt.Errorf("Registry: %w", err)
 	}
