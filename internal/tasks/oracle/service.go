@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
+
+	"github.com/merloot/market-data/internal/realtime"
 )
 
 type Service struct {
@@ -11,7 +13,7 @@ type Service struct {
 	currencyRepository CurrencyRepository
 	marketDataHistoryRepository MarketDataHistoryRepository
 	provider MarketDataProvider
-	events EventPublisher
+	events realtime.EventPublisher
 }
 
 func NewService(
@@ -19,7 +21,7 @@ func NewService(
 	currencyRepository CurrencyRepository,
 	marketDataHistoryRepository MarketDataHistoryRepository,
 	provider MarketDataProvider,
-	events EventPublisher,
+	events realtime.EventPublisher,
 ) *Service {
 	return &Service{
 		log: log,

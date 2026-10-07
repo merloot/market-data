@@ -1,4 +1,4 @@
-package oracle
+package realtime
 
 import (
 	"context"
@@ -7,7 +7,7 @@ import (
 )
 
 type EventPublisher interface {
-	PublishPriceUpdated(ctx context.Context, event market.PriceUpdated) error 
+	PublishPriceUpdated(ctx context.Context, event market.PriceUpdated) error
 
 	PublishMarketCapUpdated(ctx context.Context, event market.MarketCapUpdated) error
 }
