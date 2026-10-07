@@ -14,6 +14,7 @@ import (
 	"github.com/merloot/market-data/internal/scheduling/asynq"
 	"github.com/merloot/market-data/internal/scheduling/river"
 	"github.com/merloot/market-data/internal/storage/postgres"
+	"github.com/merloot/market-data/internal/tasks/oracle"
 )
 
 func main() {
@@ -42,7 +43,7 @@ func run() error {
 	}
 	defer repo.Close()
 
-	registry := scheduling.NewRegistry(log, nil)
+	registry := scheduling.NewRegistry(log, oracle.NewBuild())
 
 	tasks, err := registry.Tasks(ctx)
 	if err != nil {

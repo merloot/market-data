@@ -8,7 +8,7 @@ import (
 
 type Builder interface {
 	Name() string
-	Build() ([]Task, error)
+	Build(context.Context) ([]Task, error)
 }
 
 type Registry struct {
@@ -23,7 +23,7 @@ func NewRegistry(log *slog.Logger, builders ...Builder) *Registry {
 func (r *Registry) Tasks(ctx context.Context) ([]Task, error) {
 	var tasks []Task
 	for _, b := range r.builders {
-		built, err := b.Build()
+		built, err := b.Build(ctx)
 		if err != nil {
 			return nil, fmt.Errorf("Builder %q: %w", b.Name(), err)
 		}

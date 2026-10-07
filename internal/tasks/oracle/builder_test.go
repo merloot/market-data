@@ -10,9 +10,9 @@ import (
 func TestBuilder_Build(t *testing.T) {
 	t.Parallel()
 
-	b := oracle.NewBuilder()
+	b := oracle.NewBuild()
 
-	tasks, err := b.Builder(context.Background())
+	tasks, err := b.Build(context.Background())
 	if err != nil {
 		t.Fatalf("Error %v=", err)
 	}
