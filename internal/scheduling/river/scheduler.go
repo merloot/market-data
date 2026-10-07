@@ -19,6 +19,7 @@ import (
 type Scheduler struct {
 	client *river.Client[pgx.Tx]
 	log    *slog.Logger
+	tasks  []scheduling.Task
 }
 
 func NewSchedule(
@@ -32,29 +33,60 @@ func NewSchedule(
 		return nil, nil, fmt.Errorf("Pool: %w", err)
 	}
 
-	jobs, err := buildPeriodicJobs(tasks)
-	if err != nil {
-		pool.Close()
-		return nil, nil, err
-	}
 	workers := river.NewWorkers()
 	river.AddWorker(workers, &noopWorker{})
 
 	client, err := river.NewClient(riverpgxv5.New(pool), &river.Config{
-		Workers:      workers,
-		Queues:       map[string]river.QueueConfig{river.QueueDefault: {MaxWorkers: 1}},
-		PeriodicJobs: jobs,
+		LeaderElectionDisabled: true,
+		SoftStopTimeout:        5 * time.Second,
 	})
 
 	if err != nil {
 		return nil, nil, fmt.Errorf("Create river client: %w", err)
 	}
-	return &Scheduler{client: client, log: log}, pool.Close, nil
+	return &Scheduler{client: client, log: log, tasks: tasks}, pool.Close, nil
 }
 
 func (s *Scheduler) Run(ctx context.Context) error {
-	s.log.Info("River scheduler starting")
-	return s.client.Start(ctx)
+	s.log.Info("River scheduler starting", "tasks", len(s.tasks))
+
+	c := cron.New()
+	for _, task := range s.tasks {
+		t := task
+		if _, err := c.AddFunc(t.Spec, func() {
+			s.enqueue(ctx, t)
+		}); err != nil {
+			return fmt.Errorf("Add cron %q: %w", t.Name, err)
+		}
+		s.log.Info("Cron registered", "name", t.Name, "spec", t.Spec, "type", t.Type)
+	}
+	c.Start()
+	defer c.Stop()
+
+	<-ctx.Done()
+	s.log.Info("River scheduler stopping")
+	return ctx.Err()
+}
+
+func (s *Scheduler) Stop(ctx context.Context) error {
+	return nil
+}
+
+func (s *Scheduler) enqueue(ctx context.Context, task scheduling.Task) {
+	_, err := s.client.Insert(ctx, GenericArgs{
+		KindName: task.Type,
+		Payload:  task.Payload,
+	}, &river.InsertOpts{
+		Queue: river.QueueDefault,
+		UniqueOpts: river.UniqueOpts{
+			ByPeriod: time.Minute,
+		},
+	})
+	if err != nil {
+		s.log.Error("Enqueue", "name", task.Name, "err", err)
+		return
+	}
+	s.log.Info("Task enqueued", "name", task.Name, "type", task.Type)
 }
 
 func buildPeriodicJobs(tasks []scheduling.Task) ([]*river.PeriodicJob, error) {
@@ -93,14 +125,6 @@ func parseSpec(spec string) (river.PeriodicSchedule, error) {
 		return river.PeriodicInterval(d), nil
 	}
 	return cron.ParseStandard(spec)
-}
-
-type noopWorker struct {
-	river.WorkerDefaults[GenericArgs]
-}
-
-func (w *noopWorker) Work(ctx context.Context, job *river.Job[GenericArgs]) error {
-	return fmt.Errorf("Noop worker received job: %s", job.Args.KindName)
 }
 
 type GenericArgs struct {
