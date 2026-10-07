@@ -48,6 +48,7 @@ type MarketDataChart struct {
 type MarketDataRow struct {
 	Currency      string
 	Price         float64
+	TotalSupply   float64
 	MarketCap     float64
 	PriceDiff     float64
 	MarketCapDiff float64
