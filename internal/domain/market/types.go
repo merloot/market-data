@@ -42,7 +42,7 @@ type MarketData struct {
 type MarketDataChart struct {
 	Prices      [][2]float64
 	MarketCaps  [][2]float64
-	TotalVolume [][2]float64
+	TotalVolumes [][2]float64
 }
 
 type MarketDataRow struct {

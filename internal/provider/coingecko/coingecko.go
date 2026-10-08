@@ -127,7 +127,7 @@ func (c *Provider) GetMarketDataChart(ctx context.Context, currency string, days
 	return market.MarketDataChart{
 		Prices:      raw.Prices,
 		MarketCaps:  raw.MarketCaps,
-		TotalVolume: raw.TotalVolumes,
+		TotalVolumes: raw.TotalVolumes,
 	}, nil
 }
 
