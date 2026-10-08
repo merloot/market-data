@@ -11,7 +11,7 @@ import (
 	"github.com/merloot/market-data/internal/domain/market"
 )
 
-const cgDefaultUrl = "https://api.Provider.com/api/v3"
+const cgDefaultUrl = "https://api.coingecko.com/api/v3"
 
 type Provider struct {
 	apiKey  string
