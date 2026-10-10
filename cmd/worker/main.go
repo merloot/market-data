@@ -60,7 +60,6 @@ func run() error {
 	rdb := goredis.NewClient(&goredis.Options{Addr: cfg.Redis.Addr})
 	defer rdb.Close()
 
-	// TODO: вынести в config.
 	cg := coingecko.New(cfg.Provider.Coingecko.ApiKey)
 	coinmarketcap := coinmarketcap.New(cfg.Provider.Coinmarketcap.ApiKey) 
 
