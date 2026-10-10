@@ -39,16 +39,16 @@ func (s *Service) publishUpdates(
 		marketChange := calcChange(row.MarketCap, row.MarketCapDiff)
 
 		if err := s.events.PublishPriceUpdated(ctx, market.PriceUpdated{
-			CoinName: row.Currency,
-			Price: row.Price,
+			CoinName:                 row.Currency,
+			Price:                    row.Price,
 			PriceChangePercentage24h: priceChange,
 		}); err != nil {
 			s.log.Warn("Publish price", "currency", a.Currency, "err", err)
 		}
 
 		if err := s.events.PublishMarketCapUpdated(ctx, market.MarketCapUpdated{
-			CoinName: row.Currency,
-			MarketCap: row.MarketCap,
+			CoinName:                     row.Currency,
+			MarketCap:                    row.MarketCap,
 			MarketCapChangePercentage24h: marketChange,
 		}); err != nil {
 			s.log.Warn("Publish market cap", "currency", a.Currency, "err", err)
@@ -56,5 +56,3 @@ func (s *Service) publishUpdates(
 	}
 	return nil
 }
-
-

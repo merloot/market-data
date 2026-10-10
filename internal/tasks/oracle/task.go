@@ -6,5 +6,4 @@ const (
 )
 
 type Payload struct {
-	
 }

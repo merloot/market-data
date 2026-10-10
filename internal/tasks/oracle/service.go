@@ -9,11 +9,11 @@ import (
 )
 
 type Service struct {
-	log *slog.Logger
-	currencyRepository CurrencyRepository
+	log                         *slog.Logger
+	currencyRepository          CurrencyRepository
 	marketDataHistoryRepository MarketDataHistoryRepository
-	provider MarketDataProvider
-	events realtime.EventPublisher
+	provider                    MarketDataProvider
+	events                      realtime.EventPublisher
 }
 
 func NewService(
@@ -24,11 +24,11 @@ func NewService(
 	events realtime.EventPublisher,
 ) *Service {
 	return &Service{
-		log: log,
-		currencyRepository: currencyRepository,
+		log:                         log,
+		currencyRepository:          currencyRepository,
 		marketDataHistoryRepository: marketDataHistoryRepository,
-		provider: provider,
-		events: events,
+		provider:                    provider,
+		events:                      events,
 	}
 }
 
@@ -44,10 +44,10 @@ func (s *Service) Execute(ctx context.Context) error {
 
 	history, err := s.collectHistory(ctx, currencies)
 	if err != nil {
-		return  fmt.Errorf("Collect history: %w", err)
+		return fmt.Errorf("Collect history: %w", err)
 	}
 
-	actual, err :=s.collectActual(ctx, currencies)
+	actual, err := s.collectActual(ctx, currencies)
 	if err != nil {
 		return fmt.Errorf("Collect actual: %w", err)
 	}
@@ -57,7 +57,7 @@ func (s *Service) Execute(ctx context.Context) error {
 		return fmt.Errorf("Save: %w", err)
 	}
 
-	if err := s.publishUpdates(ctx,actual); err != nil {
+	if err := s.publishUpdates(ctx, actual); err != nil {
 		s.log.Warn("Publish updates", "err", err)
 	}
 

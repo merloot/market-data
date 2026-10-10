@@ -40,5 +40,3 @@ type quoteDetail struct {
 	CirculatingSupply float64 `json:"circulating_supply"`
 	Timestamp         string  `json:"timestamp"`
 }
-
-

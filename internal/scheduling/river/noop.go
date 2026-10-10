@@ -16,5 +16,5 @@ type noopWorker struct {
 }
 
 func (w *noopWorker) Work(ctx context.Context, _ *river.Job[noopArgs]) error {
-	return fmt.Errorf("Noop worker received job", )
+	return fmt.Errorf("Noop worker received job")
 }

@@ -64,7 +64,7 @@ func (r *Repo) GetMarketDataList(ctx context.Context, filter storage.MarketDataF
 	if len(filter.Currencies) > 0 {
 		currencies = filter.Currencies
 	}
-	rows, err := r.pool.Query(ctx,marketDataQuery,prevTimestamp,currencies)
+	rows, err := r.pool.Query(ctx, marketDataQuery, prevTimestamp, currencies)
 	if err != nil {
 		return nil, fmt.Errorf("Query: %w", err)
 	}

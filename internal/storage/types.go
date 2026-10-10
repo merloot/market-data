@@ -64,16 +64,16 @@ func ResolvePrevTimestamp(p Period) (time.Time, error) {
 
 	switch p.Timeframe {
 	case Timeframe1h:
-		return now.Add(-1 *time.Hour), nil
+		return now.Add(-1 * time.Hour), nil
 	case Timeframe24h:
 		return now.Add(-24 * time.Hour), nil
 	case Timeframe7d:
 		return now.Add(-7 * 24 * time.Hour), nil
 	case Timeframe30d:
-		return now.Add(- 30 * 24 * time.Hour), nil
+		return now.Add(-30 * 24 * time.Hour), nil
 	case TimeframeCustom:
-			return time.Time{}, fmt.Errorf("Custom requires FromDate")
+		return time.Time{}, fmt.Errorf("Custom requires FromDate")
 	default:
-			return time.Time{}, fmt.Errorf("Unknown timeframe: %q", p.Timeframe)
+		return time.Time{}, fmt.Errorf("Unknown timeframe: %q", p.Timeframe)
 	}
 }

@@ -6,7 +6,7 @@ import (
 	pg "github.com/merloot/market-data/internal/storage/postgres"
 )
 
-// TEMPORARY commented code 
+// TEMPORARY commented code
 func setupPostgres(t *testing.T) (*pg.Repo, func()) {
 	return &pg.Repo{}, nil
 	// t.Helper()

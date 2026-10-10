@@ -16,6 +16,7 @@ import (
 	"github.com/merloot/market-data/internal/config"
 	"github.com/merloot/market-data/internal/marketservice"
 	"github.com/merloot/market-data/internal/provider/coingecko"
+	"github.com/merloot/market-data/internal/provider/coinmarketcap"
 	"github.com/merloot/market-data/internal/realtime"
 	"github.com/merloot/market-data/internal/realtime/memory"
 	redisrealtime "github.com/merloot/market-data/internal/realtime/redis"
@@ -60,11 +61,12 @@ func run() error {
 	defer rdb.Close()
 
 	// TODO: вынести в config.
-	cg := coingecko.New("")
+	cg := coingecko.New(cfg.Provider.Coingecko.ApiKey)
+	coinmarketcap := coinmarketcap.New(cfg.Provider.Coinmarketcap.ApiKey) 
 
 	currencyRepository := postgres.NewCurrencyRepository(repo)
 	marketDataHistoryRepository := postgres.NewMarketDataHistoryRepository(repo)
-	provider := marketservice.NewService(cg)
+	provider := marketservice.NewService(cg,coinmarketcap)
 
 	publisher, err := buildPublisher(cfg, rdb)
 	if err != nil {

@@ -12,6 +12,7 @@ type Config struct {
 	Redis    RedisConfig
 	Queue    QueueConfig
 	Realtime RealtimeConfig
+	Provider ProviderConfig
 }
 
 func Load() (*Config, error) {
