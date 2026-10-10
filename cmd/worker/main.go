@@ -61,11 +61,11 @@ func run() error {
 	defer rdb.Close()
 
 	cg := coingecko.New(cfg.Provider.Coingecko.ApiKey)
-	coinmarketcap := coinmarketcap.New(cfg.Provider.Coinmarketcap.ApiKey) 
+	coinmarketcap := coinmarketcap.New(cfg.Provider.Coinmarketcap.ApiKey)
 
 	currencyRepository := postgres.NewCurrencyRepository(repo)
 	marketDataHistoryRepository := postgres.NewMarketDataHistoryRepository(repo)
-	provider := marketservice.NewService(cg,coinmarketcap)
+	provider := marketservice.NewService(cg, coinmarketcap)
 
 	publisher, err := buildPublisher(cfg, rdb)
 	if err != nil {

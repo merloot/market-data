@@ -12,7 +12,7 @@ import (
 
 func (p *Provider) GetMarketDataChart(
 	ctx context.Context,
-	currency string,
+	currency market.Currency,
 	days int,
 ) (market.MarketDataChart, error) {
 	to := time.Now()
@@ -22,7 +22,7 @@ func (p *Provider) GetMarketDataChart(
 
 func (p *Provider) GetMarketDataChartRange(
 	ctx context.Context,
-	currency string,
+	currency market.Currency,
 	from, to time.Time,
 ) (market.MarketDataChart, error) {
 	return p.getHistorical(ctx, currency, from, to)
@@ -30,14 +30,14 @@ func (p *Provider) GetMarketDataChartRange(
 
 func (p *Provider) getHistorical(
 	ctx context.Context,
-	currency string,
+	currency market.Currency,
 	from, to time.Time,
 ) (market.MarketDataChart, error) {
 	interval := intervalForRange(from, to)
 	url := fmt.Sprintf(
 		"%s/v2/cryptocurrency/quotes/historical?id=%s&time_start=%d&time_end=%d&interval=%s&convert=USD",
 		p.baseURL,
-		currency,
+		currency.CoinMarketCap,
 		from.UnixMilli(),
 		to.UnixMilli(),
 		interval,
@@ -51,7 +51,7 @@ func (p *Provider) getHistorical(
 
 	resp, err := p.client.Do(req)
 	if err != nil {
-		return market.MarketDataChart{}, fmt.Errorf("%w: %v", market.ErrUpstream, err)
+		return market.MarketDataChart{}, fmt.Errorf("%v: %w", market.ErrUpstream, err)
 	}
 	defer resp.Body.Close()
 

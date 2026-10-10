@@ -16,7 +16,7 @@ type Provider interface {
 
 	GetMarketDataList(ctx context.Context, currencies []string) (map[string]market.MarketData, error)
 
-	GetMarketDataChart(ctx context.Context, currency string, days int) (market.MarketDataChart, error)
+	GetMarketDataChart(ctx context.Context, currency market.Currency, days int) (market.MarketDataChart, error)
 
-	GetMarketDataChartRange(ctx context.Context, currency string, from, to time.Time) (market.MarketDataChart, error)
+	GetMarketDataChartRange(ctx context.Context, currency market.Currency, from, to time.Time) (market.MarketDataChart, error)
 }

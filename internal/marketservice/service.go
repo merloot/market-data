@@ -65,7 +65,7 @@ func (s *Service) GetMarketDataChart(ctx context.Context, currency market.Curren
 		return market.MarketDataChart{}, err
 	}
 
-	return p.GetMarketDataChart(ctx, currency.CoinName, days)
+	return p.GetMarketDataChart(ctx, currency, days)
 }
 
 func (s *Service) GetMarketDataChartRange(ctx context.Context, currency market.Currency, from, to time.Time) (market.MarketDataChart, error) {
@@ -73,5 +73,5 @@ func (s *Service) GetMarketDataChartRange(ctx context.Context, currency market.C
 	if err != nil {
 		return market.MarketDataChart{}, err
 	}
-	return p.GetMarketDataChartRange(ctx, currency.CoinName, from, to)
+	return p.GetMarketDataChartRange(ctx, currency, from, to)
 }

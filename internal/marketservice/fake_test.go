@@ -32,10 +32,10 @@ func (p *fakeProvider) GetMarketDataList(_ context.Context, codes []string) (map
 	return p.marketData, p.err
 }
 
-func (p *fakeProvider) GetMarketDataChart(context.Context, string, int) (market.MarketDataChart, error) {
+func (p *fakeProvider) GetMarketDataChart(context.Context, market.Currency, int) (market.MarketDataChart, error) {
 	return p.chart, p.err
 }
 
-func (p *fakeProvider) GetMarketDataChartRange(context.Context, string, time.Time, time.Time) (market.MarketDataChart, error) {
+func (p *fakeProvider) GetMarketDataChartRange(context.Context, market.Currency, time.Time, time.Time) (market.MarketDataChart, error) {
 	return p.chart, p.err
 }

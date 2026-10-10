@@ -146,7 +146,7 @@ func TestProvider_GetMarketDataChart(t *testing.T) {
 
 	p := coinmarketcap.NewWithBaseURL("test-key", srv.URL)
 
-	chart, err := p.GetMarketDataChart(context.Background(), "BTC", 1)
+	chart, err := p.GetMarketDataChart(context.Background(), market.Currency{CoinName: "BTC", Provider: "coinmarketcap", CoinMarketCap: "1"}, 1)
 	if err != nil {
 		t.Errorf("Err = %v", err)
 	}

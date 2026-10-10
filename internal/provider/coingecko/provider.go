@@ -102,8 +102,8 @@ func (c *Provider) GetMarketDataList(ctx context.Context, currencies []string) (
 	return result, nil
 }
 
-func (c *Provider) GetMarketDataChart(ctx context.Context, currency string, days int) (market.MarketDataChart, error) {
-	url := fmt.Sprintf("%s/coins/%s/market_chart?vs_currency=usd&days=%d", c.baseUrl, currency, days)
+func (c *Provider) GetMarketDataChart(ctx context.Context, currency market.Currency, days int) (market.MarketDataChart, error) {
+	url := fmt.Sprintf("%s/coins/%s/market_chart?vs_currency=usd&days=%d", c.baseUrl, currency.CoinGecko, days)
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	if err != nil {
@@ -137,6 +137,6 @@ func (c *Provider) GetMarketDataChart(ctx context.Context, currency string, days
 	}, nil
 }
 
-func (c *Provider) GetMarketDataChartRange(ctx context.Context, currency string, from, to time.Time) (market.MarketDataChart, error) {
+func (c *Provider) GetMarketDataChartRange(ctx context.Context, currency market.Currency, from, to time.Time) (market.MarketDataChart, error) {
 	return market.MarketDataChart{}, nil
 }
