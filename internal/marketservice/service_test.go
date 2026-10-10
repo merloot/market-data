@@ -1,12 +1,12 @@
-package market_test
+package marketservice_test
 
 import (
 	"context"
 	"errors"
 	"testing"
 
-	marketdomain "github.com/merloot/market-data/internal/domain/market"
-	"github.com/merloot/market-data/internal/market"
+	"github.com/merloot/market-data/internal/domain/market"
+	"github.com/merloot/market-data/internal/marketservice"
 )
 
 func TestService_GetMarketDataList_MergesProviders(t *testing.T) {
@@ -14,17 +14,17 @@ func TestService_GetMarketDataList_MergesProviders(t *testing.T) {
 
 	cg := &fakeProvider{
 		name:       "coingecko",
-		marketData: map[string]marketdomain.MarketData{"btc": {CurrentPrice: 50000}},
+		marketData: map[string]market.MarketData{"btc": {CurrentPrice: 50000}},
 	}
 
 	cmc := &fakeProvider{
 		name:       "coinmarketcap",
-		marketData: map[string]marketdomain.MarketData{"eth": {CurrentPrice: 3000}},
+		marketData: map[string]market.MarketData{"eth": {CurrentPrice: 3000}},
 	}
 
-	svc := market.NewService(cg, cmc)
+	svc := marketservice.NewService(cg, cmc)
 
-	got, err := svc.GetMarketDataList(context.Background(), []marketdomain.Currency{
+	got, err := svc.GetMarketDataList(context.Background(), []market.Currency{
 		{Provider: "coingecko", CoinName: "btc"},
 		{Provider: "coinmarketcap", CoinName: "eth"},
 	})
@@ -45,7 +45,7 @@ func TestService_GetMarketDataList_PartialFailure(t *testing.T) {
 
 	ok := &fakeProvider{
 		name:       "coingecko",
-		marketData: map[string]marketdomain.MarketData{"btc": {CurrentPrice: 500}},
+		marketData: map[string]market.MarketData{"btc": {CurrentPrice: 500}},
 	}
 
 	broken := &fakeProvider{
@@ -53,9 +53,9 @@ func TestService_GetMarketDataList_PartialFailure(t *testing.T) {
 		err:  errors.New("Api is down"),
 	}
 
-	svc := market.NewService(ok, broken)
+	svc := marketservice.NewService(ok, broken)
 
-	got, err := svc.GetMarketDataList(context.Background(), []marketdomain.Currency{
+	got, err := svc.GetMarketDataList(context.Background(), []market.Currency{
 		{Provider: "coingecko", CoinName: "btc"},
 		{Provider: "coinmarketcap", CoinName: "eth"},
 	})
@@ -72,12 +72,12 @@ func TestService_GetMarketDataList_PartialFailure(t *testing.T) {
 func TestService_GetMarketDataList_UnknownProvider(t *testing.T) {
 	t.Parallel()
 
-	svc := market.NewService()
+	svc := marketservice.NewService()
 
-	_, err := svc.GetMarketDataList(context.Background(), []marketdomain.Currency{
+	_, err := svc.GetMarketDataList(context.Background(), []market.Currency{
 		{Provider: "nope", CoinName: "btc"},
 	})
-	if !errors.Is(err, marketdomain.ErrNotFound) {
+	if !errors.Is(err, market.ErrNotFound) {
 		t.Fatalf("Error = %v, want ErrNotFound", err)
 	}
 }
@@ -87,12 +87,12 @@ func TestService_GetMarketDataListGroupByProvider(t *testing.T) {
 
 	cg := &fakeProvider{
 		name:       "coingecko",
-		marketData: map[string]marketdomain.MarketData{},
+		marketData: map[string]market.MarketData{},
 	}
 
-	svc := market.NewService(cg)
+	svc := marketservice.NewService(cg)
 
-	_, _ = svc.GetMarketDataList(context.Background(), []marketdomain.Currency{
+	_, _ = svc.GetMarketDataList(context.Background(), []market.Currency{
 		{CoinName: "btc", Provider: "coingecko"},
 		{CoinName: "eth", Provider: "coingecko"},
 		{CoinName: "sol", Provider: "coingecko"},
