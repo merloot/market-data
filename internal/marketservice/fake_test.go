@@ -1,4 +1,4 @@
-package market_test
+package marketservice_test
 
 import (
 	"context"

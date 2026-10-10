@@ -14,7 +14,7 @@ import (
 	goredis "github.com/redis/go-redis/v9"
 
 	"github.com/merloot/market-data/internal/config"
-	"github.com/merloot/market-data/internal/market"
+	"github.com/merloot/market-data/internal/marketservice"
 	"github.com/merloot/market-data/internal/provider/coingecko"
 	"github.com/merloot/market-data/internal/realtime"
 	"github.com/merloot/market-data/internal/realtime/memory"
@@ -64,7 +64,7 @@ func run() error {
 
 	currencyRepository := postgres.NewCurrencyRepository(repo)
 	marketDataHistoryRepository := postgres.NewMarketDataHistoryRepository(repo)
-	provider := market.NewService(cg)
+	provider := marketservice.NewService(cg)
 
 	publisher, err := buildPublisher(cfg, rdb)
 	if err != nil {

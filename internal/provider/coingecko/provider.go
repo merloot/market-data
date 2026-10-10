@@ -9,9 +9,15 @@ import (
 	"time"
 
 	"github.com/merloot/market-data/internal/domain/market"
+	"github.com/merloot/market-data/internal/marketservice"
 )
 
-const cgDefaultUrl = "https://api.coingecko.com/api/v3"
+var _ marketservice.Provider = (*Provider)(nil)
+
+const (
+	providerName   = "coingecko"
+	defaultBaseURL = "https://api.coingecko.com/api/v3"
+)
 
 type Provider struct {
 	apiKey  string
@@ -20,7 +26,7 @@ type Provider struct {
 }
 
 func New(apiKey string) *Provider {
-	return NewWithBaseUrl(apiKey, cgDefaultUrl)
+	return NewWithBaseUrl(apiKey, defaultBaseURL)
 }
 
 func NewWithBaseUrl(apiKey string, baseUrl string) *Provider {
@@ -125,9 +131,9 @@ func (c *Provider) GetMarketDataChart(ctx context.Context, currency string, days
 	}
 
 	return market.MarketDataChart{
-		Prices:      raw.Prices,
-		MarketCaps:  raw.MarketCaps,
-		TotalVolume: raw.TotalVolumes,
+		Prices:       raw.Prices,
+		MarketCaps:   raw.MarketCaps,
+		TotalVolumes: raw.TotalVolumes,
 	}, nil
 }
 

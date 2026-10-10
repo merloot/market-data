@@ -1,4 +1,4 @@
-package market
+package marketservice
 
 import "github.com/merloot/market-data/internal/domain/market"
 
