@@ -12,37 +12,32 @@ import (
 
 func (p *Provider) GetMarketDataChart(
 	ctx context.Context,
-	c market.Currency,
+	currency string,
 	days int,
 ) (market.MarketDataChart, error) {
 	to := time.Now()
 	from := to.Add(-time.Duration(days) * 24 * time.Hour)
-	return p.getHistorical(ctx, c, from, to)
+	return p.getHistorical(ctx, currency, from, to)
 }
 
 func (p *Provider) GetMarketDataChartRange(
 	ctx context.Context,
-	c market.Currency,
+	currency string,
 	from, to time.Time,
 ) (market.MarketDataChart, error) {
-	return p.getHistorical(ctx, c, from, to)
+	return p.getHistorical(ctx, currency, from, to)
 }
 
 func (p *Provider) getHistorical(
 	ctx context.Context,
-	c market.Currency,
+	currency string,
 	from, to time.Time,
 ) (market.MarketDataChart, error) {
-	if c.CoinMarketCap == "" {
-		return market.MarketDataChart{}, fmt.Errorf("%w: no coinmarketcap id for %s",
-			market.ErrNotFound, c.CoinName)
-	}
-
 	interval := intervalForRange(from, to)
 	url := fmt.Sprintf(
 		"%s/v2/cryptocurrency/quotes/historical?id=%s&time_start=%d&time_end=%d&interval=%s&convert=USD",
 		p.baseURL,
-		c.CoinMarketCap,
+		currency,
 		from.UnixMilli(),
 		to.UnixMilli(),
 		interval,
@@ -66,22 +61,22 @@ func (p *Provider) getHistorical(
 
 	var raw historicalResponse
 	if err := json.NewDecoder(resp.Body).Decode(&raw); err != nil {
-		return market.MarketDataChart{}, fmt.Errorf("Decode: %w",err)
+		return market.MarketDataChart{}, fmt.Errorf("Decode: %w", err)
 	}
 
-	return convertHistorical(raw),nil
+	return convertHistorical(raw), nil
 }
 
 func convertHistorical(raw historicalResponse) market.MarketDataChart {
 	chart := market.MarketDataChart{
-		Prices: make([][2]float64,0, len(raw.Data.Quotes)),
-		MarketCaps: make([][2]float64,0, len(raw.Data.Quotes)),
-		TotalVolumes: make([][2]float64,0, len(raw.Data.Quotes)),
+		Prices:       make([][2]float64, 0, len(raw.Data.Quotes)),
+		MarketCaps:   make([][2]float64, 0, len(raw.Data.Quotes)),
+		TotalVolumes: make([][2]float64, 0, len(raw.Data.Quotes)),
 	}
 
 	for _, q := range raw.Data.Quotes {
 		usd, ok := q.Quote["USD"]
-		if !ok  {
+		if !ok {
 			continue
 		}
 

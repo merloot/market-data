@@ -12,14 +12,9 @@ import (
 
 func (p *Provider) GetMarketDataList(
 	ctx context.Context,
-	currencies []market.Currency,
+	currencies []string,
 ) (map[string]market.MarketData, error) {
-	ids := make([]string, 0, len(currencies))
-	for _, c := range currencies {
-		if c.CoinMarketCap != "" {
-			ids = append(ids, c.CoinMarketCap)
-		}
-	}
+	ids := currencies
 	if len(ids) == 0 {
 		return map[string]market.MarketData{}, nil
 	}

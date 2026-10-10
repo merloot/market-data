@@ -9,11 +9,11 @@ import (
 	"time"
 
 	"github.com/merloot/market-data/internal/domain/market"
+	"github.com/merloot/market-data/internal/marketservice"
 	"github.com/merloot/market-data/internal/provider/coinmarketcap"
-	"github.com/merloot/market-data/internal/tasks/oracle"
 )
 
-var _ oracle.MarketDataProvider = (*coinmarketcap.Provider)(nil)
+var _ marketservice.Provider = (*coinmarketcap.Provider)(nil)
 
 func TestProvider_GetMarketDataList(t *testing.T) {
 	t.Parallel()
@@ -22,8 +22,8 @@ func TestProvider_GetMarketDataList(t *testing.T) {
 		if r.URL.Path != "/v2/cryptocurrency/quotes/latest" {
 			t.Errorf("unexpected path: %s", r.URL.Path)
 		}
-		if got := r.URL.Query().Get("id"); got != "1,2" {
-			t.Errorf("id = %q, want 1,2", got)
+		if got := r.URL.Query().Get("id"); got != "BTC,ETH" {
+			t.Errorf("id = %q, want BTC,ETH", got)
 		}
 		if got := r.Header.Get("X-CMC_PRO_API_KEY"); got != "test-key" {
 			t.Errorf("api key = %q, want test-key", got)
@@ -52,10 +52,7 @@ func TestProvider_GetMarketDataList(t *testing.T) {
 
 	p := coinmarketcap.NewWithBaseURL("test-key", srv.URL)
 
-	got, err := p.GetMarketDataList(context.Background(), []market.Currency{
-		{CoinName: "BTC", CoinMarketCap: "1"},
-		{CoinName: "ETH", CoinMarketCap: "2"},
-	})
+	got, err := p.GetMarketDataList(context.Background(), []string{"BTC", "ETH"})
 	if err != nil {
 		t.Fatalf("Err = %v", err)
 	}
@@ -93,9 +90,7 @@ func TestProvider_GetMarketDataList_RateLimited(t *testing.T) {
 	defer srv.Close()
 
 	p := coinmarketcap.NewWithBaseURL("test-key", srv.URL)
-	_, err := p.GetMarketDataList(context.Background(), []market.Currency{
-		{CoinName: "BTC", CoinMarketCap: "1"},
-	})
+	_, err := p.GetMarketDataList(context.Background(), []string{"BTC"})
 	if !errors.Is(err, market.ErrRateLimited) {
 		t.Fatalf("Err = %v, want ErrRateLimit", err)
 	}
@@ -110,9 +105,7 @@ func TestProvider_GetMarketDataList_HTTPError(t *testing.T) {
 	defer srv.Close()
 
 	p := coinmarketcap.NewWithBaseURL("test-key", srv.URL)
-	_, err := p.GetMarketDataList(context.Background(), []market.Currency{
-		{CoinName: "BTC", CoinMarketCap: "1"},
-	})
+	_, err := p.GetMarketDataList(context.Background(), []string{"BTC"})
 	if !errors.Is(err, market.ErrUpstream) {
 		t.Fatalf("Err = %v, want ErrUpstream", err)
 	}
@@ -153,10 +146,7 @@ func TestProvider_GetMarketDataChart(t *testing.T) {
 
 	p := coinmarketcap.NewWithBaseURL("test-key", srv.URL)
 
-	chart, err := p.GetMarketDataChart(context.Background(), market.Currency{
-		CoinName:      "BTC",
-		CoinMarketCap: "1",
-	}, 1)
+	chart, err := p.GetMarketDataChart(context.Background(), "BTC", 1)
 	if err != nil {
 		t.Errorf("Err = %v", err)
 	}
@@ -166,18 +156,6 @@ func TestProvider_GetMarketDataChart(t *testing.T) {
 
 	if chart.Prices[0][1] != 50000 {
 		t.Fatalf("Price = %v , want 50000", chart.Prices[0][1])
-	}
-}
-
-func TestProvider_GetMarketDataChart_NoID(t *testing.T) {
-	t.Parallel()
-
-	p := coinmarketcap.NewWithBaseURL("test-key", "http://unused")
-	_, err := p.GetMarketDataChart(context.Background(), market.Currency{
-		CoinName: "BTC",
-	}, 1)
-	if !errors.Is(err, market.ErrNotFound) {
-		t.Fatalf("Err = %v, want ErrNotFound", err)
 	}
 }
 
@@ -195,9 +173,9 @@ func TestParseTimestamp(t *testing.T) {
 			want:  time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC).UnixMilli(),
 		},
 		{
-			name: "invalid",
+			name:  "invalid",
 			input: "Not a timestamp",
-			want: 0,
+			want:  0,
 		},
 	}
 

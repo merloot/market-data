@@ -6,7 +6,10 @@ import (
 	"time"
 
 	"github.com/merloot/market-data/internal/domain/market"
+	"github.com/merloot/market-data/internal/marketservice"
 )
+
+var _ marketservice.Provider = (*Provider)(nil)
 
 const (
 	providerName   = "coinmarketcap"
@@ -37,8 +40,12 @@ func (p *Provider) Provider() string {
 	return providerName
 }
 
-func (p *Provider) GetLogo(_ context.Context, _ market.Currency) (string, error) {
+func (c *Provider) GetLogo(ctx context.Context, currency string) (string, error) {
 	return "", nil
+}
+
+func (c *Provider) CheckCurrencyData(ctx context.Context, currencies []market.CurrencyToFind) (map[string]market.CurrencyData, error) {
+	return map[string]market.CurrencyData{}, nil
 }
 
 func ParseTimestampForTest(s string) int64 { return parseTimestamp(s) }
