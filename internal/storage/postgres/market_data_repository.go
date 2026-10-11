@@ -31,8 +31,9 @@ func (r *MarketDataHistoryRepository) Create(ctx context.Context, data []market.
 
 	const query = `
 		INSERT INTO market_data_history
-			(currency,price,market_cap, circulating_supply,total_supply, timestamp)
-		VALUES ($1, $2, $3, $4, $5, $6)
+			(currency,price,market_cap,circulating_supply,total_supply,timestamp)
+		VALUES 
+			($1, $2, $3, $4, $5, $6)
 		ON CONFLICT (currency, date_trunc('minute',timestamp)) DO NOTHING
 	`
 

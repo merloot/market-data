@@ -4,8 +4,8 @@ CREATE TABLE market_data_history (
   currency VARCHAR(255) NOT NULL,
   price NUMERIC NOT NULL,
   market_cap NUMERIC NOT NULL,
-  circulation_supply NUMERIC NOT NULL,
-  timestamp TIMESTAMPTZ NOT NULL,
+  circulating_supply NUMERIC NOT NULL,
+  timestamp TIMESTAMP WITHOUT TIME ZONE NOT NULL,
   total_supply NUMERIC NOT NULL,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );

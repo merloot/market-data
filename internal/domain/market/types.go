@@ -40,9 +40,10 @@ type MarketData struct {
 }
 
 type MarketDataChart struct {
-	Prices       [][2]float64
-	MarketCaps   [][2]float64
-	TotalVolumes [][2]float64
+	Prices            [][2]float64
+	MarketCaps        [][2]float64
+	CirculatingSupply [][2]float64
+	TotalSupply       [][2]float64
 }
 
 type MarketDataRow struct {
@@ -55,5 +56,6 @@ type MarketDataRow struct {
 }
 
 const (
-	ProviderCoinGecko = "coin-gecko"
+	ProviderCoinGecko     = "coin-gecko"
+	ProviderCoinmarketcap = "coinmarketcap"
 )

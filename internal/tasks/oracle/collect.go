@@ -2,6 +2,7 @@ package oracle
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"time"
 
@@ -14,12 +15,17 @@ func (s *Service) collectHistory(
 	ctx context.Context,
 	currencies []market.Currency,
 ) ([]market.MarketDataHistory, error) {
-	var all []market.MarketDataHistory
+	var (
+		all  []market.MarketDataHistory
+		errs []error
+	)
 
 	for _, c := range currencies {
 		last, err := s.marketDataHistoryRepository.LastUpdated(ctx, c.CoinName)
 		if err != nil {
-			return nil, fmt.Errorf("Last updated %s: %w", c.CoinName, err)
+			s.log.Warn("Last updated failed", "currency", c.CoinName, "err", err)
+			errs = append(errs, fmt.Errorf("Last updated %s: %w", c.CoinName, err))
+			continue
 		}
 		var data []market.MarketDataHistory
 		if last.IsZero() {
@@ -28,9 +34,13 @@ func (s *Service) collectHistory(
 			data, err = s.fetchFromLastUpdated(ctx, c, last)
 		}
 		if err != nil {
-			return nil, err
+			s.log.Warn("History fetch failed", "currency", c.CoinName, "err", err)
+			errs = append(errs, fmt.Errorf("History %s: %w", c.CoinName, err))
 		}
 		all = append(all, data...)
+	}
+	if len(errs) > 0 {
+		return all, errors.Join(errs...)
 	}
 	return all, nil
 }
@@ -54,13 +64,21 @@ func (s *Service) fetchAllTimeRanges(
 	ctx context.Context,
 	currency market.Currency,
 ) ([]market.MarketDataHistory, error) {
-	var all []market.MarketDataHistory
+	var (
+		all  []market.MarketDataHistory
+		errs []error
+	)
 	for _, days := range []int{1, 90, 365} {
 		chart, err := s.provider.GetMarketDataChart(ctx, currency, days)
 		if err != nil {
-			return nil, fmt.Errorf("Chart %s/%dd: %w", currency.CoinName, days, err)
+			s.log.Warn("Chart fetch failed", "days", days, "err", err)
+			errs = append(errs, fmt.Errorf("Chart %s%dd: %w", currency.CoinName, days, err))
+			continue
 		}
 		all = append(all, formatChart(currency.CoinName, chart)...)
+	}
+	if len(errs) > 0 {
+		return all, errors.Join(errs...)
 	}
 	return all, nil
 }

@@ -69,9 +69,10 @@ func (p *Provider) getHistorical(
 
 func convertHistorical(raw historicalResponse) market.MarketDataChart {
 	chart := market.MarketDataChart{
-		Prices:       make([][2]float64, 0, len(raw.Data.Quotes)),
-		MarketCaps:   make([][2]float64, 0, len(raw.Data.Quotes)),
-		TotalVolumes: make([][2]float64, 0, len(raw.Data.Quotes)),
+		Prices:            make([][2]float64, 0, len(raw.Data.Quotes)),
+		MarketCaps:        make([][2]float64, 0, len(raw.Data.Quotes)),
+		CirculatingSupply: make([][2]float64, 0, len(raw.Data.Quotes)),
+		TotalSupply:       make([][2]float64, 0, len(raw.Data.Quotes)),
 	}
 
 	for _, q := range raw.Data.Quotes {
@@ -87,9 +88,9 @@ func convertHistorical(raw historicalResponse) market.MarketDataChart {
 
 		chart.Prices = append(chart.Prices, [2]float64{float64(ts), usd.Price})
 		chart.MarketCaps = append(chart.MarketCaps, [2]float64{float64(ts), usd.MarketCap})
-		chart.TotalVolumes = append(chart.TotalVolumes, [2]float64{float64(ts), usd.TotalSupply})
+		chart.CirculatingSupply = append(chart.CirculatingSupply, [2]float64{float64(ts), usd.CirculatingSupply})
+		chart.TotalSupply = append(chart.TotalSupply, [2]float64{float64(ts), usd.TotalSupply})
 	}
-
 	return chart
 }
 
