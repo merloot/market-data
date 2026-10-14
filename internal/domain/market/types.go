@@ -58,6 +58,11 @@ type MarketDataRow struct {
 	CirculatingSupplyDiff float64
 }
 
+type MarketDataPricePoint struct {
+	Time  time.Time
+	Price float64
+}
+
 const (
 	ProviderCoinGecko     = "coin-gecko"
 	ProviderCoinmarketcap = "coinmarketcap"
