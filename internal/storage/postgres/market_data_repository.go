@@ -105,7 +105,7 @@ func (r *MarketDataHistoryRepository) GetMarketDataList(
 				circulating_supply,
 				total_supply
 			FROM
-				market_data_history
+				market_data_history mdh
 			WHERE
 				mdh.currency = c.coin_name
 			ORDER BY
@@ -140,11 +140,14 @@ func (r *MarketDataHistoryRepository) GetMarketDataList(
 		var row market.MarketDataRow
 		if err := rows.Scan(
 			&row.Currency,
+			&row.LogoURL,
 			&row.Price,
 			&row.MarketCap,
+			&row.CirculatingSupply,
+			&row.TotalSupply,
 			&row.PriceDiff,
 			&row.MarketCapDiff,
-			&row.TotalSupply,
+			&row.CirculatingSupplyDiff,
 		); err != nil {
 			return nil, fmt.Errorf("Scan: %w", err)
 		}

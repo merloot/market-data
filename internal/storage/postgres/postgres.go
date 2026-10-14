@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/jackc/pgx/v5/tracelog"
 	"github.com/merloot/market-data/internal/config"
 )
 
@@ -30,13 +31,17 @@ func New(ctx context.Context, cfg config.DatabaseConfig, opts ...Options) (*Repo
 	poolConfig.MaxConnLifetime = cfg.MaxConnLifetime
 	poolConfig.MaxConnIdleTime = cfg.MaxConnIdleTime
 	poolConfig.ConnConfig.ConnectTimeout = cfg.ConnectionTimeout
-
 	poolConfig.HealthCheckPeriod = time.Minute
+	poolConfig.ConnConfig.Tracer = &tracelog.TraceLog{
+		Logger: newPgxLogger(o.logger),
+		LogLevel: tracelog.LogLevelDebug,
+	}
 
 	pool, err := pgxpool.NewWithConfig(ctx, poolConfig)
 	if err != nil {
 		return nil, fmt.Errorf("Create pool: %w", err)
 	}
+
 
 	repo := &Repo{pool: pool, log: o.logger}
 
