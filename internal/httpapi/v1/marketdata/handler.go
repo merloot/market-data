@@ -40,12 +40,20 @@ func getSupportedCurrencies(scv MarketService, log *slog.Logger) http.HandlerFun
 
 func getCurrenciesInfo(scv MarketService, log *slog.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		timeframe := r.URL.Query().Get("timeframe")
-		if timeframe == "" {
-			timeframe = "24h"
+		timeframeStr := r.URL.Query().Get("timeframe")
+		if timeframeStr == "" {
+			timeframeStr = string(market.TimeframeDay)
 		}
-		since := time.Now().Add(-timeframeDuration(timeframe))
 
+		timeframe := market.Timeframe(timeframeStr)
+
+		duration, err := timeframe.Duration()
+		if err != nil {
+			httputil.WriteError(w, http.StatusBadRequest, err.Error())
+			return
+		}
+
+		since := time.Now().Add(-duration)
 		currencies, err := scv.ListCurrencies(r.Context())
 		if err != nil {
 			log.Error("List currencies", "err", err)
@@ -89,40 +97,27 @@ func getPriceHistoryChart(scv MarketService, log *slog.Logger) http.HandlerFunc 
 			CoinName: input.CoinName,
 		}
 
-		chart, err := scv.GetPriceHistory(r.Context(), c, input.From, input.To)
+		points, err := scv.GetPriceHistory(r.Context(), c,input.Timeframe, input.From, input.To)
 		if err != nil {
 			log.Error("Price history", "err", err)
 			httputil.WriteError(w, http.StatusInternalServerError, err.Error())
 			return
 		}
 
-		httputil.WriteJSON(w, http.StatusOK, PriceHistoryDTO{
-			Prices:       chart.Prices,
-			MarketCaps:   chart.MarketCaps,
-			TotalVolumes: chart.TotalSupply,
-		})
-	}
-}
+		dtos := make([]PriceHistoryItemDTO, 0, len(points))
+		for _, p := range points {
+			dtos = append(dtos, PriceHistoryItemDTO{Time: p.Time, Price: p.Price})
+		}
 
-func timeframeDuration(tf string) time.Duration {
-	switch tf {
-	case "1h":
-		return time.Hour
-	case "24h":
-		return 24 * time.Hour
-	case "7d":
-		return 7 * 24 * time.Hour
-	case "30d":
-		return 30 * 24 * time.Hour
-	default:
-		return 24 * time.Hour
+		httputil.WriteJSON(w, http.StatusOK, ToPriceHistoryChartDTO(dtos))
 	}
 }
 
 type priceHistoryInput struct {
-	CoinName string
-	From     time.Time
-	To       time.Time
+	CoinName  string
+	Timeframe market.Timeframe
+	From      time.Time
+	To        time.Time
 }
 
 func parseHistoryInput(r *http.Request) (priceHistoryInput, error) {
@@ -132,6 +127,13 @@ func parseHistoryInput(r *http.Request) (priceHistoryInput, error) {
 	if coinName == "" {
 		return priceHistoryInput{}, errors.New("Missing required params: coinName")
 	}
+
+	timeframeStr := q.Get("timeframe")
+	if timeframeStr == "" {
+		timeframeStr = string(market.TimeframeDay)
+	}
+
+	timeframe := market.Timeframe(timeframeStr)
 
 	var from, to time.Time
 
@@ -150,9 +152,18 @@ func parseHistoryInput(r *http.Request) (priceHistoryInput, error) {
 		}
 		to = t
 	}
-	if from.IsZero() {
+
+	if timeframe == market.TimeframeCustom && from.IsZero() {
+		return priceHistoryInput{}, errors.New("Custom timeframe requires from parameter")
+	}
+
+	if timeframe != market.TimeframeCustom {
+		dur, err := timeframe.Duration()
+		if err != nil {
+			return priceHistoryInput{}, err
+		}
 		to = time.Now()
-		from = to.Add(24 * time.Hour)
+		from = to.Add(-dur)
 	}
 
 	if to.IsZero() {
@@ -160,8 +171,9 @@ func parseHistoryInput(r *http.Request) (priceHistoryInput, error) {
 	}
 
 	return priceHistoryInput{
-		CoinName: coinName,
-		From:     from,
-		To:       to,
+		CoinName:  coinName,
+		From:      from,
+		Timeframe: timeframe,
+		To:        to,
 	}, nil
 }

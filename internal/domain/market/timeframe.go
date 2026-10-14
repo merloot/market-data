@@ -133,7 +133,6 @@ func CalculateBucket(timeframe Timeframe, from, to time.Time) Bucket {
 	}
 }
 
-// TODO
 func calculateCustomBucket(from, to time.Time) Bucket {
 	diff := to.Sub(from)
 	hours := diff.Hours()

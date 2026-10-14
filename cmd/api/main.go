@@ -30,7 +30,6 @@ import (
 
 type marketDataV1Service struct {
 	currencies CurrencyLister
-	market     *marketservice.Service
 	history    HistoryLister
 }
 
@@ -40,16 +39,15 @@ type CurrencyLister interface {
 
 type HistoryLister interface {
 	GetMarketDataList(ctx context.Context, currencies []string, since time.Time) ([]market.MarketDataRow, error)
+	GetPriceHistory(ctx context.Context, currency market.Currency, timeframe market.Timeframe, from, to time.Time) ([]market.MarketDataPricePoint, error)
 }
 
 func newMarketDataV1Service(
 	currencies CurrencyLister,
-	market *marketservice.Service,
 	history HistoryLister,
 ) *marketDataV1Service {
 	return &marketDataV1Service{
 		currencies: currencies,
-		market:     market,
 		history:    history,
 	}
 }
@@ -91,9 +89,10 @@ func (s *marketDataV1Service) GetMarketDataInfo(
 func (s *marketDataV1Service) GetPriceHistory(
 	ctx context.Context,
 	c market.Currency,
+	timeframe market.Timeframe,
 	from, to time.Time,
-) (market.MarketDataChart, error) {
-	return s.market.GetMarketDataChartRange(ctx, c, from, to)
+) ([]market.MarketDataPricePoint, error) {
+	return s.history.GetPriceHistory(ctx, c, timeframe, from, to)
 }
 
 func main() {
@@ -132,7 +131,7 @@ func run() error {
 
 	debugSvc := marketSvc
 
-	v1Svc := newMarketDataV1Service(currencyRepo, marketSvc, historyRepo)
+	v1Svc := newMarketDataV1Service(currencyRepo, historyRepo)
 
 	deps := &httpapi.Deps{
 		Debug: &debug.Deps{
