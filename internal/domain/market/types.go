@@ -47,12 +47,15 @@ type MarketDataChart struct {
 }
 
 type MarketDataRow struct {
-	Currency      string
-	Price         float64
-	TotalSupply   float64
-	MarketCap     float64
-	PriceDiff     float64
-	MarketCapDiff float64
+	Currency              string
+	LogoURL               *string
+	Price                 float64
+	TotalSupply           float64
+	MarketCap             float64
+	PriceDiff             float64
+	MarketCapDiff         float64
+	CirculatingSupply     float64
+	CirculatingSupplyDiff float64
 }
 
 const (
