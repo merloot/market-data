@@ -1,7 +1,14 @@
 package httpapi
 
-import "github.com/merloot/market-data/internal/marketservice"
+import (
+	"log/slog"
+
+	"github.com/merloot/market-data/internal/httpapi/debug"
+	v1 "github.com/merloot/market-data/internal/httpapi/v1"
+)
 
 type Deps struct {
-	MarketService *marketservice.Service
+	Debug *debug.Deps
+	V1    *v1.Deps
+	Log   *slog.Logger
 }
