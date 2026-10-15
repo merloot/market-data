@@ -2,6 +2,7 @@ package oracle
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log/slog"
 
@@ -42,19 +43,30 @@ func (s *Service) Execute(ctx context.Context) error {
 		return nil
 	}
 
+	var errs []error
+
 	history, err := s.collectHistory(ctx, currencies)
 	if err != nil {
-		return fmt.Errorf("Collect history: %w", err)
+		s.log.Warn("Collect history partial", "err", err)
+		errs = append(errs, fmt.Errorf("Collect history: %w", err))
 	}
 
 	actual, err := s.collectActual(ctx, currencies)
 	if err != nil {
-		return fmt.Errorf("Collect actual: %w", err)
+		s.log.Warn("Collect actual partial", "err", err)
+		errs = append(errs, fmt.Errorf("Collect actual: %w", err))
 	}
 
 	all := append(history, actual...)
-	if err := s.marketDataHistoryRepository.Create(ctx, all); err != nil {
-		return fmt.Errorf("Save: %w", err)
+	if len(all) > 0 {
+		if err := s.marketDataHistoryRepository.Create(ctx, all); err != nil {
+			s.log.Error("Save failed", "err", err, "count", len(all))
+			errs = append(errs, fmt.Errorf("Save: %w", err))
+		} else {
+			s.log.Info("Saved", "count", len(all))
+		}
+	} else {
+		s.log.Warn("Nothing to save")
 	}
 
 	if err := s.publishUpdates(ctx, actual); err != nil {
@@ -63,6 +75,10 @@ func (s *Service) Execute(ctx context.Context) error {
 
 	if err := s.fetchMissingLogos(ctx); err != nil {
 		s.log.Warn("Fetch logos", "err", err)
+	}
+
+	if len(errs) > 0 {
+		return errors.Join(errs...)
 	}
 
 	return nil

@@ -40,20 +40,30 @@ type MarketData struct {
 }
 
 type MarketDataChart struct {
-	Prices       [][2]float64
-	MarketCaps   [][2]float64
-	TotalVolumes [][2]float64
+	Prices            [][2]float64
+	MarketCaps        [][2]float64
+	CirculatingSupply [][2]float64
+	TotalSupply       [][2]float64
 }
 
 type MarketDataRow struct {
-	Currency      string
-	Price         float64
-	TotalSupply   float64
-	MarketCap     float64
-	PriceDiff     float64
-	MarketCapDiff float64
+	Currency              string
+	LogoURL               *string
+	Price                 float64
+	TotalSupply           float64
+	MarketCap             float64
+	PriceDiff             float64
+	MarketCapDiff         float64
+	CirculatingSupply     float64
+	CirculatingSupplyDiff float64
+}
+
+type MarketDataPricePoint struct {
+	Time  time.Time
+	Price float64
 }
 
 const (
-	ProviderCoinGecko = "coin-gecko"
+	ProviderCoinGecko     = "coin-gecko"
+	ProviderCoinmarketcap = "coinmarketcap"
 )

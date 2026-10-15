@@ -15,10 +15,12 @@ func formatChart(currency string, chart market.MarketDataChart) []market.MarketD
 	out := make([]market.MarketDataHistory, 0, n)
 	for i := 0; i < n; i++ {
 		out = append(out, market.MarketDataHistory{
-			Currency:  currency,
-			Price:     chart.Prices[i][1],
-			MarketCap: chart.MarketCaps[i][1],
-			Timestamp: time.UnixMilli(int64(chart.Prices[i][0])).UTC(),
+			Currency:          currency,
+			Price:             chart.Prices[i][1],
+			MarketCap:         chart.MarketCaps[i][1],
+			CirculatingSupply: chart.CirculatingSupply[i][1],
+			TotalSupply:       chart.TotalSupply[i][1],
+			Timestamp:         time.UnixMilli(int64(chart.Prices[i][0])).UTC(),
 		})
 	}
 	return out

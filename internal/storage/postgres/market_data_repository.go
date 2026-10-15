@@ -31,8 +31,9 @@ func (r *MarketDataHistoryRepository) Create(ctx context.Context, data []market.
 
 	const query = `
 		INSERT INTO market_data_history
-			(currency,price,market_cap, circulating_supply,total_supply, timestamp)
-		VALUES ($1, $2, $3, $4, $5, $6)
+			(currency,price,market_cap,circulating_supply,total_supply,timestamp)
+		VALUES 
+			($1, $2, $3, $4, $5, $6)
 		ON CONFLICT (currency, date_trunc('minute',timestamp)) DO NOTHING
 	`
 
@@ -104,7 +105,7 @@ func (r *MarketDataHistoryRepository) GetMarketDataList(
 				circulating_supply,
 				total_supply
 			FROM
-				market_data_history
+				market_data_history mdh
 			WHERE
 				mdh.currency = c.coin_name
 			ORDER BY
@@ -139,15 +140,100 @@ func (r *MarketDataHistoryRepository) GetMarketDataList(
 		var row market.MarketDataRow
 		if err := rows.Scan(
 			&row.Currency,
+			&row.LogoURL,
 			&row.Price,
 			&row.MarketCap,
+			&row.CirculatingSupply,
+			&row.TotalSupply,
 			&row.PriceDiff,
 			&row.MarketCapDiff,
-			&row.TotalSupply,
+			&row.CirculatingSupplyDiff,
 		); err != nil {
 			return nil, fmt.Errorf("Scan: %w", err)
 		}
 		out = append(out, row)
 	}
 	return out, rows.Err()
+}
+
+func (r *MarketDataHistoryRepository) GetPriceHistory(
+	ctx context.Context,
+	currency market.Currency,
+	timeframe market.Timeframe,
+	from, to time.Time,
+) ([]market.MarketDataPricePoint, error) {
+	bucket := market.CalculateBucket(timeframe, from, to)
+	const query = `
+			WITH time_intervals AS (
+				SELECT generate_series(
+					$1::timestamptz,
+					$2::timestamptz,
+					$3::interval
+				) AS time_start
+			)
+			SELECT
+				ti.time_start AS time,
+				COALESCE(
+				(
+					SELECT 
+						mdh.price
+					FROM
+						market_data_history mdh
+					WHERE
+							mdh.currency = $4
+						AND
+							mdh.timestamp >= ti.time_start
+						AND 
+							mdh.timestamp < ti.time_start + $3::interval
+					ORDER BY 
+						mdh.timestamp DESC
+					LIMIT
+						1
+				),
+				(
+					SELECT
+						mdh.price
+					FROM
+						market_data_history mdh
+					WHERE 
+						mdh.currency = $4
+					AND
+						mdh.timestamp < ti.time_start
+					ORDER BY 
+						mdh.timestamp DESC
+					LIMIT
+						1
+				)
+						) AS price
+				FROM 
+					time_intervals ti
+				ORDER BY 
+					ti.time_start
+		`
+	rows, err := r.repo.pool.Query(ctx, query,
+		from,
+		to,
+		bucket.Strings(),
+		currency.CoinName,
+	)
+	if err != nil {
+		return nil, fmt.Errorf("Query: %w", err)
+	}
+	defer rows.Close()
+
+	var points []market.MarketDataPricePoint
+	for rows.Next() {
+		var p market.MarketDataPricePoint
+		var price *float64
+
+		if err := rows.Scan(&p.Time, &price); err != nil {
+			return nil, fmt.Errorf("Scan: %w", err)
+		}
+		if price == nil {
+			continue
+		}
+		p.Price = *price
+		points = append(points, p)
+	}
+	return points, nil
 }
