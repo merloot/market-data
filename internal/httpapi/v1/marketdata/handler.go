@@ -11,14 +11,6 @@ import (
 	"github.com/merloot/market-data/internal/httpapi/httputil"
 )
 
-func Register(mux *http.ServeMux, svc MarketService, log *slog.Logger) {
-	mux.HandleFunc("GET /v1/market-data", getCurrenciesInfo(svc, log))
-	mux.HandleFunc("GET /v1/market-data/currencies",
-		getSupportedCurrencies(svc, log))
-	mux.HandleFunc("GET /v1/market-data/price-history-chart",
-		getPriceHistoryChart(svc, log))
-}
-
 func getSupportedCurrencies(scv MarketService, log *slog.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		currencies, err := scv.ListCurrencies(r.Context())
@@ -97,7 +89,7 @@ func getPriceHistoryChart(scv MarketService, log *slog.Logger) http.HandlerFunc 
 			CoinName: input.CoinName,
 		}
 
-		points, err := scv.GetPriceHistory(r.Context(), c,input.Timeframe, input.From, input.To)
+		points, err := scv.GetPriceHistory(r.Context(), c, input.Timeframe, input.From, input.To)
 		if err != nil {
 			log.Error("Price history", "err", err)
 			httputil.WriteError(w, http.StatusInternalServerError, err.Error())
