@@ -59,12 +59,12 @@ func TestCoinGecko_GetMarketDataList(t *testing.T) {
 	if len(got) != 2 {
 		t.Errorf("god %d, want 2 ", len(got))
 	}
-	if got["btc"].CurrentPrice != 50000 {
-		t.Errorf("BTC price = %v, want 50000 ", got["btc"].CurrentPrice)
+	if got["bitcoin"].CurrentPrice != 50000 {
+		t.Errorf("BTC price = %v, want 50000 ", got["bitcoin"].CurrentPrice)
 	}
 
-	if got["eth"].CurrentPrice != 500 {
-		t.Errorf("ETH price = %v, want 500 ", got["eth"].CurrentPrice)
+	if got["ethereum"].CurrentPrice != 500 {
+		t.Errorf("ETH price = %v, want 500 ", got["ethereum"].CurrentPrice)
 	}
 }
 

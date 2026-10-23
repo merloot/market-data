@@ -165,7 +165,7 @@ func TestService_Execute_SkipsZeroPrice(t *testing.T) {
 	t.Parallel()
 
 	currencies := &fakeCurrencyRepository{list: []market.Currency{
-		{CoinName: "BTC", Provider: market.ProviderCoinGecko},
+		{CoinName: "BTC", Provider: market.ProviderCoinGecko, CoinGecko: "bitcoin"},
 	}}
 
 	history := &fakeMarketDataHistoryRepository{}

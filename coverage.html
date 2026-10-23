@@ -1,0 +1,4468 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>api: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">github.com/merloot/market-data/cmd/api/main.go (0.0%)</option>
+				
+				<option value="file1">github.com/merloot/market-data/cmd/migrate/main.go (0.0%)</option>
+				
+				<option value="file2">github.com/merloot/market-data/cmd/seed/main.go (0.0%)</option>
+				
+				<option value="file3">github.com/merloot/market-data/cmd/sheduler/main.go (0.0%)</option>
+				
+				<option value="file4">github.com/merloot/market-data/cmd/worker/main.go (0.0%)</option>
+				
+				<option value="file5">github.com/merloot/market-data/internal/app/app.go (0.0%)</option>
+				
+				<option value="file6">github.com/merloot/market-data/internal/cache/redis/redis.go (77.8%)</option>
+				
+				<option value="file7">github.com/merloot/market-data/internal/config/config.go (88.9%)</option>
+				
+				<option value="file8">github.com/merloot/market-data/internal/config/database.go (0.0%)</option>
+				
+				<option value="file9">github.com/merloot/market-data/internal/domain/market/timeframe.go (33.3%)</option>
+				
+				<option value="file10">github.com/merloot/market-data/internal/httpapi/debug/handler.go (0.0%)</option>
+				
+				<option value="file11">github.com/merloot/market-data/internal/httpapi/debug/router.go (0.0%)</option>
+				
+				<option value="file12">github.com/merloot/market-data/internal/httpapi/httputil/json.go (0.0%)</option>
+				
+				<option value="file13">github.com/merloot/market-data/internal/httpapi/middleware.go (85.2%)</option>
+				
+				<option value="file14">github.com/merloot/market-data/internal/httpapi/router.go (0.0%)</option>
+				
+				<option value="file15">github.com/merloot/market-data/internal/httpapi/v1/marketdata/dto.go (75.0%)</option>
+				
+				<option value="file16">github.com/merloot/market-data/internal/httpapi/v1/marketdata/handler.go (32.6%)</option>
+				
+				<option value="file17">github.com/merloot/market-data/internal/httpapi/v1/marketdata/register.go (100.0%)</option>
+				
+				<option value="file18">github.com/merloot/market-data/internal/httpapi/v1/router.go (0.0%)</option>
+				
+				<option value="file19">github.com/merloot/market-data/internal/httpapi/v1/stream/register.go (0.0%)</option>
+				
+				<option value="file20">github.com/merloot/market-data/internal/httpapi/v1/stream/sse.go (83.3%)</option>
+				
+				<option value="file21">github.com/merloot/market-data/internal/httpapi/v1/stream/ws.go (83.6%)</option>
+				
+				<option value="file22">github.com/merloot/market-data/internal/marketservice/fanout.go (100.0%)</option>
+				
+				<option value="file23">github.com/merloot/market-data/internal/marketservice/group.go (75.0%)</option>
+				
+				<option value="file24">github.com/merloot/market-data/internal/marketservice/service.go (60.5%)</option>
+				
+				<option value="file25">github.com/merloot/market-data/internal/provider/coingecko/provider.go (45.3%)</option>
+				
+				<option value="file26">github.com/merloot/market-data/internal/provider/coinmarketcap/chart.go (85.4%)</option>
+				
+				<option value="file27">github.com/merloot/market-data/internal/provider/coinmarketcap/http.go (89.5%)</option>
+				
+				<option value="file28">github.com/merloot/market-data/internal/provider/coinmarketcap/interval.go (100.0%)</option>
+				
+				<option value="file29">github.com/merloot/market-data/internal/provider/coinmarketcap/market_data.go (87.5%)</option>
+				
+				<option value="file30">github.com/merloot/market-data/internal/provider/coinmarketcap/provider.go (33.3%)</option>
+				
+				<option value="file31">github.com/merloot/market-data/internal/realtime/memory/event.go (100.0%)</option>
+				
+				<option value="file32">github.com/merloot/market-data/internal/realtime/memory/publisher.go (100.0%)</option>
+				
+				<option value="file33">github.com/merloot/market-data/internal/realtime/memory/subscriber.go (100.0%)</option>
+				
+				<option value="file34">github.com/merloot/market-data/internal/realtime/redis/publisher.go (77.8%)</option>
+				
+				<option value="file35">github.com/merloot/market-data/internal/realtime/redis/subscriber.go (86.8%)</option>
+				
+				<option value="file36">github.com/merloot/market-data/internal/scheduling/asynq/logger.go (0.0%)</option>
+				
+				<option value="file37">github.com/merloot/market-data/internal/scheduling/asynq/schedule.go (0.0%)</option>
+				
+				<option value="file38">github.com/merloot/market-data/internal/scheduling/registry.go (92.9%)</option>
+				
+				<option value="file39">github.com/merloot/market-data/internal/scheduling/river/db.go (0.0%)</option>
+				
+				<option value="file40">github.com/merloot/market-data/internal/scheduling/river/noop.go (0.0%)</option>
+				
+				<option value="file41">github.com/merloot/market-data/internal/scheduling/river/scheduler.go (0.0%)</option>
+				
+				<option value="file42">github.com/merloot/market-data/internal/storage/postgres/currency_repository.go (0.0%)</option>
+				
+				<option value="file43">github.com/merloot/market-data/internal/storage/postgres/logger.go (0.0%)</option>
+				
+				<option value="file44">github.com/merloot/market-data/internal/storage/postgres/market_data_repository.go (0.0%)</option>
+				
+				<option value="file45">github.com/merloot/market-data/internal/storage/postgres/migrate.go (3.6%)</option>
+				
+				<option value="file46">github.com/merloot/market-data/internal/storage/postgres/option.go (0.0%)</option>
+				
+				<option value="file47">github.com/merloot/market-data/internal/storage/postgres/postgres.go (0.0%)</option>
+				
+				<option value="file48">github.com/merloot/market-data/internal/storage/postgres/seed.go (0.0%)</option>
+				
+				<option value="file49">github.com/merloot/market-data/internal/tasks/oracle/builder.go (66.7%)</option>
+				
+				<option value="file50">github.com/merloot/market-data/internal/tasks/oracle/collect.go (61.7%)</option>
+				
+				<option value="file51">github.com/merloot/market-data/internal/tasks/oracle/format.go (90.9%)</option>
+				
+				<option value="file52">github.com/merloot/market-data/internal/tasks/oracle/handler.go (0.0%)</option>
+				
+				<option value="file53">github.com/merloot/market-data/internal/tasks/oracle/logos.go (66.7%)</option>
+				
+				<option value="file54">github.com/merloot/market-data/internal/tasks/oracle/publish.go (86.2%)</option>
+				
+				<option value="file55">github.com/merloot/market-data/internal/tasks/oracle/service.go (69.7%)</option>
+				
+				<option value="file56">github.com/merloot/market-data/internal/worker/asynq/logger.go (0.0%)</option>
+				
+				<option value="file57">github.com/merloot/market-data/internal/worker/asynq/worker.go (0.0%)</option>
+				
+				<option value="file58">github.com/merloot/market-data/internal/worker/registry.go (72.2%)</option>
+				
+				<option value="file59">github.com/merloot/market-data/internal/worker/river/args.go (0.0%)</option>
+				
+				<option value="file60">github.com/merloot/market-data/internal/worker/river/worker.go (0.0%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">not covered</span>
+				<span class="cov8">covered</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">package main
+
+import (
+        "context"
+        "errors"
+        "log/slog"
+        "net/http"
+        "os"
+        "os/signal"
+        "syscall"
+        "time"
+
+        "github.com/joho/godotenv"
+        goredis "github.com/redis/go-redis/v9"
+
+        "fmt"
+
+        "github.com/merloot/market-data/internal/config"
+        "github.com/merloot/market-data/internal/domain/market"
+        "github.com/merloot/market-data/internal/httpapi"
+        "github.com/merloot/market-data/internal/httpapi/debug"
+        v1 "github.com/merloot/market-data/internal/httpapi/v1"
+        "github.com/merloot/market-data/internal/httpapi/v1/marketdata"
+        "github.com/merloot/market-data/internal/marketservice"
+        "github.com/merloot/market-data/internal/provider/coingecko"
+        "github.com/merloot/market-data/internal/provider/coinmarketcap"
+        "github.com/merloot/market-data/internal/realtime"
+        "github.com/merloot/market-data/internal/realtime/memory"
+        redisrealtime "github.com/merloot/market-data/internal/realtime/redis"
+        "github.com/merloot/market-data/internal/storage/postgres"
+)
+
+// TODO IMPL apps
+
+type marketDataV1Service struct {
+        currencies CurrencyLister
+        history    HistoryLister
+}
+
+type CurrencyLister interface {
+        List(ctx context.Context) ([]market.Currency, error)
+}
+
+type HistoryLister interface {
+        GetMarketDataList(ctx context.Context, currencies []string, since time.Time) ([]market.MarketDataRow, error)
+        GetPriceHistory(ctx context.Context, currency market.Currency, timeframe market.Timeframe, from, to time.Time) ([]market.MarketDataPricePoint, error)
+}
+
+func newMarketDataV1Service(
+        currencies CurrencyLister,
+        history HistoryLister,
+) *marketDataV1Service {
+        <span class="cov0" title="0">return &amp;marketDataV1Service{
+                currencies: currencies,
+                history:    history,
+</span>        }
+}
+
+var _ marketdata.MarketService = (*marketDataV1Service)(nil)
+
+func (s *marketDataV1Service) ListCurrencies(ctx context.Context) ([]market.Currency, error) {
+        <span class="cov0" title="0">return s.currencies.List(ctx)
+</span>}
+
+func (s *marketDataV1Service) GetMarketDataInfo(
+        ctx context.Context,
+        currencies []market.Currency,
+        since time.Time,
+) ([]market.MarketDataRow, error) {
+        <span class="cov0" title="0">names := make([]string, len(currencies))
+        for i, c := range currencies </span>{
+                <span class="cov0" title="0">names[i] = c.CoinName
+</span>        }
+
+        <span class="cov0" title="0">rows, err := s.history.GetMarketDataList(ctx, names, since)
+        if err != nil </span>{
+                <span class="cov0" title="0">return nil, fmt.Errorf("history: %w", err)
+</span>        }
+
+        <span class="cov0" title="0">info := make([]market.MarketDataRow, 0, len(rows))
+        for _, r := range rows </span>{
+                <span class="cov0" title="0">info = append(info, market.MarketDataRow{
+                        Currency:      r.Currency,
+                        Price:         r.Price,
+                        MarketCap:     r.MarketCap,
+                        PriceDiff:     r.PriceDiff,
+                        MarketCapDiff: r.MarketCapDiff,
+                })
+</span>        }
+        <span class="cov0" title="0">return info, nil</span>
+}
+
+func (s *marketDataV1Service) GetPriceHistory(
+        ctx context.Context,
+        c market.Currency,
+        timeframe market.Timeframe,
+        from, to time.Time,
+) ([]market.MarketDataPricePoint, error) {
+        <span class="cov0" title="0">return s.history.GetPriceHistory(ctx, c, timeframe, from, to)
+</span>}
+
+func main() {
+        <span class="cov0" title="0">_ = godotenv.Load()
+        if err := run(); err != nil </span>{
+                <span class="cov0" title="0">slog.Error("api failed", "err", err)
+                os.Exit(1)
+</span>        }
+}
+
+func run() error {
+        <span class="cov0" title="0">log := slog.New(slog.NewJSONHandler(os.Stdout, &amp;slog.HandlerOptions{
+                Level: slog.LevelDebug,
+        }))
+        slog.SetDefault(log)
+</span>
+        <span class="cov0" title="0">cfg, err := config.Load()
+        if err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+
+        <span class="cov0" title="0">initCtx := context.Background()
+</span>
+        <span class="cov0" title="0">repo, err := postgres.New(initCtx, cfg.Database, postgres.WithLogger(log))
+        if err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">defer repo.Close()
+</span>
+        <span class="cov0" title="0">currencyRepo := postgres.NewCurrencyRepository(repo)
+        historyRepo := postgres.NewMarketDataHistoryRepository(repo)
+</span>
+        <span class="cov0" title="0">cg := coingecko.New(cfg.Provider.Coingecko.ApiKey)
+        cmc := coinmarketcap.New(cfg.Provider.Coinmarketcap.ApiKey)
+        marketSvc := marketservice.NewService(cg, cmc)
+</span>
+        <span class="cov0" title="0">debugSvc := marketSvc
+</span>
+        <span class="cov0" title="0">v1Svc := newMarketDataV1Service(currencyRepo, historyRepo)
+</span>
+        <span class="cov0" title="0">subscriber, cleanup, err := buildSubscriber(cfg, log)
+        if err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">defer cleanup()
+</span>
+        <span class="cov0" title="0">deps := &amp;httpapi.Deps{
+                Debug: &amp;debug.Deps{
+                        MarketService: debugSvc,
+                        Log:           log,
+                },
+                V1: &amp;v1.Deps{
+                        MarketService: v1Svc,
+                        Subscriber:    subscriber,
+                        Log:           log,
+                },
+                Log: log,
+</span>        }
+
+        <span class="cov0" title="0">router := httpapi.NewRouter(deps)
+</span>
+        <span class="cov0" title="0">srv := &amp;http.Server{
+                Addr:              cfg.HTTP.Addr,
+                Handler:           router,
+                ReadHeaderTimeout: 5 * time.Second,
+</span>        }
+
+        <span class="cov0" title="0">errCh := make(chan error, 1)
+        go func() </span>{
+                <span class="cov0" title="0">log.Info("api starting", "addr", srv.Addr)
+                if err := srv.ListenAndServe(); err != nil &amp;&amp; !errors.Is(err, http.ErrServerClosed) </span>{
+                        <span class="cov0" title="0">errCh &lt;- err
+</span>                }
+        }()
+
+        <span class="cov0" title="0">stop := make(chan os.Signal, 1)
+        signal.Notify(stop, os.Interrupt, syscall.SIGTERM)
+</span>
+        <span class="cov0" title="0">select </span>{
+        case err := &lt;-errCh:
+                <span class="cov0" title="0">return err</span>
+        case sig := &lt;-stop:
+                <span class="cov0" title="0">log.Info("shutdown signal", "signal", sig.String())</span>
+        }
+
+        <span class="cov0" title="0">shutdownCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+        defer cancel()
+        if err := srv.Shutdown(shutdownCtx); err != nil </span>{
+                <span class="cov0" title="0">log.Error("shutdown", "err", err)
+</span>        }
+
+        <span class="cov0" title="0">log.Info("api stopped")
+        return nil</span>
+}
+
+func buildSubscriber(cfg *config.Config, log *slog.Logger) (realtime.EventSubscriber, func(), error) {
+        <span class="cov0" title="0">switch cfg.Realtime.Backend </span>{
+        case "memory":
+                <span class="cov0" title="0">_, sub := memory.New()
+                return sub, func() </span>{<span class="cov0" title="0"></span>}, nil
+        case "redis":
+                <span class="cov0" title="0">rdb := goredis.NewClient(&amp;goredis.Options{Addr: cfg.Redis.Addr})
+                log.Info("realtime backend", "backend", "redis", "addr", cfg.Redis.Addr)
+                return redisrealtime.NewSubscriber(rdb), func() </span>{ <span class="cov0" title="0">rdb.Close() }</span>, nil
+        default:
+                <span class="cov0" title="0">return nil, nil, fmt.Errorf("Unknown realtime backend: %q", cfg.Realtime.Backend)</span>
+        }
+}
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">package main
+
+import (
+        "context"
+        "flag"
+        "fmt"
+        "log/slog"
+        "os"
+        "os/signal"
+        "syscall"
+
+        "github.com/joho/godotenv"
+        "github.com/merloot/market-data/internal/config"
+        "github.com/merloot/market-data/internal/storage/postgres"
+)
+
+func main() {
+        <span class="cov0" title="0">_ = godotenv.Load()
+</span>
+        <span class="cov0" title="0">if err := run(); err != nil </span>{
+                <span class="cov0" title="0">slog.Error("Migrate failed", "err", err)
+                os.Exit(1)
+</span>        }
+}
+
+func run() error {
+        <span class="cov0" title="0">args := os.Args[1:]
+        if len(args) == 0 </span>{
+                <span class="cov0" title="0">return fmt.Errorf("Usage: migrate &lt;up|down|status|version up-to&gt; [args]")
+</span>        }
+        <span class="cov0" title="0">command := args[0]
+</span>
+        <span class="cov0" title="0">fs := flag.NewFlagSet(command, flag.ExitOnError)
+</span>
+        <span class="cov0" title="0">log := slog.New(slog.NewJSONHandler(os.Stdout, nil))
+        slog.SetDefault(log)
+</span>
+        <span class="cov0" title="0">cfg, err := config.Load()
+        if err != nil </span>{
+                <span class="cov0" title="0">return fmt.Errorf("Config: %w", err)
+</span>        }
+
+        <span class="cov0" title="0">ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+        defer cancel()
+</span>
+        <span class="cov0" title="0">repo, err := postgres.New(ctx, cfg.Database, postgres.WithLogger(log), postgres.WithPingRetries(5))
+        if err != nil </span>{
+                <span class="cov0" title="0">return fmt.Errorf("Postgres: %w", err)
+</span>        }
+        <span class="cov0" title="0">defer repo.Close()
+</span>
+        <span class="cov0" title="0">switch command </span>{
+        case "up":
+                <span class="cov0" title="0">return repo.MigrateUp(ctx)</span>
+        case "down":
+                <span class="cov0" title="0">return repo.MigrateDown(ctx)</span>
+        case "status":
+                <span class="cov0" title="0">return repo.MigrateStatus(ctx)</span>
+        case "version":
+                <span class="cov0" title="0">return repo.MigrateVersion(ctx)</span>
+        case "up-to":
+                <span class="cov0" title="0">if len(args) &lt; 2 </span>{
+                        <span class="cov0" title="0">return fmt.Errorf("Usage: migrate up &lt;version&gt;")
+</span>                }
+                <span class="cov0" title="0">var version int64
+                if _, err := fmt.Sscanf(args[1], "%d", &amp;version); err != nil </span>{
+                        <span class="cov0" title="0">return fmt.Errorf("Invalid version %q: %w", args[1], err)
+</span>                }
+                <span class="cov0" title="0">_ = fs
+                return repo.MigrateUpTo(ctx, version)</span>
+        default:
+                <span class="cov0" title="0">return fmt.Errorf("Unknown command: %q", command)</span>
+        }
+}
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">package main
+
+import (
+        "context"
+        "log/slog"
+        "os"
+        "os/signal"
+        "syscall"
+
+        "github.com/joho/godotenv"
+        "github.com/merloot/market-data/internal/config"
+        "github.com/merloot/market-data/internal/storage/postgres"
+)
+
+func main() {
+        <span class="cov0" title="0">_ = godotenv.Load()
+</span>
+        <span class="cov0" title="0">if err := run(); err != nil </span>{
+                <span class="cov0" title="0">slog.Error("Seed failed", "err", err)
+                os.Exit(1)
+</span>        }
+}
+
+func run() error {
+        <span class="cov0" title="0">log := slog.New(slog.NewJSONHandler(os.Stdout, nil))
+        slog.SetDefault(log)
+</span>
+        <span class="cov0" title="0">cfg, err := config.Load()
+        if err != nil </span>{
+                <span class="cov0" title="0">return nil
+</span>        }
+
+        <span class="cov0" title="0">ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+        defer cancel()
+</span>
+        <span class="cov0" title="0">repo, err := postgres.New(ctx, cfg.Database, postgres.WithLogger(log), postgres.WithPingRetries(5))
+</span>
+        <span class="cov0" title="0">if err != nil </span>{
+                <span class="cov0" title="0">return nil
+</span>        }
+
+        <span class="cov0" title="0">defer repo.Close()
+</span>
+        <span class="cov0" title="0">return repo.SeedCurrencies(ctx)</span>
+}
+</pre>
+		
+		<pre class="file" id="file3" style="display: none">package main
+
+import (
+        "context"
+        "errors"
+        "fmt"
+        "log/slog"
+        "os"
+        "os/signal"
+        "syscall"
+        "time"
+
+        "github.com/joho/godotenv"
+
+        "github.com/merloot/market-data/internal/config"
+        "github.com/merloot/market-data/internal/scheduling"
+        "github.com/merloot/market-data/internal/scheduling/asynq"
+        "github.com/merloot/market-data/internal/scheduling/river"
+        "github.com/merloot/market-data/internal/storage/postgres"
+        "github.com/merloot/market-data/internal/tasks/oracle"
+)
+
+func main() {
+        <span class="cov0" title="0">_ = godotenv.Load()
+</span>
+        <span class="cov0" title="0">if err := run(); err != nil </span>{
+                <span class="cov0" title="0">slog.Error("Scheduler failed", "err", err)
+                os.Exit(1)
+</span>        }
+}
+
+func run() error {
+        <span class="cov0" title="0">log := slog.New(slog.NewJSONHandler(os.Stdout, &amp;slog.HandlerOptions{
+                Level: slog.LevelInfo,
+        }))
+        slog.SetDefault(log)
+</span>
+        <span class="cov0" title="0">cfg, err := config.Load()
+        if err != nil </span>{
+                <span class="cov0" title="0">return fmt.Errorf("Config: %w", err)
+</span>        }
+
+        <span class="cov0" title="0">initCtx, initCancel := context.WithTimeout(context.Background(), 30*time.Second)
+        defer initCancel()
+</span>
+        <span class="cov0" title="0">repo, err := postgres.New(initCtx, cfg.Database,
+                postgres.WithLogger(log),
+                postgres.WithPingRetries(5),
+        )
+        if err != nil </span>{
+                <span class="cov0" title="0">return fmt.Errorf("Postgres: %w", err)
+</span>        }
+        <span class="cov0" title="0">defer repo.Close()
+</span>
+        <span class="cov0" title="0">registry := scheduling.NewRegistry(log,
+                oracle.NewBuild(),
+        )
+</span>
+        <span class="cov0" title="0">tasks, err := registry.Tasks(initCtx)
+        if err != nil </span>{
+                <span class="cov0" title="0">return fmt.Errorf("Build tasks: %w", err)
+</span>        }
+        <span class="cov0" title="0">if len(tasks) == 0 </span>{
+                <span class="cov0" title="0">return fmt.Errorf("No tasks to schedule")
+</span>        }
+
+        <span class="cov0" title="0">log.Info("Tasks ready", "total", len(tasks), "backend", cfg.Queue.Backend)
+</span>
+        <span class="cov0" title="0">scheduler, cleanup, err := buildScheduler(initCtx, cfg, tasks, log)
+        if err != nil </span>{
+                <span class="cov0" title="0">return fmt.Errorf("Build scheduler: %w", err)
+</span>        }
+        <span class="cov0" title="0">defer cleanup()
+</span>
+        <span class="cov0" title="0">runCtx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+        defer stop()
+</span>
+        <span class="cov0" title="0">log.Info("scheduler starting", "backend", cfg.Queue.Backend)
+        if err := scheduler.Run(runCtx); err != nil &amp;&amp; !errors.Is(err, context.Canceled) </span>{
+                <span class="cov0" title="0">return fmt.Errorf("Run: %w", err)
+</span>        }
+
+        <span class="cov0" title="0">log.Info("Scheduler stopped")
+        return nil</span>
+}
+
+func buildScheduler(
+        ctx context.Context,
+        cfg *config.Config,
+        tasks []scheduling.Task,
+        log *slog.Logger,
+) (scheduling.Scheduler, func(), error) {
+        <span class="cov0" title="0">switch cfg.Queue.Backend </span>{
+        case "redis":
+                <span class="cov0" title="0">s, err := asynq.NewSchedule(ctx, cfg.Redis.Addr, tasks, log)
+                if err != nil </span>{
+                        <span class="cov0" title="0">return nil, nil, err
+</span>                }
+                <span class="cov0" title="0">return s, func() </span>{<span class="cov0" title="0"></span>}, nil
+
+        case "postgres":
+                <span class="cov0" title="0">s, cleanup, err := river.NewSchedule(ctx, cfg.Database.URL, tasks, log)
+                if err != nil </span>{
+                        <span class="cov0" title="0">return nil, nil, err
+</span>                }
+                <span class="cov0" title="0">return s, cleanup, nil</span>
+
+        default:
+                <span class="cov0" title="0">return nil, nil, fmt.Errorf("Unknown queue backend: %q", cfg.Queue.Backend)</span>
+        }
+}
+</pre>
+		
+		<pre class="file" id="file4" style="display: none">package main
+
+import (
+        "context"
+        "errors"
+        "fmt"
+        "log/slog"
+        "os"
+        "os/signal"
+        "syscall"
+        "time"
+
+        "github.com/joho/godotenv"
+        goredis "github.com/redis/go-redis/v9"
+
+        "github.com/merloot/market-data/internal/config"
+        "github.com/merloot/market-data/internal/marketservice"
+        "github.com/merloot/market-data/internal/provider/coingecko"
+        "github.com/merloot/market-data/internal/provider/coinmarketcap"
+        "github.com/merloot/market-data/internal/realtime"
+        "github.com/merloot/market-data/internal/realtime/memory"
+        redisrealtime "github.com/merloot/market-data/internal/realtime/redis"
+        "github.com/merloot/market-data/internal/storage/postgres"
+        "github.com/merloot/market-data/internal/tasks/oracle"
+        "github.com/merloot/market-data/internal/worker"
+        "github.com/merloot/market-data/internal/worker/asynq"
+        "github.com/merloot/market-data/internal/worker/river"
+)
+
+func main() {
+        <span class="cov0" title="0">_ = godotenv.Load()
+</span>
+        <span class="cov0" title="0">if err := run(); err != nil </span>{
+                <span class="cov0" title="0">slog.Error("Worker failed", "err", err)
+                os.Exit(1)
+</span>        }
+}
+
+func run() error {
+        <span class="cov0" title="0">log := slog.New(slog.NewJSONHandler(os.Stdout, nil))
+        slog.SetDefault(log)
+</span>
+        <span class="cov0" title="0">cfg, err := config.Load()
+        if err != nil </span>{
+                <span class="cov0" title="0">return fmt.Errorf("Config: %w", err)
+</span>        }
+
+        <span class="cov0" title="0">initCtx, initCancel := context.WithTimeout(context.Background(), 30*time.Second)
+        defer initCancel()
+</span>
+        <span class="cov0" title="0">repo, err := postgres.New(initCtx, cfg.Database,
+                postgres.WithLogger(log),
+                postgres.WithPingRetries(5),
+        )
+        if err != nil </span>{
+                <span class="cov0" title="0">return fmt.Errorf("Postgres: %w", err)
+</span>        }
+        <span class="cov0" title="0">defer repo.Close()
+</span>
+        <span class="cov0" title="0">rdb := goredis.NewClient(&amp;goredis.Options{Addr: cfg.Redis.Addr})
+        defer rdb.Close()
+</span>
+        <span class="cov0" title="0">cg := coingecko.New(cfg.Provider.Coingecko.ApiKey)
+        coinmarketcap := coinmarketcap.New(cfg.Provider.Coinmarketcap.ApiKey)
+</span>
+        <span class="cov0" title="0">currencyRepository := postgres.NewCurrencyRepository(repo)
+        marketDataHistoryRepository := postgres.NewMarketDataHistoryRepository(repo)
+        provider := marketservice.NewService(cg, coinmarketcap)
+</span>
+        <span class="cov0" title="0">publisher, err := buildPublisher(cfg, rdb)
+        if err != nil </span>{
+                <span class="cov0" title="0">return fmt.Errorf("Publisher: %w", err)
+</span>        }
+
+        <span class="cov0" title="0">oracleService := oracle.NewService(
+                log,
+                currencyRepository,
+                marketDataHistoryRepository,
+                provider,
+                publisher,
+        )
+</span>
+        <span class="cov0" title="0">registry, err := worker.NewRegistry(log,
+                oracle.NewHandler(oracleService, log),
+        )
+        if err != nil </span>{
+                <span class="cov0" title="0">return fmt.Errorf("Registry: %w", err)
+</span>        }
+
+        <span class="cov0" title="0">log.Info("Handlers registered",
+                "count", len(registry.Types()),
+                "types", registry.Types(),
+        )
+</span>
+        <span class="cov0" title="0">w, cleanup, err := buildWorker(initCtx, cfg, registry, log)
+        if err != nil </span>{
+                <span class="cov0" title="0">return fmt.Errorf("Build worker: %w", err)
+</span>        }
+        <span class="cov0" title="0">defer cleanup()
+</span>
+        <span class="cov0" title="0">runCtx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+        defer stop()
+</span>
+        <span class="cov0" title="0">log.Info("Worker starting", "backend", cfg.Queue.Backend)
+        if err := w.Run(runCtx); err != nil &amp;&amp; !errors.Is(err, context.Canceled) </span>{
+                <span class="cov0" title="0">return fmt.Errorf("Run: %w", err)
+</span>        }
+
+        <span class="cov0" title="0">log.Info("Worker stopped")
+        return nil</span>
+}
+
+func buildWorker(
+        ctx context.Context,
+        cfg *config.Config,
+        registry *worker.Registry,
+        log *slog.Logger,
+) (worker.Worker, func(), error) {
+        <span class="cov0" title="0">switch cfg.Queue.Backend </span>{
+        case "redis":
+                <span class="cov0" title="0">w, err := asynq.NewWorker(cfg.Redis.Addr, registry, log)
+                if err != nil </span>{
+                        <span class="cov0" title="0">return nil, nil, err
+</span>                }
+                <span class="cov0" title="0">return w, func() </span>{<span class="cov0" title="0"></span>}, nil
+
+        case "postgres":
+                <span class="cov0" title="0">w, cleanup, err := river.NewWorker(ctx, cfg.Database.URL, registry, log)
+                if err != nil </span>{
+                        <span class="cov0" title="0">return nil, nil, err
+</span>                }
+                <span class="cov0" title="0">return w, cleanup, nil</span>
+
+        default:
+                <span class="cov0" title="0">return nil, nil, fmt.Errorf("Unknown queue backend: %q", cfg.Queue.Backend)</span>
+        }
+}
+
+func buildPublisher(cfg *config.Config, rdb *goredis.Client) (realtime.EventPublisher, error) {
+        <span class="cov0" title="0">switch cfg.Realtime.Backend </span>{
+        case "memory":
+                <span class="cov0" title="0">pub, _ := memory.New()
+                return pub, nil</span>
+        case "redis":
+                <span class="cov0" title="0">return redisrealtime.NewPublisher(rdb), nil</span>
+        default:
+                <span class="cov0" title="0">return nil, fmt.Errorf("Unknown realtime backend: %q", cfg.Realtime.Backend)</span>
+        }
+}
+</pre>
+		
+		<pre class="file" id="file5" style="display: none">package app
+
+import (
+        "context"
+        "log/slog"
+        "os"
+
+        "github.com/merloot/market-data/internal/cache"
+        "github.com/merloot/market-data/internal/config"
+        "github.com/merloot/market-data/internal/storage/postgres"
+)
+
+type App struct {
+        Config *config.Config
+        Logger *slog.Logger
+        Repo   *postgres.Repo
+        Cache  cache.Cache
+}
+
+func New(ctx context.Context) (*App, error) {
+        <span class="cov0" title="0">cfg, err := config.Load()
+        if err != nil </span>{
+                <span class="cov0" title="0">return nil, err
+</span>        }
+
+        <span class="cov0" title="0">logger := slog.New(slog.NewJSONHandler(os.Stdout, &amp;slog.HandlerOptions{
+                Level: slog.LevelInfo,
+        }))
+        slog.SetDefault(logger)
+</span>
+        <span class="cov0" title="0">repo, err := postgres.New(
+                ctx,
+                cfg.Database,
+                postgres.WithLogger(logger),
+                postgres.WithPingRetries(5),
+        )
+</span>
+        <span class="cov0" title="0">if err != nil </span>{
+                <span class="cov0" title="0">return nil, err
+</span>        }
+
+        <span class="cov0" title="0">return &amp;App{
+                Config: cfg,
+                Logger: logger,
+                Repo:   repo,
+        }, nil</span>
+}
+
+func (a *App) Close() {
+        <span class="cov0" title="0">a.Repo.Close()
+</span>}
+</pre>
+		
+		<pre class="file" id="file6" style="display: none">package redis
+
+import (
+        "context"
+        "errors"
+        "fmt"
+        "time"
+
+        "github.com/redis/go-redis/v9"
+)
+
+var ErrMiss = errors.New("Cache miss")
+
+type Cache struct {
+        client *redis.Client
+}
+
+func New(addr string) *Cache {
+        <span class="cov8" title="1">return &amp;Cache{
+                client: redis.NewClient(&amp;redis.Options{Addr: addr}),
+</span>        }
+}
+
+func (c *Cache) Close() {
+        <span class="cov8" title="1">c.client.Close()
+</span>}
+
+func (c *Cache) Get(ctx context.Context, key string) ([]byte, error) {
+        <span class="cov8" title="1">val, err := c.client.Get(ctx, key).Bytes()
+</span>
+        <span class="cov8" title="1">if errors.Is(err, redis.Nil) </span>{
+                <span class="cov8" title="1">return nil, ErrMiss
+</span>        }
+
+        <span class="cov8" title="1">if err != nil </span>{
+                <span class="cov0" title="0">return nil, fmt.Errorf("Redis get: %w", err)
+</span>        }
+
+        <span class="cov8" title="1">return val, nil</span>
+}
+
+func (c *Cache) Set(ctx context.Context, key string, value []byte, ttl time.Duration) error {
+        <span class="cov8" title="1">if err := c.client.Set(ctx, key, value, ttl).Err(); err != nil </span>{
+                <span class="cov0" title="0">return fmt.Errorf("Redis set %w", err)
+</span>        }
+        <span class="cov8" title="1">return nil</span>
+}
+
+func (c *Cache) Delete(ctx context.Context, keys ...string) error {
+        <span class="cov8" title="1">if len(keys) == 0 </span>{
+                <span class="cov0" title="0">return nil
+</span>        }
+
+        <span class="cov8" title="1">if err := c.client.Del(ctx, keys...).Err(); err != nil </span>{
+                <span class="cov0" title="0">return fmt.Errorf("Redis delete %w", err)
+</span>        }
+        <span class="cov8" title="1">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file7" style="display: none">package config
+
+import (
+        "fmt"
+
+        "github.com/caarlos0/env/v11"
+)
+
+type Config struct {
+        Database DatabaseConfig
+        Redis    RedisConfig
+        HTTP     HTTPConfig
+        Provider ProviderConfig
+        Realtime RealtimeConfig
+        Queue    QueueConfig
+}
+
+func Load() (*Config, error) {
+        <span class="cov8" title="1">cfg := &amp;Config{}
+        if err := env.Parse(cfg); err != nil </span>{
+                <span class="cov0" title="0">return nil, fmt.Errorf("parse env: %w", err)
+</span>        }
+        <span class="cov8" title="1">if err := cfg.Validate(); err != nil </span>{
+                <span class="cov8" title="1">return nil, fmt.Errorf("validate: %w", err)
+</span>        }
+        <span class="cov8" title="1">return cfg, nil</span>
+}
+
+func (c *Config) Validate() error {
+        <span class="cov8" title="1">if c.Database.URL == "" </span>{
+                <span class="cov8" title="1">return fmt.Errorf("DATABASE_URL is required")
+</span>        }
+        <span class="cov8" title="1">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file8" style="display: none">package config
+
+import (
+        "fmt"
+        "time"
+)
+
+type DatabaseConfig struct {
+        URL               string        `env:"DB_URL,required"`
+        MaxConns          int32         `env:"DB_MAX_CONNS" envDefault:"10"`
+        MinConns          int32         `env:"DB_MIN_CONS" envDefault:"2"`
+        MaxConnLifetime   time.Duration `env:"MAX_CONN_LIFETIME" envDefault:"1h"`
+        MaxConnIdleTime   time.Duration `env:"MAX_CONN_IDLE_TIME" envDefault:"30m"`
+        ConnectionTimeout time.Duration `env:"DB_CONNECTION_TIMEOUT" envDefault:"5s"`
+}
+
+func (c *DatabaseConfig) Validate() error {
+        <span class="cov0" title="0">if c.MaxConns &lt; c.MinConns </span>{
+                <span class="cov0" title="0">return fmt.Errorf("MaxConns(%d) must be &gt;= MinConns(%d)", c.MaxConns, c.MinConns)
+</span>        }
+        <span class="cov0" title="0">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file9" style="display: none">package market
+
+import (
+        "fmt"
+        "time"
+)
+
+type Timeframe string
+
+const (
+        Timeframe1h          Timeframe = "1h"
+        Timeframe8h          Timeframe = "8h"
+        TimeframeDay         Timeframe = "24h"
+        TimeframeWeek        Timeframe = "7d"
+        TimeframeTwoWeeks    Timeframe = "14d"
+        TimeframeMonth       Timeframe = "30d"
+        TimeframeThreeMonths Timeframe = "90d"
+        TimeframeSixMonths   Timeframe = "180d"
+        TimeframeYear        Timeframe = "365d"
+        TimeframeCustom      Timeframe = "custom"
+)
+
+func ResolvePrevTimestamp(p Period) (time.Time, error) {
+        <span class="cov0" title="0">now := time.Now().UTC()
+        if p.FromDate != nil </span>{
+                <span class="cov0" title="0">return *p.FromDate, nil
+</span>        }
+
+        <span class="cov0" title="0">switch p.Timeframe </span>{
+        case Timeframe1h:
+                <span class="cov0" title="0">return now.Add(-1 * time.Hour), nil</span>
+        case TimeframeDay:
+                <span class="cov0" title="0">return now.Add(-24 * time.Hour), nil</span>
+        case TimeframeWeek:
+                <span class="cov0" title="0">return now.Add(-7 * 24 * time.Hour), nil</span>
+        case TimeframeMonth:
+                <span class="cov0" title="0">return now.Add(-30 * 24 * time.Hour), nil</span>
+        case TimeframeCustom:
+                <span class="cov0" title="0">return time.Time{}, fmt.Errorf("Custom requires FromDate")</span>
+        default:
+                <span class="cov0" title="0">return time.Time{}, fmt.Errorf("Unknown timeframe: %q", p.Timeframe)</span>
+        }
+}
+
+type PeriodProvider interface {
+        GetPeriod() Period
+}
+
+type Period struct {
+        Timeframe Timeframe
+        FromDate  *time.Time
+}
+
+func (t Timeframe) Days() int {
+        <span class="cov0" title="0">switch t </span>{
+        case Timeframe1h:
+                <span class="cov0" title="0">return 0</span>
+        case TimeframeDay:
+                <span class="cov0" title="0">return 1</span>
+        case TimeframeWeek:
+                <span class="cov0" title="0">return 7</span>
+        case TimeframeMonth:
+                <span class="cov0" title="0">return 30</span>
+        default:
+                <span class="cov0" title="0">return 0</span>
+        }
+}
+
+func (t Timeframe) Duration() (time.Duration, error) {
+        <span class="cov0" title="0">switch t </span>{
+        case Timeframe8h:
+                <span class="cov0" title="0">return 8 * time.Hour, nil</span>
+        case TimeframeDay:
+                <span class="cov0" title="0">return 24 * time.Hour, nil</span>
+        case TimeframeWeek:
+                <span class="cov0" title="0">return 7 * 24 * time.Hour, nil</span>
+        case TimeframeTwoWeeks:
+                <span class="cov0" title="0">return 14 * 24 * time.Hour, nil</span>
+        case TimeframeMonth:
+                <span class="cov0" title="0">return 30 * 24 * time.Hour, nil</span>
+        case TimeframeThreeMonths:
+                <span class="cov0" title="0">return 90 * 24 * time.Hour, nil</span>
+        case TimeframeSixMonths:
+                <span class="cov0" title="0">return 180 * 24 * time.Hour, nil</span>
+        case TimeframeYear:
+                <span class="cov0" title="0">return 365 * 24 * time.Hour, nil</span>
+        case TimeframeCustom:
+                <span class="cov0" title="0">return 0, fmt.Errorf("custom timeframe requires explicit dates")</span>
+        default:
+                <span class="cov0" title="0">return 0, fmt.Errorf("unknown timeframe: %q", t)</span>
+        }
+}
+
+type Bucket time.Duration
+
+const (
+        Bucket5m Bucket = Bucket(5 * time.Minute)
+        Bucket1h Bucket = Bucket(time.Hour)
+        Bucket3h Bucket = Bucket(3 * time.Hour)
+        Bucket1d Bucket = Bucket(24 * time.Hour)
+)
+
+func (b Bucket) Strings() string {
+        <span class="cov0" title="0">switch b </span>{
+        case Bucket5m:
+                <span class="cov0" title="0">return "5 minutes"</span>
+        case Bucket1h:
+                <span class="cov0" title="0">return "1 hour"</span>
+        case Bucket3h:
+                <span class="cov0" title="0">return "3 hours"</span>
+        case Bucket1d:
+                <span class="cov0" title="0">return "1 day"</span>
+        default:
+                <span class="cov0" title="0">return fmt.Sprintf("%d seconds", int(time.Duration(b).Seconds()))</span>
+        }
+}
+
+func CalculateBucket(timeframe Timeframe, from, to time.Time) Bucket {
+        <span class="cov8" title="1">if timeframe == TimeframeCustom </span>{
+                <span class="cov8" title="1">return calculateCustomBucket(from, to)
+</span>        }
+        <span class="cov8" title="1">switch timeframe </span>{
+        case Timeframe8h, TimeframeDay:
+                <span class="cov8" title="1">return Bucket5m</span>
+        case TimeframeWeek, TimeframeTwoWeeks, TimeframeMonth:
+                <span class="cov8" title="1">return Bucket1h</span>
+        case TimeframeThreeMonths:
+                <span class="cov8" title="1">return Bucket3h</span>
+        case TimeframeSixMonths, TimeframeYear:
+                <span class="cov8" title="1">return Bucket1d</span>
+        default:
+                <span class="cov0" title="0">return Bucket1h</span>
+        }
+}
+
+func calculateCustomBucket(from, to time.Time) Bucket {
+        <span class="cov8" title="1">diff := to.Sub(from)
+        hours := diff.Hours()
+</span>
+        <span class="cov8" title="1">switch </span>{
+        case hours &lt;= 24:
+                <span class="cov8" title="1">return Bucket5m</span>
+        case diff.Hours()/24 &lt;= 30:
+                <span class="cov8" title="1">return Bucket1h</span>
+        case diff.Hours()/24 &lt;= 90:
+                <span class="cov8" title="1">return Bucket3h</span>
+        default:
+                <span class="cov8" title="1">return Bucket1d</span>
+        }
+}
+</pre>
+		
+		<pre class="file" id="file10" style="display: none">package debug
+
+import (
+        "log/slog"
+        "net/http"
+        "strconv"
+        "time"
+
+        "github.com/merloot/market-data/internal/domain/market"
+        "github.com/merloot/market-data/internal/httpapi/httputil"
+)
+
+func getMarketData(svc MarketService, log *slog.Logger) http.HandlerFunc {
+        <span class="cov0" title="0">return func(w http.ResponseWriter, r *http.Request) </span>{
+                <span class="cov0" title="0">provider := r.URL.Query().Get("provider")
+                symbol := r.URL.Query().Get("symbol")
+                id := r.URL.Query().Get("id")
+</span>
+                <span class="cov0" title="0">if provider == "" </span>{
+                        <span class="cov0" title="0">httputil.WriteError(w, http.StatusBadRequest, "provider is required")
+                        return
+</span>                }
+
+                <span class="cov0" title="0">c := market.Currency{
+                        CoinName: provider + ":" + firstNonEmpty(symbol, id),
+                        Provider: provider,
+</span>                }
+
+                <span class="cov0" title="0">switch provider </span>{
+                case market.ProviderCoinGecko:
+                        <span class="cov0" title="0">if symbol == "" </span>{
+                                <span class="cov0" title="0">httputil.WriteError(w, http.StatusBadRequest, "symbol is required for coingecko")
+                                return
+</span>                        }
+                        <span class="cov0" title="0">c.CoinGecko = symbol</span>
+                case market.ProviderCoinmarketcap:
+                        <span class="cov0" title="0">if id == "" </span>{
+                                <span class="cov0" title="0">httputil.WriteError(w, http.StatusBadRequest, "id is required for coinmarketcap")
+                                return
+</span>                        }
+                        <span class="cov0" title="0">c.CoinMarketCap = id</span>
+                default:
+                        <span class="cov0" title="0">httputil.WriteError(w, http.StatusBadRequest, "unknown provider: "+provider)
+                        return</span>
+                }
+
+                <span class="cov0" title="0">got, err := svc.GetMarketDataList(r.Context(), []market.Currency{c})
+                if err != nil </span>{
+                        <span class="cov0" title="0">slog.Error("debug market-data", "err", err, "provider", provider)
+                        httputil.WriteError(w, http.StatusBadGateway, err.Error())
+                        return
+</span>                }
+
+                <span class="cov0" title="0">httputil.WriteJSON(w, http.StatusOK, map[string]any{
+                        "provider": provider,
+                        "currency": c,
+                        "data":     got,
+                })</span>
+        }
+}
+
+func getChart(svc MarketService, log *slog.Logger) http.HandlerFunc {
+        <span class="cov0" title="0">return func(w http.ResponseWriter, r *http.Request) </span>{
+                <span class="cov0" title="0">provider := r.URL.Query().Get("provider")
+                symbol := r.URL.Query().Get("symbol")
+                id := r.URL.Query().Get("id")
+                daysStr := r.URL.Query().Get("days")
+</span>
+                <span class="cov0" title="0">if provider == "" </span>{
+                        <span class="cov0" title="0">httputil.WriteError(w, http.StatusBadRequest, "provider is required")
+                        return
+</span>                }
+
+                <span class="cov0" title="0">days := 1
+                if daysStr != "" </span>{
+                        <span class="cov0" title="0">var err error
+                        days, err = strconv.Atoi(daysStr)
+                        if err != nil </span>{
+                                <span class="cov0" title="0">httputil.WriteError(w, http.StatusBadRequest, "days must be an integer")
+                                return
+</span>                        }
+                }
+
+                <span class="cov0" title="0">c := market.Currency{
+                        CoinName: provider + ":" + firstNonEmpty(symbol, id),
+                        Provider: provider,
+</span>                }
+
+                <span class="cov0" title="0">switch provider </span>{
+                case market.ProviderCoinGecko:
+                        <span class="cov0" title="0">if symbol == "" </span>{
+                                <span class="cov0" title="0">httputil.WriteError(w, http.StatusBadRequest, "symbol is required for coingecko")
+                                return
+</span>                        }
+                        <span class="cov0" title="0">c.CoinGecko = symbol</span>
+                case market.ProviderCoinmarketcap:
+                        <span class="cov0" title="0">if id == "" </span>{
+                                <span class="cov0" title="0">httputil.WriteError(w, http.StatusBadRequest, "id is required for coinmarketcap")
+                                return
+</span>                        }
+                        <span class="cov0" title="0">c.CoinMarketCap = id</span>
+                default:
+                        <span class="cov0" title="0">httputil.WriteError(w, http.StatusBadRequest, "unknown provider: "+provider)
+                        return</span>
+                }
+
+                <span class="cov0" title="0">start := time.Now()
+                chart, err := svc.GetMarketDataChart(r.Context(), c, days)
+                duration := time.Since(start)
+</span>
+                <span class="cov0" title="0">if err != nil </span>{
+                        <span class="cov0" title="0">slog.Error("debug chart", "err", err, "provider", provider, "duration", duration, "error", err)
+                        httputil.WriteError(w, http.StatusBadGateway, err.Error())
+                        return
+</span>                }
+
+                <span class="cov0" title="0">httputil.WriteJSON(w, http.StatusOK, map[string]any{
+                        "provider":    provider,
+                        "currency":    c,
+                        "days":        days,
+                        "duration_ms": duration.Milliseconds(),
+                        "points":      len(chart.Prices),
+                        "chart":       chart,
+                })</span>
+        }
+}
+
+func firstNonEmpty(symbol, id string) string {
+        <span class="cov0" title="0">if symbol != "" </span>{
+                <span class="cov0" title="0">return symbol
+</span>        }
+        <span class="cov0" title="0">return id</span>
+}
+</pre>
+		
+		<pre class="file" id="file11" style="display: none">package debug
+
+import (
+        "log/slog"
+        "net/http"
+)
+
+type Deps struct {
+        MarketService MarketService
+        Log           *slog.Logger
+}
+
+func NewRouter(deps *Deps) http.Handler {
+        <span class="cov0" title="0">mux := http.NewServeMux()
+</span>
+        <span class="cov0" title="0">mux.HandleFunc("GET /debug/market-data", getMarketData(deps.MarketService, deps.Log))
+        mux.HandleFunc("GET /debug/chart", getChart(deps.MarketService, deps.Log))
+</span>
+        <span class="cov0" title="0">return mux
+</span>}
+</pre>
+		
+		<pre class="file" id="file12" style="display: none">package httputil
+
+import (
+        "encoding/json"
+        "net/http"
+)
+
+func WriteJSON(w http.ResponseWriter, status int, v any) {
+        <span class="cov0" title="0">w.Header().Set("Content-Type", "application/json")
+        w.WriteHeader(status)
+        _ = json.NewEncoder(w).Encode(v)
+</span>}
+
+func WriteError(w http.ResponseWriter, status int, msg string) {
+        <span class="cov0" title="0">WriteJSON(w, status, map[string]string{"error": msg})
+</span>}
+</pre>
+		
+		<pre class="file" id="file13" style="display: none">package httpapi
+
+import (
+        "bufio"
+        "fmt"
+        "log/slog"
+        "net"
+        "net/http"
+        "time"
+)
+
+type responseWriter struct {
+        http.ResponseWriter
+        status int
+}
+
+func (rw *responseWriter) WriteHeader(status int) {
+        <span class="cov8" title="1">rw.status = status
+        rw.ResponseWriter.WriteHeader(status)
+</span>}
+
+func (rw *responseWriter) Hijack() (net.Conn, *bufio.ReadWriter, error) {
+        <span class="cov0" title="0">h, ok := rw.ResponseWriter.(http.Hijacker)
+        if !ok </span>{
+                <span class="cov0" title="0">return nil, nil, fmt.Errorf("underlying ResponseWriter doesn't implement http.Hijacker")
+</span>        }
+        <span class="cov0" title="0">return h.Hijack()</span>
+
+}
+
+func Logging(log *slog.Logger) func(http.Handler) http.Handler {
+        <span class="cov8" title="1">return func(next http.Handler) http.Handler </span>{
+                <span class="cov8" title="1">return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) </span>{
+                        <span class="cov8" title="1">start := time.Now()
+                        rw := &amp;responseWriter{ResponseWriter: w, status: http.StatusOK}
+</span>
+                        <span class="cov8" title="1">next.ServeHTTP(rw, r)
+</span>
+                        <span class="cov8" title="1">log.Info("request",
+                                "method", r.Method,
+                                "path", r.URL.Path,
+                                "status", rw.status,
+                                "duration", time.Since(start),
+                        )
+</span>                })
+        }
+}
+
+func Recovery(log *slog.Logger) func(http.Handler) http.Handler {
+        <span class="cov8" title="1">return func(next http.Handler) http.Handler </span>{
+                <span class="cov8" title="1">return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) </span>{
+                        <span class="cov8" title="1">defer func() </span>{
+                                <span class="cov8" title="1">if rec := recover(); rec != nil </span>{
+                                        <span class="cov8" title="1">log.Error("panic", "err", rec, "path", r.URL.Path)
+                                        http.Error(w, "internal server error", http.StatusInternalServerError)
+</span>                                }
+                        }()
+                        <span class="cov8" title="1">next.ServeHTTP(w, r)</span>
+                })
+        }
+}
+</pre>
+		
+		<pre class="file" id="file14" style="display: none">package httpapi
+
+import (
+        "net/http"
+
+        "github.com/merloot/market-data/internal/httpapi/debug"
+        v1 "github.com/merloot/market-data/internal/httpapi/v1"
+)
+
+func NewRouter(deps *Deps) http.Handler {
+        <span class="cov0" title="0">root := http.NewServeMux()
+</span>
+        <span class="cov0" title="0">root.HandleFunc("GET /healthz", handleHealthz)
+        root.Handle("/v1/", v1.NewRouter(deps.V1))
+        root.Handle("/debug/", http.StripPrefix("/debug", debug.NewRouter(deps.Debug)))
+</span>
+        <span class="cov0" title="0">var handler http.Handler = root
+        handler = Logging(deps.Log)(handler)
+        handler = Recovery(deps.Log)(handler)
+</span>
+        <span class="cov0" title="0">return handler
+</span>}
+
+func handleHealthz(w http.ResponseWriter, r *http.Request) {
+        <span class="cov0" title="0">w.WriteHeader(http.StatusOK)
+        _, _ = w.Write([]byte("ok"))
+</span>}
+</pre>
+		
+		<pre class="file" id="file15" style="display: none">package marketdata
+
+import "time"
+
+type CurrencyDTO struct {
+        CoinID   string `json:"coinId"`
+        CoinName string `json:"coinName"`
+}
+
+type SupportedCurrenciesDTO struct {
+        Data []CurrencyDTO `json:"data"`
+}
+
+type MarketDataInfoDTO struct {
+        CoinName              string  `json:"coinName"`
+        LogoURL               *string `json:"LogoUrl"`
+        Price                 float64 `json:"price"`
+        MarketCap             float64 `json:"marketCap"`
+        TotalSupply           float64 `json:"total_supply"`
+        CirculatingSupply     float64 `json:"circulatingSupply"`
+        CirculatingSupplyDiff float64 `json:"circulatingSupplyDiff"`
+        PriceDiff             float64 `json:"priceDiff"`
+        MarketCapDiff         float64 `json:"MarketCapDiff"`
+}
+
+type MarketDataInfoListDTO struct {
+        Data []MarketDataInfoDTO `json:"data"`
+}
+
+type PriceHistoryChartDTO struct {
+        Prices [][2]any `json:"prices"`
+}
+
+type PriceHistoryItemDTO struct {
+        Time  time.Time
+        Price float64
+}
+
+func ToPriceHistoryChartDTO(points []PriceHistoryItemDTO) PriceHistoryChartDTO {
+        <span class="cov8" title="1">prices := make([][2]any, 0, len(points))
+        for _, p := range points </span>{
+                <span class="cov0" title="0">prices = append(prices, [2]any{
+                        p.Time.UnixMilli(),
+                        p.Price,
+                })
+</span>        }
+        <span class="cov8" title="1">return PriceHistoryChartDTO{Prices: prices}</span>
+}
+</pre>
+		
+		<pre class="file" id="file16" style="display: none">package marketdata
+
+import (
+        "errors"
+        "fmt"
+        "log/slog"
+        "net/http"
+        "time"
+
+        "github.com/merloot/market-data/internal/domain/market"
+        "github.com/merloot/market-data/internal/httpapi/httputil"
+)
+
+func getSupportedCurrencies(scv MarketService, log *slog.Logger) http.HandlerFunc {
+        <span class="cov8" title="1">return func(w http.ResponseWriter, r *http.Request) </span>{
+                <span class="cov8" title="1">currencies, err := scv.ListCurrencies(r.Context())
+                if err != nil </span>{
+                        <span class="cov8" title="1">log.Error("List currencies", "err", err)
+                        httputil.WriteError(w, http.StatusInternalServerError, "Could not list currencies")
+                        return
+</span>                }
+                <span class="cov8" title="1">dtos := make([]CurrencyDTO, 0, len(currencies))
+                for _, c := range currencies </span>{
+                        <span class="cov8" title="1">dtos = append(dtos, CurrencyDTO{
+                                CoinID:   c.CoinGecko,
+                                CoinName: c.CoinName,
+                        })
+</span>                }
+                <span class="cov8" title="1">httputil.WriteJSON(w, http.StatusOK, SupportedCurrenciesDTO{Data: dtos})</span>
+        }
+}
+
+func getCurrenciesInfo(scv MarketService, log *slog.Logger) http.HandlerFunc {
+        <span class="cov8" title="1">return func(w http.ResponseWriter, r *http.Request) </span>{
+                <span class="cov0" title="0">timeframeStr := r.URL.Query().Get("timeframe")
+                if timeframeStr == "" </span>{
+                        <span class="cov0" title="0">timeframeStr = string(market.TimeframeDay)
+</span>                }
+
+                <span class="cov0" title="0">timeframe := market.Timeframe(timeframeStr)
+</span>
+                <span class="cov0" title="0">duration, err := timeframe.Duration()
+                if err != nil </span>{
+                        <span class="cov0" title="0">httputil.WriteError(w, http.StatusBadRequest, err.Error())
+                        return
+</span>                }
+
+                <span class="cov0" title="0">since := time.Now().Add(-duration)
+                currencies, err := scv.ListCurrencies(r.Context())
+                if err != nil </span>{
+                        <span class="cov0" title="0">log.Error("List currencies", "err", err)
+                        httputil.WriteError(w, http.StatusInternalServerError, "Could not list currencies")
+                        return
+</span>                }
+
+                <span class="cov0" title="0">info, err := scv.GetMarketDataInfo(r.Context(), currencies, since)
+                if err != nil </span>{
+                        <span class="cov0" title="0">log.Error("MarketDataInfo", "err", err)
+                        httputil.WriteError(w, http.StatusInternalServerError, "Could not market list info")
+                        return
+</span>                }
+
+                <span class="cov0" title="0">dtos := make([]MarketDataInfoDTO, 0, len(info))
+</span>
+                <span class="cov0" title="0">for _, i := range info </span>{
+                        <span class="cov0" title="0">dtos = append(dtos, MarketDataInfoDTO{
+                                CoinName:              i.Currency,
+                                LogoURL:               i.LogoURL,
+                                TotalSupply:           i.TotalSupply,
+                                Price:                 i.Price,
+                                PriceDiff:             i.PriceDiff,
+                                MarketCap:             i.MarketCap,
+                                MarketCapDiff:         i.MarketCapDiff,
+                                CirculatingSupply:     i.CirculatingSupply,
+                                CirculatingSupplyDiff: i.CirculatingSupplyDiff,
+                        })
+</span>                }
+                <span class="cov0" title="0">httputil.WriteJSON(w, http.StatusOK, MarketDataInfoListDTO{Data: dtos})</span>
+        }
+}
+
+func getPriceHistoryChart(scv MarketService, log *slog.Logger) http.HandlerFunc {
+        <span class="cov8" title="1">return func(w http.ResponseWriter, r *http.Request) </span>{
+                <span class="cov8" title="1">input, err := parseHistoryInput(r)
+                if err != nil </span>{
+                        <span class="cov8" title="1">httputil.WriteError(w, http.StatusBadRequest, err.Error())
+</span>                }
+                <span class="cov8" title="1">c := market.Currency{
+                        CoinName: input.CoinName,
+</span>                }
+
+                <span class="cov8" title="1">points, err := scv.GetPriceHistory(r.Context(), c, input.Timeframe, input.From, input.To)
+                if err != nil </span>{
+                        <span class="cov0" title="0">log.Error("Price history", "err", err)
+                        httputil.WriteError(w, http.StatusInternalServerError, err.Error())
+                        return
+</span>                }
+
+                <span class="cov8" title="1">dtos := make([]PriceHistoryItemDTO, 0, len(points))
+                for _, p := range points </span>{
+                        <span class="cov0" title="0">dtos = append(dtos, PriceHistoryItemDTO{Time: p.Time, Price: p.Price})
+</span>                }
+
+                <span class="cov8" title="1">httputil.WriteJSON(w, http.StatusOK, ToPriceHistoryChartDTO(dtos))</span>
+        }
+}
+
+type priceHistoryInput struct {
+        CoinName  string
+        Timeframe market.Timeframe
+        From      time.Time
+        To        time.Time
+}
+
+func parseHistoryInput(r *http.Request) (priceHistoryInput, error) {
+        <span class="cov8" title="1">q := r.URL.Query()
+</span>
+        <span class="cov8" title="1">coinName := q.Get("coinName")
+        if coinName == "" </span>{
+                <span class="cov8" title="1">return priceHistoryInput{}, errors.New("Missing required params: coinName")
+</span>        }
+
+        <span class="cov0" title="0">timeframeStr := q.Get("timeframe")
+        if timeframeStr == "" </span>{
+                <span class="cov0" title="0">timeframeStr = string(market.TimeframeDay)
+</span>        }
+
+        <span class="cov0" title="0">timeframe := market.Timeframe(timeframeStr)
+</span>
+        <span class="cov0" title="0">var from, to time.Time
+</span>
+        <span class="cov0" title="0">if s := q.Get("from"); s != "" </span>{
+                <span class="cov0" title="0">t, err := time.Parse(time.RFC3339, s)
+                if err != nil </span>{
+                        <span class="cov0" title="0">return priceHistoryInput{}, fmt.Errorf("Invalid from: %q", s)
+</span>                }
+                <span class="cov0" title="0">from = t</span>
+        }
+
+        <span class="cov0" title="0">if s := q.Get("to"); s != "" </span>{
+                <span class="cov0" title="0">t, err := time.Parse(time.RFC3339, s)
+                if err != nil </span>{
+                        <span class="cov0" title="0">return priceHistoryInput{}, fmt.Errorf("Invalid to: %q", s)
+</span>                }
+                <span class="cov0" title="0">to = t</span>
+        }
+
+        <span class="cov0" title="0">if timeframe == market.TimeframeCustom &amp;&amp; from.IsZero() </span>{
+                <span class="cov0" title="0">return priceHistoryInput{}, errors.New("Custom timeframe requires from parameter")
+</span>        }
+
+        <span class="cov0" title="0">if timeframe != market.TimeframeCustom </span>{
+                <span class="cov0" title="0">dur, err := timeframe.Duration()
+                if err != nil </span>{
+                        <span class="cov0" title="0">return priceHistoryInput{}, err
+</span>                }
+                <span class="cov0" title="0">to = time.Now()
+                from = to.Add(-dur)</span>
+        }
+
+        <span class="cov0" title="0">if to.IsZero() </span>{
+                <span class="cov0" title="0">to = time.Now()
+</span>        }
+
+        <span class="cov0" title="0">return priceHistoryInput{
+                CoinName:  coinName,
+                From:      from,
+                Timeframe: timeframe,
+                To:        to,
+        }, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file17" style="display: none">package marketdata
+
+import (
+        "log/slog"
+        "net/http"
+)
+
+func Register(mux *http.ServeMux, svc MarketService, log *slog.Logger) {
+        <span class="cov8" title="1">mux.HandleFunc("GET /v1/market-data", getCurrenciesInfo(svc, log))
+        mux.HandleFunc("GET /v1/market-data/currencies",
+                getSupportedCurrencies(svc, log))
+        mux.HandleFunc("GET /v1/market-data/price-history-chart",
+                getPriceHistoryChart(svc, log))
+</span>}
+</pre>
+		
+		<pre class="file" id="file18" style="display: none">package v1
+
+import (
+        "log/slog"
+        "net/http"
+
+        "github.com/merloot/market-data/internal/httpapi/v1/marketdata"
+        "github.com/merloot/market-data/internal/httpapi/v1/stream"
+        "github.com/merloot/market-data/internal/realtime"
+)
+
+type Deps struct {
+        MarketService marketdata.MarketService
+        Subscriber    realtime.EventSubscriber
+        Log           *slog.Logger
+}
+
+func NewRouter(deps *Deps) http.Handler {
+        <span class="cov0" title="0">mux := http.NewServeMux()
+</span>
+        <span class="cov0" title="0">marketdata.Register(mux, deps.MarketService, deps.Log)
+</span>
+        <span class="cov0" title="0">if deps.Subscriber != nil </span>{
+                <span class="cov0" title="0">stream.Register(mux, deps.Subscriber, deps.Log)
+</span>        }
+        <span class="cov0" title="0">return mux</span>
+}
+</pre>
+		
+		<pre class="file" id="file19" style="display: none">package stream
+
+import (
+        "log/slog"
+        "net/http"
+
+        "github.com/merloot/market-data/internal/realtime"
+)
+
+func Register(mux *http.ServeMux, sub realtime.EventSubscriber, log *slog.Logger) {
+        <span class="cov0" title="0">mux.HandleFunc("GET /v1/stream/sse", SSEHandler(sub, log))
+        mux.HandleFunc("GET /v1/stream/ws", WSHandler(sub, log))
+</span>}
+</pre>
+		
+		<pre class="file" id="file20" style="display: none">package stream
+
+import (
+        "encoding/json"
+        "fmt"
+        "log/slog"
+        "net/http"
+
+        "github.com/merloot/market-data/internal/realtime"
+)
+
+func SSEHandler(sub realtime.EventSubscriber, log *slog.Logger) http.HandlerFunc {
+        <span class="cov8" title="1">return func(w http.ResponseWriter, r *http.Request) </span>{
+                <span class="cov8" title="1">flusher, ok := w.(http.Flusher)
+                if !ok </span>{
+                        <span class="cov0" title="0">log.Error("Flusher not supported")
+                        http.Error(w, "Flusher not supported", http.StatusInternalServerError)
+                        return
+</span>                }
+
+                <span class="cov8" title="1">w.Header().Set("Content-Type", "text/event-stream")
+                w.Header().Set("Cache-Control", "no-cache")
+                w.Header().Set("Connection", "keep-alive")
+                w.Header().Set("X-Accel-Buffering", "no")
+</span>
+                <span class="cov8" title="1">priceCh, priceStop, err := sub.SubscribePriceUpdated(r.Context())
+                if err != nil </span>{
+                        <span class="cov0" title="0">log.Error("SubscribePriceUpdated", "err", err)
+                        http.Error(w, err.Error(), http.StatusInternalServerError)
+                        return
+</span>                }
+                <span class="cov8" title="1">defer priceStop()
+</span>
+                <span class="cov8" title="1">marketCapCh, marketCapStop, err := sub.SubscribeMarketCapUpdated(r.Context())
+                if err != nil </span>{
+                        <span class="cov0" title="0">log.Error("SubscribeMarketCapUpdated", "err", err)
+                        http.Error(w, err.Error(), http.StatusInternalServerError)
+                        return
+</span>                }
+                <span class="cov8" title="1">defer marketCapStop()
+</span>
+                <span class="cov8" title="1">flusher.Flush()
+</span>
+                <span class="cov8" title="1">log.Info("sse client connected", "remote", r.RemoteAddr)
+                defer log.Info("sse client disconnected", "remote", r.RemoteAddr)
+</span>
+                <span class="cov8" title="1">for </span>{
+                        <span class="cov8" title="1">select </span>{
+                        case &lt;-r.Context().Done():
+                                <span class="cov8" title="1">return</span>
+                        case event := &lt;-priceCh:
+                                <span class="cov8" title="1">writeSSE(w, flusher, "price.updated", event)</span>
+                        case event := &lt;-marketCapCh:
+                                <span class="cov8" title="1">writeSSE(w, flusher, "marketcap.updated", event)</span>
+                        }
+                }
+        }
+}
+
+func writeSSE(w http.ResponseWriter, flusher http.Flusher, eventName string, data any) {
+        <span class="cov8" title="1">payload, err := json.Marshal(data)
+        if err != nil </span>{
+                <span class="cov0" title="0">return
+</span>        }
+
+        <span class="cov8" title="1">_, _ = fmt.Fprintf(w, "event: %s\n", eventName)
+        _, _ = fmt.Fprintf(w, "data: %s\n\n", payload)
+        flusher.Flush()</span>
+}
+</pre>
+		
+		<pre class="file" id="file21" style="display: none">package stream
+
+import (
+        "context"
+        "log/slog"
+        "net/http"
+        "sync"
+
+        "github.com/coder/websocket"
+        "github.com/coder/websocket/wsjson"
+
+        "github.com/merloot/market-data/internal/realtime"
+)
+
+func WSHandler(sub realtime.EventSubscriber, log *slog.Logger) http.HandlerFunc {
+        <span class="cov8" title="1">return func(w http.ResponseWriter, r *http.Request) </span>{
+                <span class="cov8" title="1">if sub == nil </span>{
+                        <span class="cov8" title="1">http.Error(w, "subscriber not configured", http.StatusInternalServerError)
+                        return
+</span>                }
+
+                <span class="cov8" title="1">c, err := websocket.Accept(w, r, &amp;websocket.AcceptOptions{
+                        OriginPatterns: []string{"*"},
+                })
+                if err != nil </span>{
+                        <span class="cov0" title="0">log.Error("ws accept", "err", err)
+                        return
+</span>                }
+                <span class="cov8" title="1">defer c.CloseNow()
+</span>
+                <span class="cov8" title="1">ctx, cancel := context.WithCancel(r.Context())
+                defer cancel()
+</span>
+                <span class="cov8" title="1">priceCh, priceStop, err := sub.SubscribePriceUpdated(ctx)
+                if err != nil </span>{
+                        <span class="cov0" title="0">_ = c.Close(websocket.StatusInternalError, err.Error())
+                        return
+</span>                }
+                <span class="cov8" title="1">defer priceStop()
+</span>
+                <span class="cov8" title="1">capCh, capStop, err := sub.SubscribeMarketCapUpdated(ctx)
+                if err != nil </span>{
+                        <span class="cov0" title="0">_ = c.Close(websocket.StatusInternalError, err.Error())
+                        return
+</span>                }
+                <span class="cov8" title="1">defer capStop()
+</span>
+                <span class="cov8" title="1">var mu sync.Mutex
+</span>
+                <span class="cov8" title="1">if err := writeWS(ctx, &amp;mu, c, "connected", map[string]string{"status": "ok"}); err != nil </span>{
+                        <span class="cov0" title="0">return
+</span>                }
+
+                <span class="cov8" title="1">log.Info("ws client connected", "remote", r.RemoteAddr)
+                defer log.Info("ws client disconnected", "remote", r.RemoteAddr)
+</span>
+                <span class="cov8" title="1">for </span>{
+                        <span class="cov8" title="1">select </span>{
+                        case &lt;-ctx.Done():
+                                <span class="cov0" title="0">return</span>
+                        case event := &lt;-priceCh:
+                                <span class="cov8" title="1">if err := writeWS(ctx, &amp;mu, c, "price.updated", event); err != nil </span>{
+                                        <span class="cov0" title="0">return
+</span>                                }
+                        case event := &lt;-capCh:
+                                <span class="cov8" title="1">if err := writeWS(ctx, &amp;mu, c, "marketcap.updated", event); err != nil </span>{
+                                        <span class="cov0" title="0">return
+</span>                                }
+                        }
+                }
+        }
+}
+
+func writeWS(ctx context.Context, mu *sync.Mutex, c *websocket.Conn, eventName string, data any) error {
+        <span class="cov8" title="1">mu.Lock()
+        defer mu.Unlock()
+</span>
+        <span class="cov8" title="1">return wsjson.Write(ctx, c, map[string]any{
+                "event": eventName,
+                "data":  data,
+        })
+</span>}
+</pre>
+		
+		<pre class="file" id="file22" style="display: none">package marketservice
+
+import (
+        "context"
+        "errors"
+        "fmt"
+        "sync"
+
+        "golang.org/x/sync/errgroup"
+)
+
+func fanOut[K comparable, V any, R any](
+        ctx context.Context,
+        grouped map[K][]V,
+        fn func(ctx context.Context, key K, items []V) (map[string]R, error),
+) (map[string]R, error) {
+        <span class="cov8" title="1">var (
+                mu     sync.Mutex
+                result = make(map[string]R)
+                errs   []error
+        )
+</span>
+        <span class="cov8" title="1">g, ctx := errgroup.WithContext(ctx)
+</span>
+        <span class="cov8" title="1">for key, items := range grouped </span>{
+                <span class="cov8" title="1">key, items := key, items
+                g.Go(func() error </span>{
+                        <span class="cov8" title="1">data, err := fn(ctx, key, items)
+</span>
+                        <span class="cov8" title="1">mu.Lock()
+                        defer mu.Unlock()
+</span>
+                        <span class="cov8" title="1">if err != nil </span>{
+                                <span class="cov8" title="1">errs = append(errs, fmt.Errorf("%v: %w", key, err))
+                                return nil
+</span>                        }
+
+                        <span class="cov8" title="1">for k, v := range data </span>{
+                                <span class="cov8" title="1">result[k] = v
+</span>                        }
+                        <span class="cov8" title="1">return nil</span>
+                })
+        }
+        <span class="cov8" title="1">_ = g.Wait()
+</span>
+        <span class="cov8" title="1">if len(errs) &gt; 0 </span>{
+                <span class="cov8" title="1">return result, errors.Join(errs...)
+</span>        }
+        <span class="cov8" title="1">return result, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file23" style="display: none">package marketservice
+
+import "github.com/merloot/market-data/internal/domain/market"
+
+func groupByCurrencies(currencies []market.Currency) map[string][]market.Currency {
+        <span class="cov8" title="1">grouped := make(map[string][]market.Currency)
+        for _, c := range currencies </span>{
+                <span class="cov8" title="1">grouped[c.Provider] = append(grouped[c.Provider], c)
+</span>        }
+        <span class="cov8" title="1">return grouped</span>
+}
+
+func groupToFind(currencies []market.CurrencyToFind) map[string][]market.CurrencyToFind {
+        <span class="cov0" title="0">grouped := make(map[string][]market.CurrencyToFind)
+        for _, c := range currencies </span>{
+                <span class="cov0" title="0">grouped[c.Provider] = append(grouped[c.Provider], c)
+</span>        }
+        <span class="cov0" title="0">return grouped</span>
+}
+
+func idsAndIndex(provider string, currencies []market.Currency) ([]string, map[string]market.Currency) {
+        <span class="cov8" title="1">ids := make([]string, 0, len(currencies))
+        index := make(map[string]market.Currency, len(currencies))
+</span>
+        <span class="cov8" title="1">for _, c := range currencies </span>{
+                <span class="cov8" title="1">id := idForProvider(provider, c)
+                if id == "" </span>{
+                        <span class="cov0" title="0">continue</span>
+                }
+                <span class="cov8" title="1">ids = append(ids, id)
+                index[id] = c</span>
+        }
+        <span class="cov8" title="1">return ids, index</span>
+}
+
+func idForProvider(provider string, c market.Currency) string {
+        <span class="cov8" title="1">switch provider </span>{
+        case market.ProviderCoinGecko:
+                <span class="cov8" title="1">return c.CoinGecko</span>
+        case market.ProviderCoinmarketcap:
+                <span class="cov8" title="1">return c.CoinMarketCap</span>
+        default:
+                <span class="cov0" title="0">return c.CoinName</span>
+        }
+}
+</pre>
+		
+		<pre class="file" id="file24" style="display: none">package marketservice
+
+import (
+        "context"
+        "fmt"
+        "time"
+
+        "github.com/merloot/market-data/internal/domain/market"
+)
+
+type Service struct {
+        impls map[string]Provider
+}
+
+func NewService(impls ...Provider) *Service {
+        <span class="cov8" title="1">m := make(map[string]Provider, len(impls))
+        for _, impl := range impls </span>{
+                <span class="cov8" title="1">m[impl.Provider()] = impl
+</span>        }
+        <span class="cov8" title="1">return &amp;Service{impls: m}</span>
+}
+
+func (s *Service) impl(provider string) (Provider, error) {
+        <span class="cov8" title="1">p, ok := s.impls[provider]
+        if !ok </span>{
+                <span class="cov8" title="1">return nil, fmt.Errorf("%w:, %q", market.ErrNotFound, provider)
+</span>        }
+        <span class="cov8" title="1">return p, nil</span>
+}
+
+func (s *Service) GetLogo(ctx context.Context, c market.Currency) (string, error) {
+        <span class="cov0" title="0">p, err := s.impl(c.Provider)
+        if err != nil </span>{
+                <span class="cov0" title="0">return "", err
+</span>        }
+        <span class="cov0" title="0">return p.GetLogo(ctx, c.CoinName)</span>
+}
+
+// TODO: implement
+func (s *Service) CheckCurrencyData(ctx context.Context, currencies []market.CurrencyToFind) (map[string]market.CurrencyData, error) {
+        <span class="cov0" title="0">return nil, nil
+</span>}
+
+func (s *Service) GetMarketDataList(
+        ctx context.Context,
+        currencies []market.Currency,
+) (map[string]market.MarketData, error) {
+        <span class="cov8" title="1">grouped := groupByCurrencies(currencies)
+</span>
+        <span class="cov8" title="1">return fanOut(ctx, grouped, func(ctx context.Context, provider string, items []market.Currency) (map[string]market.MarketData, error) </span>{
+                <span class="cov8" title="1">p, err := s.impl(provider)
+                if err != nil </span>{
+                        <span class="cov8" title="1">return nil, err
+</span>                }
+
+                <span class="cov8" title="1">ids, idToCurrency := idsAndIndex(provider, items)
+                if len(ids) == 0 </span>{
+                        <span class="cov0" title="0">return map[string]market.MarketData{}, nil
+</span>                }
+
+                <span class="cov8" title="1">byID, err := p.GetMarketDataList(ctx, ids)
+                if err != nil </span>{
+                        <span class="cov8" title="1">return nil, err
+</span>                }
+
+                <span class="cov8" title="1">result := make(map[string]market.MarketData, len(byID))
+                for id, data := range byID </span>{
+                        <span class="cov8" title="1">c, ok := idToCurrency[id]
+                        if !ok </span>{
+                                <span class="cov0" title="0">continue</span>
+                        }
+                        <span class="cov8" title="1">result[c.CoinName] = data</span>
+                }
+                <span class="cov8" title="1">return result, nil</span>
+        })
+}
+
+func (s *Service) GetMarketDataChart(ctx context.Context, currency market.Currency, days int) (market.MarketDataChart, error) {
+        <span class="cov0" title="0">p, err := s.impl(currency.Provider)
+        if err != nil </span>{
+                <span class="cov0" title="0">return market.MarketDataChart{}, err
+</span>        }
+
+        <span class="cov0" title="0">id := idForProvider(currency.Provider, currency)
+        return p.GetMarketDataChart(ctx, id, days)</span>
+}
+
+func (s *Service) GetMarketDataChartRange(ctx context.Context, currency market.Currency, from, to time.Time) (market.MarketDataChart, error) {
+        <span class="cov0" title="0">p, err := s.impl(currency.Provider)
+        if err != nil </span>{
+                <span class="cov0" title="0">return market.MarketDataChart{}, err
+</span>        }
+
+        <span class="cov0" title="0">id := idForProvider(currency.Provider, currency)
+        return p.GetMarketDataChartRange(ctx, id, from, to)</span>
+}
+</pre>
+		
+		<pre class="file" id="file25" style="display: none">package coingecko
+
+import (
+        "context"
+        "encoding/json"
+        "fmt"
+        "net/http"
+        "strings"
+        "time"
+
+        "github.com/merloot/market-data/internal/domain/market"
+        "github.com/merloot/market-data/internal/marketservice"
+)
+
+var _ marketservice.Provider = (*Provider)(nil)
+
+const (
+        providerName   = "coingecko"
+        defaultBaseURL = "https://api.coingecko.com/api/v3"
+)
+
+type Provider struct {
+        apiKey  string
+        baseUrl string
+        client  *http.Client
+}
+
+func New(apiKey string) *Provider {
+        <span class="cov0" title="0">return NewWithBaseUrl(apiKey, defaultBaseURL)
+</span>}
+
+func NewWithBaseUrl(apiKey string, baseUrl string) *Provider {
+        <span class="cov8" title="1">return &amp;Provider{
+                apiKey:  apiKey,
+                baseUrl: baseUrl,
+                client:  &amp;http.Client{Timeout: 10 * time.Second},
+</span>        }
+}
+
+func (c *Provider) Provider() string {
+        <span class="cov0" title="0">return market.ProviderCoinGecko
+</span>}
+
+func (c *Provider) GetLogo(ctx context.Context, currency string) (string, error) {
+        <span class="cov0" title="0">return "", nil
+</span>}
+
+func (c *Provider) CheckCurrencyData(ctx context.Context, currencies []string) (map[string]market.CurrencyData, error) {
+        <span class="cov0" title="0">return map[string]market.CurrencyData{}, nil
+</span>}
+
+func (c *Provider) GetMarketDataList(ctx context.Context, currencies []string) (map[string]market.MarketData, error) {
+        <span class="cov8" title="1">url := fmt.Sprintf("%s/coins/markets?vs_currency=usd&amp;ids=%s", c.baseUrl, strings.Join(currencies, ","))
+</span>
+        <span class="cov8" title="1">req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
+        if err != nil </span>{
+                <span class="cov0" title="0">return nil, fmt.Errorf("Cg request: %w", err)
+</span>        }
+
+        <span class="cov8" title="1">resp, err := c.client.Do(req)
+        if err != nil </span>{
+                <span class="cov0" title="0">return nil, fmt.Errorf("%w: %v", market.ErrUpstream, err)
+</span>        }
+        <span class="cov8" title="1">defer resp.Body.Close()
+</span>
+        <span class="cov8" title="1">if resp.StatusCode == http.StatusTooManyRequests </span>{
+                <span class="cov8" title="1">return nil, market.ErrRateLimited
+</span>        }
+
+        <span class="cov8" title="1">if resp.StatusCode != http.StatusOK </span>{
+                <span class="cov8" title="1">return nil, fmt.Errorf("%w: status %d", market.ErrUpstream, resp.StatusCode)
+</span>        }
+
+        <span class="cov8" title="1">var raw []struct {
+                ID                string    `json:"id"`
+                Symbol            string    `json:"symbol"`
+                CurrentPrice      float64   `json:"current_price"`
+                MarketCap         float64   `json:"market_cap"`
+                CirculatingSupply float64   `json:"circulating_supply"`
+                TotalSupply       float64   `json:"total_supply"`
+                LastUpdated       time.Time `json:"last_updated"`
+</span>        }
+
+        <span class="cov8" title="1">if err := json.NewDecoder(resp.Body).Decode(&amp;raw); err != nil </span>{
+                <span class="cov0" title="0">return nil, fmt.Errorf("Cg decode: %w", err)
+</span>        }
+
+        <span class="cov8" title="1">result := make(map[string]market.MarketData, len(raw))
+        for _, item := range raw </span>{
+                <span class="cov8" title="1">result[item.ID] = market.MarketData{
+                        CurrentPrice:      item.CurrentPrice,
+                        MarketCap:         item.MarketCap,
+                        CirculatingSupply: item.CirculatingSupply,
+                        TotalSupply:       item.TotalSupply,
+                        LastUpdated:       item.LastUpdated,
+</span>                }
+        }
+        <span class="cov8" title="1">return result, nil</span>
+}
+
+func (c *Provider) GetMarketDataChart(ctx context.Context, currency string, days int) (market.MarketDataChart, error) {
+        <span class="cov0" title="0">url := fmt.Sprintf("%s/coins/%s/market_chart?vs_currency=usd&amp;days=%d", c.baseUrl, currency, days)
+</span>
+        <span class="cov0" title="0">req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
+        if err != nil </span>{
+                <span class="cov0" title="0">return market.MarketDataChart{}, fmt.Errorf("cg request %w", err)
+</span>        }
+
+        <span class="cov0" title="0">resp, err := c.client.Do(req)
+        if err != nil </span>{
+                <span class="cov0" title="0">return market.MarketDataChart{}, fmt.Errorf("%w: %v", market.ErrUpstream, err)
+</span>        }
+        <span class="cov0" title="0">defer resp.Body.Close()
+</span>
+        <span class="cov0" title="0">if resp.StatusCode != http.StatusOK </span>{
+                <span class="cov0" title="0">return market.MarketDataChart{}, fmt.Errorf("%w status: %d", market.ErrUpstream, resp.StatusCode)
+</span>        }
+
+        <span class="cov0" title="0">var raw struct {
+                Prices       [][2]float64 `json:"prices"`
+                MarketCaps   [][2]float64 `json:"market_caps"`
+                TotalVolumes [][2]float64 `json:"total_volumes"`
+</span>        }
+
+        <span class="cov0" title="0">if err := json.NewDecoder(resp.Body).Decode(&amp;raw); err != nil </span>{
+                <span class="cov0" title="0">return market.MarketDataChart{}, fmt.Errorf("Cg decode: %w", err)
+</span>        }
+
+        <span class="cov0" title="0">return market.MarketDataChart{
+                Prices:      raw.Prices,
+                MarketCaps:  raw.MarketCaps,
+                TotalSupply: raw.TotalVolumes,
+        }, nil</span>
+}
+
+func (c *Provider) GetMarketDataChartRange(ctx context.Context, currency string, from, to time.Time) (market.MarketDataChart, error) {
+        <span class="cov0" title="0">return market.MarketDataChart{}, nil
+</span>}
+</pre>
+		
+		<pre class="file" id="file26" style="display: none">package coinmarketcap
+
+import (
+        "context"
+        "encoding/json"
+        "fmt"
+        "net/http"
+        "time"
+
+        "github.com/merloot/market-data/internal/domain/market"
+)
+
+func (p *Provider) GetMarketDataChart(
+        ctx context.Context,
+        currency string,
+        days int,
+) (market.MarketDataChart, error) {
+        <span class="cov8" title="1">to := time.Now()
+        from := to.Add(-time.Duration(days) * 24 * time.Hour)
+        return p.getHistorical(ctx, currency, from, to)
+</span>}
+
+func (p *Provider) GetMarketDataChartRange(
+        ctx context.Context,
+        currency string,
+        from, to time.Time,
+) (market.MarketDataChart, error) {
+        <span class="cov0" title="0">return p.getHistorical(ctx, currency, from, to)
+</span>}
+
+func (p *Provider) getHistorical(
+        ctx context.Context,
+        currency string,
+        from, to time.Time,
+) (market.MarketDataChart, error) {
+        <span class="cov8" title="1">interval := intervalForRange(from, to)
+        url := fmt.Sprintf(
+                "%s/v2/cryptocurrency/quotes/historical?id=%s&amp;time_start=%d&amp;time_end=%d&amp;interval=%s&amp;convert=USD",
+                p.baseURL,
+                currency,
+                from.UnixMilli(),
+                to.UnixMilli(),
+                interval,
+        )
+</span>
+        <span class="cov8" title="1">req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
+        if err != nil </span>{
+                <span class="cov0" title="0">return market.MarketDataChart{}, fmt.Errorf("Request: %w", err)
+</span>        }
+        <span class="cov8" title="1">req.Header.Set("X-CMC_PRO_API_KEY", p.apiKey)
+</span>
+        <span class="cov8" title="1">resp, err := p.client.Do(req)
+        if err != nil </span>{
+                <span class="cov0" title="0">return market.MarketDataChart{}, fmt.Errorf("%v: %w", market.ErrUpstream, err)
+</span>        }
+        <span class="cov8" title="1">defer resp.Body.Close()
+</span>
+        <span class="cov8" title="1">if err := checkStatus(resp); err != nil </span>{
+                <span class="cov0" title="0">return market.MarketDataChart{}, err
+</span>        }
+
+        <span class="cov8" title="1">var raw historicalResponse
+        if err := json.NewDecoder(resp.Body).Decode(&amp;raw); err != nil </span>{
+                <span class="cov0" title="0">return market.MarketDataChart{}, fmt.Errorf("Decode: %w", err)
+</span>        }
+
+        <span class="cov8" title="1">return convertHistorical(raw), nil</span>
+}
+
+func convertHistorical(raw historicalResponse) market.MarketDataChart {
+        <span class="cov8" title="1">chart := market.MarketDataChart{
+                Prices:            make([][2]float64, 0, len(raw.Data.Quotes)),
+                MarketCaps:        make([][2]float64, 0, len(raw.Data.Quotes)),
+                CirculatingSupply: make([][2]float64, 0, len(raw.Data.Quotes)),
+                TotalSupply:       make([][2]float64, 0, len(raw.Data.Quotes)),
+</span>        }
+
+        <span class="cov8" title="1">for _, q := range raw.Data.Quotes </span>{
+                <span class="cov8" title="1">usd, ok := q.Quote["USD"]
+                if !ok </span>{
+                        <span class="cov0" title="0">continue</span>
+                }
+
+                <span class="cov8" title="1">ts := parseTimestamp(usd.Timestamp)
+                if ts == 0 </span>{
+                        <span class="cov0" title="0">continue</span>
+                }
+
+                <span class="cov8" title="1">chart.Prices = append(chart.Prices, [2]float64{float64(ts), usd.Price})
+                chart.MarketCaps = append(chart.MarketCaps, [2]float64{float64(ts), usd.MarketCap})
+                chart.CirculatingSupply = append(chart.CirculatingSupply, [2]float64{float64(ts), usd.CirculatingSupply})
+                chart.TotalSupply = append(chart.TotalSupply, [2]float64{float64(ts), usd.TotalSupply})</span>
+        }
+        <span class="cov8" title="1">return chart</span>
+}
+
+func parseTimestamp(s string) int64 {
+        <span class="cov8" title="1">t, err := time.Parse(time.RFC3339, s)
+        if err != nil </span>{
+                <span class="cov8" title="1">return 0
+</span>        }
+        <span class="cov8" title="1">return t.UnixMilli()</span>
+}
+</pre>
+		
+		<pre class="file" id="file27" style="display: none">package coinmarketcap
+
+import (
+        "encoding/json"
+        "fmt"
+        "io"
+        "net/http"
+
+        "github.com/merloot/market-data/internal/domain/market"
+)
+
+type cmcErrorResponse struct {
+        Status struct {
+                ErrorCode    int    `json:"error_code"`
+                ErrorMessage string `json:"error_message"`
+        } `json:"status"`
+}
+
+func checkStatus(resp *http.Response) error {
+        <span class="cov8" title="1">if resp.StatusCode == http.StatusOK </span>{
+                <span class="cov8" title="1">return nil
+</span>        }
+
+        <span class="cov8" title="1">switch resp.StatusCode </span>{
+        case http.StatusTooManyRequests:
+                <span class="cov8" title="1">return market.ErrRateLimited</span>
+        case http.StatusNotFound:
+                <span class="cov0" title="0">return market.ErrNotFound</span>
+        }
+
+        <span class="cov8" title="1">body, _ := io.ReadAll(io.LimitReader(resp.Body, 4096))
+</span>
+        <span class="cov8" title="1">var apiErr cmcErrorResponse
+        _ = json.Unmarshal(body, &amp;apiErr)
+</span>
+        <span class="cov8" title="1">if apiErr.Status.ErrorMessage != "" </span>{
+                <span class="cov0" title="0">return fmt.Errorf("%w: status=%d code=%d message=%q",
+                        market.ErrUpstream,
+                        resp.StatusCode,
+                        apiErr.Status.ErrorCode,
+                        apiErr.Status.ErrorMessage,
+                )
+</span>        }
+        <span class="cov8" title="1">return fmt.Errorf("%w: status=%d body=%s",
+                market.ErrUpstream,
+                resp.StatusCode,
+                string(body),
+        )</span>
+}
+</pre>
+		
+		<pre class="file" id="file28" style="display: none">package coinmarketcap
+
+import "time"
+
+const (
+        dayInMs   = int64(24 * time.Hour / time.Millisecond)
+        monthInMs = dayInMs * 30
+)
+
+func intervalForRange(from, to time.Time) string {
+        <span class="cov8" title="1">diff := to.UnixMilli() - from.UnixMilli()
+</span>
+        <span class="cov8" title="1">switch </span>{
+        case diff &gt; 3*monthInMs:
+                <span class="cov8" title="1">return "1d"</span>
+        case diff &gt; 2*dayInMs:
+                <span class="cov8" title="1">return "1h"</span>
+        default:
+                <span class="cov8" title="1">return "5m"</span>
+        }
+}
+</pre>
+		
+		<pre class="file" id="file29" style="display: none">package coinmarketcap
+
+import (
+        "context"
+        "encoding/json"
+        "fmt"
+        "net/http"
+        "strings"
+
+        "github.com/merloot/market-data/internal/domain/market"
+)
+
+func (p *Provider) GetMarketDataList(
+        ctx context.Context,
+        ids []string,
+) (map[string]market.MarketData, error) {
+        <span class="cov8" title="1">if len(ids) == 0 </span>{
+                <span class="cov8" title="1">return map[string]market.MarketData{}, nil
+</span>        }
+
+        <span class="cov8" title="1">url := fmt.Sprintf("%s/v2/cryptocurrency/quotes/latest?id=%s&amp;convert=USD",
+                p.baseURL, strings.Join(ids, ","))
+</span>
+        <span class="cov8" title="1">req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
+        if err != nil </span>{
+                <span class="cov0" title="0">return nil, fmt.Errorf("%w: %v", market.ErrUpstream, err)
+</span>        }
+        <span class="cov8" title="1">req.Header.Set("X-CMC_PRO_API_KEY", p.apiKey)
+</span>
+        <span class="cov8" title="1">resp, err := p.client.Do(req)
+        if err != nil </span>{
+                <span class="cov0" title="0">return nil, fmt.Errorf("%w: %v", market.ErrUpstream, err)
+</span>        }
+        <span class="cov8" title="1">defer resp.Body.Close()
+</span>
+        <span class="cov8" title="1">if err := checkStatus(resp); err != nil </span>{
+                <span class="cov8" title="1">return nil, err
+</span>        }
+
+        <span class="cov8" title="1">var raw marketDataListResponse
+        if err := json.NewDecoder(resp.Body).Decode(&amp;raw); err != nil </span>{
+                <span class="cov0" title="0">return nil, fmt.Errorf("Decode: %w", err)
+</span>        }
+
+        <span class="cov8" title="1">return convertMarketDataList(raw), nil</span>
+}
+
+func convertMarketDataList(raw marketDataListResponse) map[string]market.MarketData {
+        <span class="cov8" title="1">result := make(map[string]market.MarketData, len(raw.Data))
+        for id, item := range raw.Data </span>{
+                <span class="cov8" title="1">usd, ok := item.Quote["USD"]
+                if !ok </span>{
+                        <span class="cov0" title="0">continue</span>
+                }
+                <span class="cov8" title="1">result[id] = market.MarketData{
+                        Currency:          id,
+                        CurrentPrice:      usd.Price,
+                        MarketCap:         usd.MarketCap,
+                        CirculatingSupply: item.CirculatingSupply,
+                        TotalSupply:       item.TotalSupply,
+                        LastUpdated:       item.LastUpdated,
+</span>                }
+        }
+        <span class="cov8" title="1">return result</span>
+}
+</pre>
+		
+		<pre class="file" id="file30" style="display: none">package coinmarketcap
+
+import (
+        "context"
+        "net/http"
+        "time"
+
+        "github.com/merloot/market-data/internal/domain/market"
+        "github.com/merloot/market-data/internal/marketservice"
+)
+
+var _ marketservice.Provider = (*Provider)(nil)
+
+const (
+        providerName   = "coinmarketcap"
+        defaultBaseURL = "https://pro-api.coinmarketcap.com"
+)
+
+type Provider struct {
+        apiKey  string
+        baseURL string
+        client  *http.Client
+}
+
+func New(apiKey string) *Provider {
+        <span class="cov0" title="0">return NewWithBaseURL(apiKey, defaultBaseURL)
+</span>}
+
+func NewWithBaseURL(apiKey, baseURL string) *Provider {
+        <span class="cov8" title="1">return &amp;Provider{
+                apiKey:  apiKey,
+                baseURL: baseURL,
+                client: &amp;http.Client{
+                        Timeout: 10 * time.Second,
+                },
+</span>        }
+}
+
+func (p *Provider) Provider() string {
+        <span class="cov0" title="0">return providerName
+</span>}
+
+func (c *Provider) GetLogo(ctx context.Context, currency string) (string, error) {
+        <span class="cov0" title="0">return "", nil
+</span>}
+
+func (c *Provider) CheckCurrencyData(ctx context.Context, currencies []string) (map[string]market.CurrencyData, error) {
+        <span class="cov0" title="0">return map[string]market.CurrencyData{}, nil
+</span>}
+
+func ParseTimestampForTest(s string) int64 { <span class="cov8" title="1">return parseTimestamp(s) }</span>
+</pre>
+		
+		<pre class="file" id="file31" style="display: none">package memory
+
+import (
+        "sync"
+
+        "github.com/merloot/market-data/internal/domain/market"
+)
+
+type bus struct {
+        mu            sync.RWMutex
+        priceSubs     []chan market.PriceUpdated
+        marketCapSubs []chan market.MarketCapUpdated
+
+        prices     map[string]market.PriceUpdated
+        marketCaps map[string]market.MarketCapUpdated
+}
+
+func newBus() *bus {
+        <span class="cov8" title="1">return &amp;bus{
+                prices:     make(map[string]market.PriceUpdated),
+                marketCaps: make(map[string]market.MarketCapUpdated),
+</span>        }
+}
+
+func (b *bus) publishPrice(event market.PriceUpdated) {
+        <span class="cov8" title="1">b.mu.Lock()
+        b.prices[event.CoinName] = event
+        subs := b.priceSubs
+        b.mu.Unlock()
+</span>
+        <span class="cov8" title="1">for _, ch := range subs </span>{
+                <span class="cov8" title="1">select </span>{
+                case ch &lt;- event:<span class="cov8" title="1"></span>
+                default:<span class="cov8" title="1"></span>
+                }
+        }
+}
+
+func (b *bus) publishMarketCap(event market.MarketCapUpdated) {
+        <span class="cov8" title="1">b.mu.Lock()
+        b.marketCaps[event.CoinName] = event
+        subs := b.marketCapSubs
+        b.mu.Unlock()
+</span>
+        <span class="cov8" title="1">for _, ch := range subs </span>{
+                <span class="cov8" title="1">select </span>{
+                case ch &lt;- event:<span class="cov8" title="1"></span>
+                default:<span class="cov0" title="0"></span>
+                }
+        }
+}
+</pre>
+		
+		<pre class="file" id="file32" style="display: none">package memory
+
+import (
+        "context"
+
+        "github.com/merloot/market-data/internal/domain/market"
+        "github.com/merloot/market-data/internal/realtime"
+)
+
+var _ realtime.EventPublisher = (*Publisher)(nil)
+
+type Publisher struct {
+        bus *bus
+}
+
+func New() (*Publisher, *Subscriber) {
+        <span class="cov8" title="1">b := newBus()
+        return &amp;Publisher{bus: b}, &amp;Subscriber{bus: b}
+</span>}
+
+func (p *Publisher) PublishPriceUpdated(_ context.Context, event market.PriceUpdated) error {
+        <span class="cov8" title="1">p.bus.publishPrice(event)
+        return nil
+</span>}
+
+func (p *Publisher) PublishMarketCapUpdated(_ context.Context, event market.MarketCapUpdated) error {
+        <span class="cov8" title="1">p.bus.publishMarketCap(event)
+        return nil
+</span>}
+
+func (p *Publisher) LastPrice(coinName string) (market.PriceUpdated, bool) {
+        <span class="cov8" title="1">p.bus.mu.RLock()
+        defer p.bus.mu.RUnlock()
+</span>
+        <span class="cov8" title="1">e, ok := p.bus.prices[coinName]
+        return e, ok
+</span>}
+
+func (p *Publisher) LastMarketCap(coinName string) (market.MarketCapUpdated, bool) {
+        <span class="cov8" title="1">p.bus.mu.RLock()
+        defer p.bus.mu.RUnlock()
+</span>
+        <span class="cov8" title="1">e, ok := p.bus.marketCaps[coinName]
+        return e, ok
+</span>}
+</pre>
+		
+		<pre class="file" id="file33" style="display: none">package memory
+
+import (
+        "context"
+        "sync"
+
+        "github.com/merloot/market-data/internal/domain/market"
+        "github.com/merloot/market-data/internal/realtime"
+)
+
+var _ realtime.EventSubscriber = (*Subscriber)(nil)
+
+type Subscriber struct {
+        bus *bus
+}
+
+func (s *Subscriber) SubscribePriceUpdated(ctx context.Context) (&lt;-chan market.PriceUpdated, func(), error) {
+        <span class="cov8" title="1">ch := make(chan market.PriceUpdated, 100)
+</span>
+        <span class="cov8" title="1">s.bus.mu.Lock()
+        s.bus.priceSubs = append(s.bus.priceSubs, ch)
+        s.bus.mu.Unlock()
+</span>
+        <span class="cov8" title="1">var once sync.Once
+        cleanup := func() </span>{
+                <span class="cov8" title="1">once.Do(func() </span>{
+                        <span class="cov8" title="1">s.bus.mu.Lock()
+                        defer s.bus.mu.Unlock()
+                        for i, sub := range s.bus.priceSubs </span>{
+                                <span class="cov8" title="1">if sub == ch </span>{
+                                        <span class="cov8" title="1">s.bus.priceSubs = append(s.bus.priceSubs[:i], s.bus.priceSubs[i+1:]...)
+                                        close(ch)
+                                        return
+</span>                                }
+                        }
+                })
+        }
+
+        <span class="cov8" title="1">go func() </span>{
+                <span class="cov8" title="1">&lt;-ctx.Done()
+                cleanup()
+</span>        }()
+
+        <span class="cov8" title="1">return ch, cleanup, nil</span>
+}
+
+func (s *Subscriber) SubscribeMarketCapUpdated(ctx context.Context) (&lt;-chan market.MarketCapUpdated, func(), error) {
+        <span class="cov8" title="1">ch := make(chan market.MarketCapUpdated, 100)
+</span>
+        <span class="cov8" title="1">s.bus.mu.Lock()
+        s.bus.marketCapSubs = append(s.bus.marketCapSubs, ch)
+        s.bus.mu.Unlock()
+</span>
+        <span class="cov8" title="1">var once sync.Once
+        cleanup := func() </span>{
+                <span class="cov8" title="1">once.Do(func() </span>{
+                        <span class="cov8" title="1">s.bus.mu.Lock()
+                        defer s.bus.mu.Unlock()
+                        for i, sub := range s.bus.marketCapSubs </span>{
+                                <span class="cov8" title="1">if sub == ch </span>{
+                                        <span class="cov8" title="1">s.bus.marketCapSubs = append(s.bus.marketCapSubs[:i], s.bus.marketCapSubs[i+1:]...)
+                                        close(ch)
+                                        return
+</span>                                }
+                        }
+                })
+        }
+
+        <span class="cov8" title="1">go func() </span>{
+                <span class="cov8" title="1">&lt;-ctx.Done()
+                cleanup()
+</span>        }()
+
+        <span class="cov8" title="1">return ch, cleanup, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file34" style="display: none">package redis
+
+import (
+        "context"
+        "encoding/json"
+        "fmt"
+
+        "github.com/merloot/market-data/internal/domain/market"
+        goredis "github.com/redis/go-redis/v9"
+)
+
+const (
+        MarketCapUpdatedChannel = "marketcap.updated"
+        PriceUpdatedChannel     = "price.updated"
+)
+
+type Publisher struct {
+        client *goredis.Client
+}
+
+func NewPublisher(client *goredis.Client) *Publisher {
+        <span class="cov8" title="1">return &amp;Publisher{client: client}
+</span>}
+
+func (p *Publisher) PublishPriceUpdated(ctx context.Context, event market.PriceUpdated) error {
+        <span class="cov8" title="1">return p.publish(ctx, PriceUpdatedChannel, event)
+</span>}
+
+func (p *Publisher) PublishMarketCapUpdated(ctx context.Context, event market.MarketCapUpdated) error {
+        <span class="cov8" title="1">return p.publish(ctx, MarketCapUpdatedChannel, event)
+</span>}
+
+func (p *Publisher) publish(ctx context.Context, channel string, event any) error {
+        <span class="cov8" title="1">payload, err := json.Marshal(event)
+        if err != nil </span>{
+                <span class="cov0" title="0">return fmt.Errorf("Marshal: %w", err)
+</span>        }
+
+        <span class="cov8" title="1">if err := p.client.Publish(ctx, channel, payload).Err(); err != nil </span>{
+                <span class="cov0" title="0">return fmt.Errorf("Publish: %w", err)
+</span>        }
+
+        <span class="cov8" title="1">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file35" style="display: none">package redis
+
+import (
+        "context"
+        "encoding/json"
+        "fmt"
+        "sync"
+
+        "github.com/merloot/market-data/internal/domain/market"
+        "github.com/merloot/market-data/internal/realtime"
+        goredis "github.com/redis/go-redis/v9"
+)
+
+var _ realtime.EventSubscriber = (*Subscriber)(nil)
+
+type Subscriber struct {
+        client *goredis.Client
+}
+
+func NewSubscriber(client *goredis.Client) *Subscriber {
+        <span class="cov8" title="1">return &amp;Subscriber{client: client}
+</span>}
+
+func (s *Subscriber) SubscribePriceUpdated(ctx context.Context) (&lt;-chan market.PriceUpdated, func(), error) {
+        <span class="cov8" title="1">return subscribeJSON[market.PriceUpdated](ctx, s.client, PriceUpdatedChannel)
+</span>}
+
+func (s *Subscriber) SubscribeMarketCapUpdated(ctx context.Context) (&lt;-chan market.MarketCapUpdated, func(), error) {
+        <span class="cov8" title="1">return subscribeJSON[market.MarketCapUpdated](ctx, s.client, MarketCapUpdatedChannel)
+</span>}
+
+func subscribeJSON[T any](ctx context.Context, client *goredis.Client, channel string) (&lt;-chan T, func(), error) {
+        <span class="cov8" title="1">raw, cleanup, err := subscribeRaw(ctx, client, channel)
+        if err != nil </span>{
+                <span class="cov0" title="0">return nil, nil, err
+</span>        }
+
+        <span class="cov8" title="1">out := make(chan T, 100)
+</span>
+        <span class="cov8" title="1">go func() </span>{
+                <span class="cov8" title="1">defer close(out)
+                for payload := range raw </span>{
+                        <span class="cov8" title="1">var event T
+                        if err := json.Unmarshal(payload, &amp;event); err != nil </span>{
+                                <span class="cov8" title="1">continue</span>
+                        }
+
+                        <span class="cov8" title="1">select </span>{
+                        case out &lt;- event:<span class="cov8" title="1"></span>
+                        case &lt;-ctx.Done():
+                                <span class="cov0" title="0">return</span>
+                        }
+                }
+        }()
+
+        <span class="cov8" title="1">return out, cleanup, nil</span>
+}
+
+func subscribeRaw(ctx context.Context, client *goredis.Client, channel string) (&lt;-chan []byte, func(), error) {
+        <span class="cov8" title="1">pubsub := client.Subscribe(ctx, channel)
+        if _, err := pubsub.Receive(ctx); err != nil </span>{
+                <span class="cov0" title="0">_ = pubsub.Close()
+                return nil, nil, fmt.Errorf("subscribe %s: %w", channel, err)
+</span>        }
+
+        <span class="cov8" title="1">out := make(chan []byte, 100)
+</span>
+        <span class="cov8" title="1">go func() </span>{
+                <span class="cov8" title="1">&lt;-ctx.Done()
+                _ = pubsub.Close()
+</span>        }()
+
+        <span class="cov8" title="1">go func() </span>{
+                <span class="cov8" title="1">defer close(out)
+                for msg := range pubsub.Channel() </span>{
+                        <span class="cov8" title="1">select </span>{
+                        case out &lt;- []byte(msg.Payload):<span class="cov8" title="1"></span>
+                        case &lt;-ctx.Done():
+                                <span class="cov0" title="0">return</span>
+                        }
+                }
+        }()
+
+        <span class="cov8" title="1">var once sync.Once
+        cleanup := func() </span>{
+                <span class="cov8" title="1">once.Do(func() </span>{
+                        <span class="cov8" title="1">_ = pubsub.Close()
+</span>                })
+        }
+        <span class="cov8" title="1">return out, cleanup, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file36" style="display: none">package asynq
+
+import (
+        "log/slog"
+
+        "github.com/hibiken/asynq"
+)
+
+type asynqLogger struct {
+        log *slog.Logger
+}
+
+func newAsynqLogger(log *slog.Logger) asynq.Logger {
+        <span class="cov0" title="0">return &amp;asynqLogger{log: log}
+</span>}
+
+func (l *asynqLogger) Debug(args ...any) { <span class="cov0" title="0">l.log.Debug("asynq", "args", args) }</span>
+func (l *asynqLogger) Info(args ...any)  { <span class="cov0" title="0">l.log.Info("asynq", "args", args) }</span>
+func (l *asynqLogger) Warn(args ...any)  { <span class="cov0" title="0">l.log.Warn("asynq", "args", args) }</span>
+func (l *asynqLogger) Error(args ...any) { <span class="cov0" title="0">l.log.Error("asynq", "args", args) }</span>
+func (l *asynqLogger) Fatal(args ...any) { <span class="cov0" title="0">l.log.Error("asynq fatal", "args", args) }</span>
+</pre>
+		
+		<pre class="file" id="file37" style="display: none">package asynq
+
+import (
+        "context"
+        "fmt"
+        "log/slog"
+        "time"
+
+        "github.com/hibiken/asynq"
+        "github.com/merloot/market-data/internal/scheduling"
+)
+
+type Scheduler struct {
+        scheduler *asynq.Scheduler
+        log       *slog.Logger
+}
+
+func NewSchedule(ctx context.Context, redisAddr string, tasks []scheduling.Task, log *slog.Logger) (*Scheduler, error) {
+        <span class="cov0" title="0">s := asynq.NewScheduler(
+                asynq.RedisClientOpt{Addr: redisAddr},
+                &amp;asynq.SchedulerOpts{
+                        Location: time.UTC,
+                        Logger:   newAsynqLogger(log),
+                },
+        )
+</span>
+        <span class="cov0" title="0">for _, task := range tasks </span>{
+                <span class="cov0" title="0">if err := registerTask(ctx, s, task, log); err != nil </span>{
+                        <span class="cov0" title="0">return nil, err
+</span>                }
+        }
+        <span class="cov0" title="0">return &amp;Scheduler{scheduler: s, log: log}, nil</span>
+}
+
+func registerTask(ctx context.Context, s *asynq.Scheduler, task scheduling.Task, log *slog.Logger) error {
+        <span class="cov0" title="0">t := asynq.NewTask(task.Type, task.Payload)
+</span>
+        <span class="cov0" title="0">entryID, err := s.Register(
+                task.Spec,
+                t, asynq.Queue("critical"),
+                asynq.MaxRetry(3),
+                asynq.Unique(55*time.Second),
+        )
+        if err != nil </span>{
+                <span class="cov0" title="0">return fmt.Errorf("Register %q: %w", task.Name, err)
+</span>        }
+
+        <span class="cov0" title="0">log.Info("Cron registered",
+                "name", task.Name,
+                "spec", task.Spec,
+                "type", task.Type,
+                "entry_id", entryID,
+        )
+</span>
+        <span class="cov0" title="0">return nil</span>
+}
+
+func (s *Scheduler) Run(ctx context.Context) error {
+        <span class="cov0" title="0">s.log.Info("Asynq scheduler starting")
+</span>
+        <span class="cov0" title="0">errCh := make(chan error, 1)
+        go func() </span>{
+                <span class="cov0" title="0">errCh &lt;- s.scheduler.Run()
+</span>        }()
+
+        <span class="cov0" title="0">select </span>{
+        case &lt;-ctx.Done():
+                <span class="cov0" title="0">s.log.Info("Asynq scheduler stopping")
+                s.scheduler.Shutdown()
+                return ctx.Err()</span>
+        case err := &lt;-errCh:
+                <span class="cov0" title="0">return err</span>
+        }
+}
+
+func (s *Scheduler) Stop(_ context.Context) error {
+        <span class="cov0" title="0">s.scheduler.Shutdown()
+        return nil
+</span>}
+</pre>
+		
+		<pre class="file" id="file38" style="display: none">package scheduling
+
+import (
+        "context"
+        "fmt"
+        "log/slog"
+)
+
+type Builder interface {
+        Name() string
+        Build(context.Context) ([]Task, error)
+}
+
+type Registry struct {
+        builders []Builder
+        log      *slog.Logger
+}
+
+func NewRegistry(log *slog.Logger, builders ...Builder) *Registry {
+        <span class="cov8" title="1">return &amp;Registry{log: log, builders: builders}
+</span>}
+
+func (r *Registry) Tasks(ctx context.Context) ([]Task, error) {
+        <span class="cov8" title="1">var tasks []Task
+        for _, b := range r.builders </span>{
+                <span class="cov8" title="1">built, err := b.Build(ctx)
+                if err != nil </span>{
+                        <span class="cov8" title="1">return nil, fmt.Errorf("builder %q: %w", b.Name(), err)
+</span>                }
+
+                <span class="cov8" title="1">for _, t := range built </span>{
+                        <span class="cov8" title="1">if t.Type == "" </span>{
+                                <span class="cov8" title="1">return nil, fmt.Errorf("builder %q: task %q has empty Type", b.Name(), t.Name)
+</span>                        }
+                        <span class="cov8" title="1">if t.Spec == "" </span>{
+                                <span class="cov0" title="0">return nil, fmt.Errorf("builder %q: task %q has empty Spec", b.Name(), t.Name)
+</span>                        }
+                }
+
+                <span class="cov8" title="1">r.log.Info("tasks built", "builder", b.Name(), "count", len(built))
+                tasks = append(tasks, built...)</span>
+        }
+        <span class="cov8" title="1">return tasks, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file39" style="display: none">package river
+
+import (
+        "context"
+        "fmt"
+
+        "github.com/jackc/pgx/v5"
+        "github.com/jackc/pgx/v5/pgxpool"
+        "github.com/riverqueue/river"
+        "github.com/riverqueue/river/riverdriver/riverpgxv5"
+)
+
+func NewClient(ctx context.Context, dns string, cfg *river.Config) (*river.Client[pgx.Tx], func(), error) {
+        <span class="cov0" title="0">pool, err := pgxpool.New(ctx, dns)
+        if err != nil </span>{
+                <span class="cov0" title="0">return nil, nil, fmt.Errorf("Pool: %w", err)
+</span>        }
+
+        <span class="cov0" title="0">client, err := river.NewClient(riverpgxv5.New(pool), cfg)
+        if err != nil </span>{
+                <span class="cov0" title="0">pool.Close()
+                return nil, nil, fmt.Errorf("River client: %w", err)
+</span>        }
+        <span class="cov0" title="0">cleanup := func() </span>{
+                <span class="cov0" title="0">pool.Close()
+</span>        }
+        <span class="cov0" title="0">return client, cleanup, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file40" style="display: none">package river
+
+import (
+        "context"
+        "fmt"
+
+        "github.com/riverqueue/river"
+)
+
+type noopArgs struct{}
+
+func (noopArgs) Kind() string { <span class="cov0" title="0">return "noop" }</span>
+
+type noopWorker struct {
+        river.WorkerDefaults[noopArgs]
+}
+
+func (w *noopWorker) Work(ctx context.Context, _ *river.Job[noopArgs]) error {
+        <span class="cov0" title="0">return fmt.Errorf("Noop worker received job")
+</span>}
+</pre>
+		
+		<pre class="file" id="file41" style="display: none">package river
+
+import (
+        "context"
+        "encoding/json"
+        "fmt"
+        "log/slog"
+        "time"
+
+        "github.com/riverqueue/river"
+        "github.com/riverqueue/river/riverdriver/riverpgxv5"
+        "github.com/robfig/cron/v3"
+
+        "github.com/jackc/pgx/v5"
+        "github.com/jackc/pgx/v5/pgxpool"
+        "github.com/merloot/market-data/internal/scheduling"
+)
+
+type Scheduler struct {
+        client *river.Client[pgx.Tx]
+        log    *slog.Logger
+        tasks  []scheduling.Task
+}
+
+func NewSchedule(
+        ctx context.Context,
+        dsn string,
+        tasks []scheduling.Task,
+        log *slog.Logger,
+) (*Scheduler, func(), error) {
+        <span class="cov0" title="0">pool, err := pgxpool.New(ctx, dsn)
+        if err != nil </span>{
+                <span class="cov0" title="0">return nil, nil, fmt.Errorf("Pool: %w", err)
+</span>        }
+
+        <span class="cov0" title="0">workers := river.NewWorkers()
+        river.AddWorker(workers, &amp;noopWorker{})
+</span>
+        <span class="cov0" title="0">client, err := river.NewClient(riverpgxv5.New(pool), &amp;river.Config{
+                LeaderElectionDisabled: true,
+                SoftStopTimeout:        5 * time.Second,
+        })
+</span>
+        <span class="cov0" title="0">if err != nil </span>{
+                <span class="cov0" title="0">return nil, nil, fmt.Errorf("Create river client: %w", err)
+</span>        }
+        <span class="cov0" title="0">return &amp;Scheduler{client: client, log: log, tasks: tasks}, pool.Close, nil</span>
+}
+
+func (s *Scheduler) Run(ctx context.Context) error {
+        <span class="cov0" title="0">s.log.Info("River scheduler starting", "tasks", len(s.tasks))
+</span>
+        <span class="cov0" title="0">c := cron.New()
+        for _, task := range s.tasks </span>{
+                <span class="cov0" title="0">t := task
+                if _, err := c.AddFunc(t.Spec, func() </span>{
+                        <span class="cov0" title="0">s.enqueue(ctx, t)
+</span>                }); err != nil {
+                        <span class="cov0" title="0">return fmt.Errorf("Add cron %q: %w", t.Name, err)
+</span>                }
+                <span class="cov0" title="0">s.log.Info("Cron registered", "name", t.Name, "spec", t.Spec, "type", t.Type)</span>
+        }
+        <span class="cov0" title="0">c.Start()
+        defer c.Stop()
+</span>
+        <span class="cov0" title="0">&lt;-ctx.Done()
+        s.log.Info("River scheduler stopping")
+        return ctx.Err()</span>
+}
+
+func (s *Scheduler) Stop(ctx context.Context) error {
+        <span class="cov0" title="0">return nil
+</span>}
+
+func (s *Scheduler) enqueue(ctx context.Context, task scheduling.Task) {
+        <span class="cov0" title="0">_, err := s.client.Insert(ctx, GenericArgs{
+                KindName: task.Type,
+                Payload:  task.Payload,
+        }, &amp;river.InsertOpts{
+                Queue: river.QueueDefault,
+                UniqueOpts: river.UniqueOpts{
+                        ByPeriod: time.Minute,
+                },
+        })
+        if err != nil </span>{
+                <span class="cov0" title="0">s.log.Error("Enqueue", "name", task.Name, "err", err)
+                return
+</span>        }
+        <span class="cov0" title="0">s.log.Info("Task enqueued", "name", task.Name, "type", task.Type)</span>
+}
+
+func buildPeriodicJobs(tasks []scheduling.Task) ([]*river.PeriodicJob, error) {
+        <span class="cov0" title="0">jobs := make([]*river.PeriodicJob, 0, len(tasks))
+        for _, task := range tasks </span>{
+                <span class="cov0" title="0">schedule, err := parseSpec(task.Spec)
+                if err != nil </span>{
+                        <span class="cov0" title="0">return nil, fmt.Errorf("Parse %q: %w", task.Name, err)
+</span>                }
+
+                <span class="cov0" title="0">t := task
+                jobs = append(jobs, river.NewPeriodicJob(
+                        schedule,
+                        func() (river.JobArgs, *river.InsertOpts) </span>{
+                                <span class="cov0" title="0">return GenericArgs{
+                                        KindName: t.Type,
+                                        Payload:  t.Payload,
+                                }, &amp;river.InsertOpts{
+                                        Queue: river.QueueDefault,
+                                        UniqueOpts: river.UniqueOpts{
+                                                ByPeriod: time.Minute,
+                                        },
+</span>                                }
+                        }, &amp;river.PeriodicJobOpts{RunOnStart: true},
+                ))
+        }
+        <span class="cov0" title="0">return jobs, nil</span>
+}
+
+func parseSpec(spec string) (river.PeriodicSchedule, error) {
+        <span class="cov0" title="0">if len(spec) &gt; 7 &amp;&amp; spec[:7] == "@every " </span>{
+                <span class="cov0" title="0">d, err := time.ParseDuration(spec[7:])
+                if err != nil </span>{
+                        <span class="cov0" title="0">return nil, fmt.Errorf("Parse @every: %w", err)
+</span>                }
+                <span class="cov0" title="0">return river.PeriodicInterval(d), nil</span>
+        }
+        <span class="cov0" title="0">return cron.ParseStandard(spec)</span>
+}
+
+type GenericArgs struct {
+        KindName string          `json:"kind"`
+        Payload  json.RawMessage `json:"payload"`
+}
+
+func (g GenericArgs) Kind() string { <span class="cov0" title="0">return g.KindName }</span>
+</pre>
+		
+		<pre class="file" id="file42" style="display: none">package postgres
+
+import (
+        "context"
+        "fmt"
+
+        "github.com/merloot/market-data/internal/domain/market"
+)
+
+type CurrencyRepository struct {
+        repo *Repo
+}
+
+func NewCurrencyRepository(repo *Repo) *CurrencyRepository {
+        <span class="cov0" title="0">return &amp;CurrencyRepository{repo: repo}
+</span>}
+
+func (r *CurrencyRepository) List(ctx context.Context) ([]market.Currency, error) {
+        <span class="cov0" title="0">const query = `
+                SELECT
+                        coin_name,
+                        coin_gecko,
+                        coinmarketcap,
+                        provider,
+                        COALESCE(logo_url, '')
+                FROM
+                        currency
+                ORDER BY 
+                        coin_name
+        `
+        rows, err := r.repo.pool.Query(ctx, query)
+        if err != nil </span>{
+                <span class="cov0" title="0">return nil, fmt.Errorf("Query: %w", err)
+</span>        }
+        <span class="cov0" title="0">defer rows.Close()
+</span>
+        <span class="cov0" title="0">var out []market.Currency
+        for rows.Next() </span>{
+                <span class="cov0" title="0">var c market.Currency
+                if err := rows.Scan(
+                        &amp;c.CoinName,
+                        &amp;c.CoinGecko,
+                        &amp;c.CoinMarketCap,
+                        &amp;c.Provider,
+                        &amp;c.LogoUrl,
+                ); err != nil </span>{
+                        <span class="cov0" title="0">return nil, fmt.Errorf("Scan: %w", err)
+</span>                }
+                <span class="cov0" title="0">out = append(out, c)</span>
+        }
+        <span class="cov0" title="0">return out, rows.Err()</span>
+}
+
+func (r *CurrencyRepository) ListWithoutLogo(ctx context.Context, provider string) ([]market.Currency, error) {
+        <span class="cov0" title="0">const query = `
+                SELECT
+                        coin_name,
+                        coin_gecko,
+                        coinmarketcap,
+                        provider,
+                        ''
+                FROM
+                        currency
+                WHERE 
+                        provider = $1 
+                        AND
+                        logo_url IS NULL
+                ORDER BY
+                        coin_name
+        `
+        rows, err := r.repo.pool.Query(ctx, query, provider)
+        if err != nil </span>{
+                <span class="cov0" title="0">return nil, fmt.Errorf("Query: %w", err)
+</span>        }
+        <span class="cov0" title="0">defer rows.Close()
+</span>
+        <span class="cov0" title="0">var out []market.Currency
+        for rows.Next() </span>{
+                <span class="cov0" title="0">var c market.Currency
+                if err := rows.Scan(
+                        &amp;c.CoinName,
+                        &amp;c.CoinGecko,
+                        &amp;c.CoinMarketCap,
+                        &amp;c.Provider,
+                        &amp;c.LogoUrl,
+                ); err != nil </span>{
+                        <span class="cov0" title="0">return nil, fmt.Errorf("Scan: %w", err)
+</span>                }
+                <span class="cov0" title="0">out = append(out, c)</span>
+        }
+        <span class="cov0" title="0">return out, rows.Err()</span>
+}
+
+func (r *CurrencyRepository) UpdateLogo(ctx context.Context, coinName string, logoURL string) error {
+        <span class="cov0" title="0">const query = `
+                UPDATE
+                        currency
+                SET 
+                        logo_url = $1
+                WHERE
+                        coin_name = $2
+        `
+        if _, err := r.repo.pool.Query(ctx, query, logoURL, coinName); err != nil </span>{
+                <span class="cov0" title="0">return fmt.Errorf("Update: %w", err)
+</span>        }
+        <span class="cov0" title="0">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file43" style="display: none">package postgres
+
+import (
+        "context"
+        "log/slog"
+        "strings"
+
+        "github.com/jackc/pgx/v5/tracelog"
+)
+
+type pgxLogger struct {
+        log *slog.Logger
+}
+
+func newPgxLogger(log *slog.Logger) *pgxLogger {
+        <span class="cov0" title="0">return &amp;pgxLogger{log: log}
+</span>}
+
+func (l *pgxLogger) Log(
+        ctx context.Context,
+        level tracelog.LogLevel,
+        msg string,
+        data map[string]any) {
+        <span class="cov0" title="0">if sql, ok := data["sql"].(string); ok </span>{
+                <span class="cov0" title="0">data["sql"] = normalizeSQL(sql)
+</span>        }
+        <span class="cov0" title="0">args := make([]any, 0, len(data)*2)
+        for k, v := range data </span>{
+                <span class="cov0" title="0">args = append(args, k, v)
+</span>        }
+
+        <span class="cov0" title="0">switch level </span>{
+        case tracelog.LogLevelTrace, tracelog.LogLevelDebug:
+                <span class="cov0" title="0">l.log.Debug(msg, args...)</span>
+        case tracelog.LogLevelInfo:
+                <span class="cov0" title="0">l.log.Info(msg, args...)</span>
+        case tracelog.LogLevelWarn:
+                <span class="cov0" title="0">l.log.Warn(msg, args...)</span>
+        case tracelog.LogLevelError:
+                <span class="cov0" title="0">l.log.Error(msg, args...)</span>
+        default:
+                <span class="cov0" title="0">l.log.Debug(msg, args...)</span>
+        }
+}
+
+func normalizeSQL(sql string) string {
+        <span class="cov0" title="0">return strings.Join(strings.Fields(sql), " ")
+</span>
+        // sql = strings.ReplaceAll(sql, "\t", " ")
+        // sql = strings.ReplaceAll(sql, "\n", " ")
+        // for strings.Contains(sql, "  ") {
+        //         sql = strings.ReplaceAll(sql, "  ", " ")
+        // }
+
+        // return strings.TrimSpace(sql)
+}
+</pre>
+		
+		<pre class="file" id="file44" style="display: none">package postgres
+
+import (
+        "context"
+        "errors"
+        "fmt"
+        "time"
+
+        "github.com/jackc/pgx/v5"
+        "github.com/merloot/market-data/internal/domain/market"
+)
+
+type MarketDataHistoryRepository struct {
+        repo *Repo
+}
+
+func NewMarketDataHistoryRepository(repo *Repo) *MarketDataHistoryRepository {
+        <span class="cov0" title="0">return &amp;MarketDataHistoryRepository{repo: repo}
+</span>}
+
+// TODO add bulk insert
+func (r *MarketDataHistoryRepository) Create(ctx context.Context, data []market.MarketDataHistory) error {
+        <span class="cov0" title="0">if len(data) == 0 </span>{
+                <span class="cov0" title="0">return nil
+</span>        }
+        <span class="cov0" title="0">tx, err := r.repo.pool.Begin(ctx)
+        if err != nil </span>{
+                <span class="cov0" title="0">return fmt.Errorf("Begin tx: %w", err)
+</span>        }
+        <span class="cov0" title="0">defer func() </span>{ <span class="cov0" title="0">tx.Rollback(ctx) }</span>()
+
+        <span class="cov0" title="0">const query = `
+                INSERT INTO market_data_history
+                        (currency,price,market_cap,circulating_supply,total_supply,timestamp)
+                VALUES 
+                        ($1, $2, $3, $4, $5, $6)
+                ON CONFLICT (currency, date_trunc('minute',timestamp)) DO NOTHING
+        `
+</span>
+        <span class="cov0" title="0">for _, d := range data </span>{
+                <span class="cov0" title="0">if _, err := tx.Exec(ctx, query,
+                        d.Currency,
+                        d.Price,
+                        d.MarketCap,
+                        d.CirculatingSupply,
+                        d.TotalSupply,
+                        d.Timestamp,
+                ); err != nil </span>{
+                        <span class="cov0" title="0">return fmt.Errorf("Insert %s: %w", d.Currency, err)
+</span>                }
+        }
+        <span class="cov0" title="0">if err := tx.Commit(ctx); err != nil </span>{
+                <span class="cov0" title="0">return fmt.Errorf("Commit: %w", err)
+</span>        }
+        <span class="cov0" title="0">return nil</span>
+}
+
+func (r *MarketDataHistoryRepository) LastUpdated(ctx context.Context, currency string) (time.Time, error) {
+        <span class="cov0" title="0">const query = `
+                SELECT
+                        timestamp
+                FROM
+                        market_data_history
+                WHERE 
+                        currency = $1
+                ORDER BY 
+                        timestamp DESC
+                LIMIT
+                        1
+        `
+        var ts time.Time
+        err := r.repo.pool.QueryRow(ctx, query, currency).Scan(&amp;ts)
+        if errors.Is(err, pgx.ErrNoRows) </span>{
+                <span class="cov0" title="0">return time.Time{}, nil
+</span>        }
+
+        <span class="cov0" title="0">if err != nil </span>{
+                <span class="cov0" title="0">return time.Time{}, fmt.Errorf("Query: %w", err)
+</span>        }
+        <span class="cov0" title="0">return ts, nil</span>
+}
+
+func (r *MarketDataHistoryRepository) GetMarketDataList(
+        ctx context.Context,
+        currencies []string,
+        since time.Time,
+) ([]market.MarketDataRow, error) {
+        <span class="cov0" title="0">const query = `
+                SELECT
+                        c.coin_name AS currency,
+                        c.logo_url AS "logoUrl",
+                        mdh_cur.price AS price,
+                        mdh_cur.market_cap AS "marketCap",
+                        mdh_cur.circulating_supply AS "circulatingSupply",
+                        mdh_cur.total_supply AS "totalSupply",
+                        (mdh_cur.price - COALESCE(mdh_prev.price,0)) AS "priceDiff",
+                        (mdh_cur.market_cap - COALESCE(mdh_prev.market_cap,0)) AS "marketCapDiff",
+                        (mdh_cur.circulating_supply - COALESCE(mdh_prev.circulating_supply,0)) "circulatingSupplyDiff" 
+                FROM
+                        currency c
+                LEFT JOIN LATERAL (
+                        SELECT
+                                price,
+                                market_cap,
+                                circulating_supply,
+                                total_supply
+                        FROM
+                                market_data_history mdh
+                        WHERE
+                                mdh.currency = c.coin_name
+                        ORDER BY
+                                mdh.timestamp DESC
+                        LIMIT
+                                1
+                ) mdh_cur ON TRUE
+                LEFT JOIN LATERAL (
+                        SELECT
+                                price,
+                                market_cap,
+                                circulating_supply
+                        FROM
+                                market_data_history mdh
+                        WHERE mdh.currency = c.coin_name
+                        AND timestamp &lt;= $1
+                        ORDER BY
+                                mdh.timestamp DESC
+                        LIMIT
+                                1
+                ) mdh_prev ON TRUE
+                 WHERE c.coin_name = ANY($2)
+        `
+        rows, err := r.repo.pool.Query(ctx, query, since, currencies)
+        if err != nil </span>{
+                <span class="cov0" title="0">return nil, fmt.Errorf("Query: %w", err)
+</span>        }
+        <span class="cov0" title="0">defer rows.Close()
+</span>
+        <span class="cov0" title="0">var out []market.MarketDataRow
+        for rows.Next() </span>{
+                <span class="cov0" title="0">var row market.MarketDataRow
+                if err := rows.Scan(
+                        &amp;row.Currency,
+                        &amp;row.LogoURL,
+                        &amp;row.Price,
+                        &amp;row.MarketCap,
+                        &amp;row.CirculatingSupply,
+                        &amp;row.TotalSupply,
+                        &amp;row.PriceDiff,
+                        &amp;row.MarketCapDiff,
+                        &amp;row.CirculatingSupplyDiff,
+                ); err != nil </span>{
+                        <span class="cov0" title="0">return nil, fmt.Errorf("Scan: %w", err)
+</span>                }
+                <span class="cov0" title="0">out = append(out, row)</span>
+        }
+        <span class="cov0" title="0">return out, rows.Err()</span>
+}
+
+func (r *MarketDataHistoryRepository) GetPriceHistory(
+        ctx context.Context,
+        currency market.Currency,
+        timeframe market.Timeframe,
+        from, to time.Time,
+) ([]market.MarketDataPricePoint, error) {
+        <span class="cov0" title="0">bucket := market.CalculateBucket(timeframe, from, to)
+        const query = `
+                        WITH time_intervals AS (
+                                SELECT generate_series(
+                                        $1::timestamptz,
+                                        $2::timestamptz,
+                                        $3::interval
+                                ) AS time_start
+                        )
+                        SELECT
+                                ti.time_start AS time,
+                                COALESCE(
+                                (
+                                        SELECT 
+                                                mdh.price
+                                        FROM
+                                                market_data_history mdh
+                                        WHERE
+                                                        mdh.currency = $4
+                                                AND
+                                                        mdh.timestamp &gt;= ti.time_start
+                                                AND 
+                                                        mdh.timestamp &lt; ti.time_start + $3::interval
+                                        ORDER BY 
+                                                mdh.timestamp DESC
+                                        LIMIT
+                                                1
+                                ),
+                                (
+                                        SELECT
+                                                mdh.price
+                                        FROM
+                                                market_data_history mdh
+                                        WHERE 
+                                                mdh.currency = $4
+                                        AND
+                                                mdh.timestamp &lt; ti.time_start
+                                        ORDER BY 
+                                                mdh.timestamp DESC
+                                        LIMIT
+                                                1
+                                )
+                                                ) AS price
+                                FROM 
+                                        time_intervals ti
+                                ORDER BY 
+                                        ti.time_start
+                `
+        rows, err := r.repo.pool.Query(ctx, query,
+                from,
+                to,
+                bucket.Strings(),
+                currency.CoinName,
+        )
+        if err != nil </span>{
+                <span class="cov0" title="0">return nil, fmt.Errorf("Query: %w", err)
+</span>        }
+        <span class="cov0" title="0">defer rows.Close()
+</span>
+        <span class="cov0" title="0">var points []market.MarketDataPricePoint
+        for rows.Next() </span>{
+                <span class="cov0" title="0">var p market.MarketDataPricePoint
+                var price *float64
+</span>
+                <span class="cov0" title="0">if err := rows.Scan(&amp;p.Time, &amp;price); err != nil </span>{
+                        <span class="cov0" title="0">return nil, fmt.Errorf("Scan: %w", err)
+</span>                }
+                <span class="cov0" title="0">if price == nil </span>{
+                        <span class="cov0" title="0">continue</span>
+                }
+                <span class="cov0" title="0">p.Price = *price
+                points = append(points, p)</span>
+        }
+        <span class="cov0" title="0">return points, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file45" style="display: none">package postgres
+
+import (
+        "context"
+        "database/sql"
+        "embed"
+        "fmt"
+
+        "github.com/jackc/pgx/v5/stdlib"
+        "github.com/pressly/goose/v3"
+)
+
+//go:embed migrations/*.sql
+var migrationsFS embed.FS
+
+var migrationDIR = "migrations"
+
+func init() {
+        <span class="cov8" title="1">goose.SetBaseFS(migrationsFS)
+</span>}
+
+func (r *Repo) MigrateUp(ctx context.Context) error {
+        <span class="cov0" title="0">return r.runGoose(ctx, func(db *sql.DB) error </span>{
+                <span class="cov0" title="0">return goose.UpContext(ctx, db, migrationDIR)
+</span>        }, "up")
+}
+
+func (r *Repo) MigrateDown(ctx context.Context) error {
+        <span class="cov0" title="0">return r.runGoose(ctx, func(db *sql.DB) error </span>{
+                <span class="cov0" title="0">return goose.DownContext(ctx, db, migrationDIR)
+</span>        }, "down")
+}
+
+func (r *Repo) MigrateStatus(ctx context.Context) error {
+        <span class="cov0" title="0">return r.runGoose(ctx, func(db *sql.DB) error </span>{
+                <span class="cov0" title="0">return goose.StatusContext(ctx, db, migrationDIR)
+</span>        }, "status")
+}
+
+func (r *Repo) MigrateVersion(ctx context.Context) error {
+        <span class="cov0" title="0">return r.runGoose(ctx, func(db *sql.DB) error </span>{
+                <span class="cov0" title="0">v, err := goose.GetDBVersionContext(ctx, db)
+                if err != nil </span>{
+                        <span class="cov0" title="0">return err
+</span>                }
+                <span class="cov0" title="0">r.log.Info("Current migration version", "version", v)
+                return nil</span>
+        }, "version")
+}
+
+func (r *Repo) MigrateUpTo(ctx context.Context, version int64) error {
+        <span class="cov0" title="0">return r.runGoose(ctx, func(db *sql.DB) error </span>{
+                <span class="cov0" title="0">return goose.UpToContext(ctx, db, migrationDIR, version)
+</span>        }, "up-to")
+}
+
+func (r *Repo) runGoose(ctx context.Context, fn func(*sql.DB) error, op string) error {
+        <span class="cov0" title="0">if err := goose.SetDialect("postgres"); err != nil </span>{
+                <span class="cov0" title="0">return fmt.Errorf("Goose dialect: %w", err)
+</span>        }
+        <span class="cov0" title="0">db := stdlib.OpenDBFromPool(r.pool)
+        defer db.Close()
+</span>
+        <span class="cov0" title="0">r.log.Info("Migrate start", "op", op)
+        if err := fn(db); err != nil </span>{
+                <span class="cov0" title="0">return fmt.Errorf("Goose %s: %w", op, err)
+</span>        }
+
+        <span class="cov0" title="0">r.log.Info("Migrate done", "op", op)
+        return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file46" style="display: none">package postgres
+
+import "log/slog"
+
+type options struct {
+        logger      *slog.Logger
+        pingRetries int
+}
+
+func defaultOptions() options {
+        <span class="cov0" title="0">return options{
+                logger:      slog.Default(),
+                pingRetries: 0,
+</span>        }
+}
+
+type Options func(*options)
+
+func WithLogger(log *slog.Logger) Options {
+        <span class="cov0" title="0">return func(o *options) </span>{ <span class="cov0" title="0">o.logger = log }</span>
+}
+
+func WithPingRetries(n int) Options {
+        <span class="cov0" title="0">return func(o *options) </span>{ <span class="cov0" title="0">o.pingRetries = n }</span>
+}
+</pre>
+		
+		<pre class="file" id="file47" style="display: none">package postgres
+
+import (
+        "context"
+        "fmt"
+        "log/slog"
+        "time"
+
+        "github.com/jackc/pgx/v5/pgxpool"
+        "github.com/jackc/pgx/v5/tracelog"
+        "github.com/merloot/market-data/internal/config"
+)
+
+type Repo struct {
+        pool *pgxpool.Pool
+        log  *slog.Logger
+}
+
+func New(ctx context.Context, cfg config.DatabaseConfig, opts ...Options) (*Repo, error) {
+        <span class="cov0" title="0">o := defaultOptions()
+        for _, opt := range opts </span>{
+                <span class="cov0" title="0">opt(&amp;o)
+</span>        }
+
+        <span class="cov0" title="0">poolConfig, err := pgxpool.ParseConfig(cfg.URL)
+        if err != nil </span>{
+                <span class="cov0" title="0">return nil, fmt.Errorf("Parse dsn: %w", err)
+</span>        }
+        <span class="cov0" title="0">poolConfig.MaxConns = cfg.MaxConns
+        poolConfig.MinConns = cfg.MinConns
+        poolConfig.MaxConnLifetime = cfg.MaxConnLifetime
+        poolConfig.MaxConnIdleTime = cfg.MaxConnIdleTime
+        poolConfig.ConnConfig.ConnectTimeout = cfg.ConnectionTimeout
+        poolConfig.HealthCheckPeriod = time.Minute
+        poolConfig.ConnConfig.Tracer = &amp;tracelog.TraceLog{
+                Logger:   newPgxLogger(o.logger),
+                LogLevel: tracelog.LogLevelDebug,
+</span>        }
+
+        <span class="cov0" title="0">pool, err := pgxpool.NewWithConfig(ctx, poolConfig)
+        if err != nil </span>{
+                <span class="cov0" title="0">return nil, fmt.Errorf("Create pool: %w", err)
+</span>        }
+
+        <span class="cov0" title="0">repo := &amp;Repo{pool: pool, log: o.logger}
+</span>
+        <span class="cov0" title="0">if err := repo.pingWithRetry(ctx, cfg.ConnectionTimeout, o.pingRetries); err != nil </span>{
+                <span class="cov0" title="0">pool.Close()
+                return nil, fmt.Errorf("Ping: %w", err)
+</span>
+        }
+
+        <span class="cov0" title="0">repo.log.Info("Postgres connected", "max_conns", cfg.MaxConns, "min_cons", cfg.MinConns)
+</span>
+        <span class="cov0" title="0">return repo, nil</span>
+}
+
+func (r *Repo) poolConn() *pgxpool.Pool {
+        <span class="cov0" title="0">return r.pool
+</span>}
+
+func (r *Repo) Close() {
+        <span class="cov0" title="0">if r.pool != nil </span>{
+                <span class="cov0" title="0">r.pool.Close()
+</span>        }
+}
+
+func (r *Repo) pingWithRetry(ctx context.Context, timeout time.Duration, retries int) error {
+        <span class="cov0" title="0">if retries &lt;= 0 </span>{
+                <span class="cov0" title="0">return r.ping(ctx, timeout)
+</span>        }
+
+        <span class="cov0" title="0">var lastErr error
+        for i := 0; i &lt; retries; i++ </span>{
+                <span class="cov0" title="0">if err := r.ping(ctx, timeout); err == nil </span>{
+                        <span class="cov0" title="0">return nil
+</span>                } else {
+                        <span class="cov0" title="0">lastErr = err
+</span>                }
+
+                // Экспоненциальный backoff: 500ms, 1s,2s, ...
+                <span class="cov0" title="0">delay := time.Duration(500*(1&lt;&lt;i)) * time.Microsecond
+                r.log.Warn("Ping failed, retrying",
+                        "attempt", i+1,
+                        "delay", delay,
+                        "err", lastErr,
+                )
+</span>
+                <span class="cov0" title="0">select </span>{
+                case &lt;-ctx.Done():
+                        <span class="cov0" title="0">return ctx.Err()</span>
+                case &lt;-time.After(delay):<span class="cov0" title="0"></span>
+                }
+        }
+        <span class="cov0" title="0">return fmt.Errorf("After %d retries: %w", retries, lastErr)</span>
+}
+
+func (r *Repo) ping(ctx context.Context, timeout time.Duration) error {
+        <span class="cov0" title="0">pingCtx, cancel := context.WithTimeout(ctx, timeout)
+        defer cancel()
+        return r.pool.Ping(pingCtx)
+</span>}
+</pre>
+		
+		<pre class="file" id="file48" style="display: none">package postgres
+
+import (
+        "context"
+        "embed"
+        "encoding/json"
+        "fmt"
+        "io/fs"
+)
+
+//go:embed seeddata/*.json
+var seedFS embed.FS
+
+const seedDataPath = "seeddata/currencies.json"
+
+type SeedCurrency struct {
+        CoinName      string  `json:"coin_name"`
+        CoinGecko     string  `json:"coin_gecko"`
+        CoinMarketCap string  `json:"coinmarketcap"`
+        Provider      string  `json:"provider"`
+        LogoURL       *string `json:"logo_url"`
+}
+
+type seedFile struct {
+        Currencies []SeedCurrency `json:"currencies"`
+}
+
+func loadSeedData() ([]SeedCurrency, error) {
+        <span class="cov0" title="0">raw, err := fs.ReadFile(seedFS, seedDataPath)
+        if err != nil </span>{
+                <span class="cov0" title="0">return nil, fmt.Errorf("Read seed file: %w", err)
+</span>        }
+
+        <span class="cov0" title="0">var file seedFile
+        if err := json.Unmarshal(raw, &amp;file); err != nil </span>{
+                <span class="cov0" title="0">return nil, fmt.Errorf("Parse seed json: %w", err)
+</span>        }
+
+        <span class="cov0" title="0">if len(file.Currencies) == 0 </span>{
+                <span class="cov0" title="0">return nil, fmt.Errorf("Seed file is empty")
+</span>        }
+
+        <span class="cov0" title="0">for i, c := range file.Currencies </span>{
+                <span class="cov0" title="0">if c.CoinName == "" </span>{
+                        <span class="cov0" title="0">return nil, fmt.Errorf("Currency[%d]: coin_name is required", i)
+</span>                }
+                <span class="cov0" title="0">if c.Provider == "" </span>{
+                        <span class="cov0" title="0">return nil, fmt.Errorf("Currency[%q]: provider is required", c.CoinName)
+</span>                }
+        }
+
+        <span class="cov0" title="0">return file.Currencies, nil</span>
+}
+
+func (r *Repo) SeedCurrencies(ctx context.Context) error {
+        <span class="cov0" title="0">currencies, err := loadSeedData()
+        if err != nil </span>{
+                <span class="cov0" title="0">return fmt.Errorf("Load seed data: %w", err)
+</span>        }
+        <span class="cov0" title="0">r.log.Info("Seeding currencies", "count", len(currencies))
+</span>
+        <span class="cov0" title="0">tx, err := r.pool.Begin(ctx)
+        if err != nil </span>{
+                <span class="cov0" title="0">return fmt.Errorf("Begin tx: %w", err)
+</span>        }
+        <span class="cov0" title="0">defer tx.Rollback(ctx)
+</span>
+        <span class="cov0" title="0">inserted := 0
+        skipped := 0
+</span>
+        <span class="cov0" title="0">for _, c := range currencies </span>{
+                <span class="cov0" title="0">tag, err := tx.Exec(ctx, `
+                INSERT INTO currency (coin_name, coin_gecko, coinmarketcap, provider, logo_url)
+                VALUES ($1, $2, $3, $4, $5)
+                ON CONFLICT (coin_name) DO NOTHING
+                `, c.CoinName, c.CoinGecko, c.CoinMarketCap, c.Provider, c.LogoURL)
+                if err != nil </span>{
+                        <span class="cov0" title="0">return fmt.Errorf("Insert currency %s: %w", c.CoinName, err)
+</span>                }
+
+                <span class="cov0" title="0">if tag.RowsAffected() == 0 </span>{
+                        <span class="cov0" title="0">skipped++
+</span>                }
+                <span class="cov0" title="0">inserted++</span>
+        }
+
+        <span class="cov0" title="0">if err := tx.Commit(ctx); err != nil </span>{
+                <span class="cov0" title="0">return fmt.Errorf("Commit: %w", err)
+</span>        }
+
+        <span class="cov0" title="0">r.log.Info(`Seeding done`, "inserted", inserted, "skipped", skipped)
+        return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file49" style="display: none">package oracle
+
+import (
+        "context"
+        "encoding/json"
+
+        "github.com/merloot/market-data/internal/scheduling"
+)
+
+type Builder struct{}
+
+func NewBuild() *Builder { <span class="cov8" title="1">return &amp;Builder{} }</span>
+
+func (b *Builder) Name() string { <span class="cov0" title="0">return "oracle" }</span>
+
+func (b *Builder) Build(_ context.Context) ([]scheduling.Task, error) {
+        <span class="cov8" title="1">payload, err := json.Marshal(Payload{})
+        if err != nil </span>{
+                <span class="cov0" title="0">return nil, err
+</span>        }
+
+        <span class="cov8" title="1">return []scheduling.Task{{
+                Name:    "oracle:run",
+                Spec:    Spec,
+                Type:    Type,
+                Payload: payload,
+        }}, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file50" style="display: none">package oracle
+
+import (
+        "context"
+        "errors"
+        "fmt"
+        "time"
+
+        "github.com/merloot/market-data/internal/domain/market"
+)
+
+const timeWindowMax = 10 * time.Minute
+
+func (s *Service) collectHistory(
+        ctx context.Context,
+        currencies []market.Currency,
+) ([]market.MarketDataHistory, error) {
+        <span class="cov8" title="1">var (
+                all  []market.MarketDataHistory
+                errs []error
+        )
+</span>
+        <span class="cov8" title="1">for _, c := range currencies </span>{
+                <span class="cov8" title="1">last, err := s.marketDataHistoryRepository.LastUpdated(ctx, c.CoinName)
+                if err != nil </span>{
+                        <span class="cov0" title="0">s.log.Warn("Last updated failed", "currency", c.CoinName, "err", err)
+                        errs = append(errs, fmt.Errorf("Last updated %s: %w", c.CoinName, err))
+                        continue</span>
+                }
+                <span class="cov8" title="1">var data []market.MarketDataHistory
+                if last.IsZero() </span>{
+                        <span class="cov8" title="1">data, err = s.fetchAllTimeRanges(ctx, c)
+</span>                } else {
+                        <span class="cov0" title="0">data, err = s.fetchFromLastUpdated(ctx, c, last)
+</span>                }
+                <span class="cov8" title="1">if err != nil </span>{
+                        <span class="cov0" title="0">s.log.Warn("History fetch failed", "currency", c.CoinName, "err", err)
+                        errs = append(errs, fmt.Errorf("History %s: %w", c.CoinName, err))
+</span>                }
+                <span class="cov8" title="1">all = append(all, data...)</span>
+        }
+        <span class="cov8" title="1">if len(errs) &gt; 0 </span>{
+                <span class="cov0" title="0">return all, errors.Join(errs...)
+</span>        }
+        <span class="cov8" title="1">return all, nil</span>
+}
+
+func (s *Service) fetchFromLastUpdated(
+        ctx context.Context,
+        currency market.Currency,
+        last time.Time,
+) ([]market.MarketDataHistory, error) {
+        <span class="cov0" title="0">if time.Since(last) &lt;= timeWindowMax </span>{
+                <span class="cov0" title="0">return nil, nil
+</span>        }
+        <span class="cov0" title="0">chart, err := s.provider.GetMarketDataChartRange(ctx, currency, last, time.Now())
+        if err != nil </span>{
+                <span class="cov0" title="0">return nil, fmt.Errorf("Chart range %s: %w", currency.CoinName, err)
+</span>        }
+        <span class="cov0" title="0">return formatChart(currency.CoinName, chart), nil</span>
+}
+
+func (s *Service) fetchAllTimeRanges(
+        ctx context.Context,
+        currency market.Currency,
+) ([]market.MarketDataHistory, error) {
+        <span class="cov8" title="1">var (
+                all  []market.MarketDataHistory
+                errs []error
+        )
+        for _, days := range []int{1, 90, 365} </span>{
+                <span class="cov8" title="1">chart, err := s.provider.GetMarketDataChart(ctx, currency, days)
+                if err != nil </span>{
+                        <span class="cov0" title="0">s.log.Warn("Chart fetch failed", "days", days, "err", err)
+                        errs = append(errs, fmt.Errorf("Chart %s%dd: %w", currency.CoinName, days, err))
+                        continue</span>
+                }
+                <span class="cov8" title="1">all = append(all, formatChart(currency.CoinName, chart)...)</span>
+        }
+        <span class="cov8" title="1">if len(errs) &gt; 0 </span>{
+                <span class="cov0" title="0">return all, errors.Join(errs...)
+</span>        }
+        <span class="cov8" title="1">return all, nil</span>
+}
+
+func (s *Service) collectActual(
+        ctx context.Context,
+        currencies []market.Currency,
+) ([]market.MarketDataHistory, error) {
+        <span class="cov8" title="1">list, err := s.provider.GetMarketDataList(ctx, currencies)
+        if err != nil </span>{
+                <span class="cov0" title="0">s.log.Warn("get market data list partial", "err", err)
+</span>        }
+
+        <span class="cov8" title="1">var history []market.MarketDataHistory
+        for _, c := range currencies </span>{
+                <span class="cov8" title="1">data, ok := list[c.CoinName]
+                if !ok || data.CurrentPrice == 0 </span>{
+                        <span class="cov8" title="1">continue</span>
+                }
+
+                <span class="cov8" title="1">history = append(history, market.MarketDataHistory{
+                        Currency:          c.CoinName,
+                        Price:             data.CurrentPrice,
+                        MarketCap:         data.MarketCap,
+                        CirculatingSupply: data.CirculatingSupply,
+                        TotalSupply:       data.TotalSupply,
+                        Timestamp:         data.LastUpdated,
+                })</span>
+        }
+        <span class="cov8" title="1">return history, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file51" style="display: none">package oracle
+
+import (
+        "time"
+
+        "github.com/merloot/market-data/internal/domain/market"
+)
+
+func formatChart(currency string, chart market.MarketDataChart) []market.MarketDataHistory {
+        <span class="cov8" title="1">n := len(chart.Prices)
+        if len(chart.MarketCaps) &lt; n </span>{
+                <span class="cov0" title="0">n = len(chart.MarketCaps)
+</span>        }
+
+        <span class="cov8" title="1">out := make([]market.MarketDataHistory, 0, n)
+        for i := 0; i &lt; n; i++ </span>{
+                <span class="cov8" title="1">out = append(out, market.MarketDataHistory{
+                        Currency:          currency,
+                        Price:             chart.Prices[i][1],
+                        MarketCap:         chart.MarketCaps[i][1],
+                        CirculatingSupply: chart.CirculatingSupply[i][1],
+                        TotalSupply:       chart.TotalSupply[i][1],
+                        Timestamp:         time.UnixMilli(int64(chart.Prices[i][0])).UTC(),
+                })
+</span>        }
+        <span class="cov8" title="1">return out</span>
+}
+
+func calcChange(current, diff float64) float64 {
+        <span class="cov8" title="1">base := current - diff
+        if base == 0 </span>{
+                <span class="cov8" title="1">return 100
+</span>        }
+        <span class="cov8" title="1">return (diff / base) * 100</span>
+}
+</pre>
+		
+		<pre class="file" id="file52" style="display: none">package oracle
+
+import (
+        "context"
+        "fmt"
+        "log/slog"
+)
+
+type Handler struct {
+        scv *Service
+        log *slog.Logger
+}
+
+func NewHandler(svc *Service, log *slog.Logger) *Handler {
+        <span class="cov0" title="0">return &amp;Handler{scv: svc, log: log}
+</span>}
+
+func (h *Handler) Type() string { <span class="cov0" title="0">return Type }</span>
+
+func (h *Handler) Handle(ctx context.Context, payload []byte) error {
+        <span class="cov0" title="0">h.log.Info("Oracle task started")
+        if err := h.scv.Execute(ctx); err != nil </span>{
+                <span class="cov0" title="0">return fmt.Errorf("Execute: %w", err)
+</span>        }
+        <span class="cov0" title="0">h.log.Info("Oracle task done")
+        return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file53" style="display: none">package oracle
+
+import (
+        "context"
+        "fmt"
+
+        "github.com/merloot/market-data/internal/domain/market"
+)
+
+func (s *Service) fetchMissingLogos(ctx context.Context) error {
+        <span class="cov8" title="1">currencies, err := s.currencyRepository.ListWithoutLogo(ctx, market.ProviderCoinGecko)
+        if err != nil </span>{
+                <span class="cov0" title="0">return fmt.Errorf("List without logo: %w", err)
+</span>        }
+
+        <span class="cov8" title="1">for _, c := range currencies </span>{
+                <span class="cov8" title="1">logo, err := s.provider.GetLogo(ctx, c)
+                if err != nil </span>{
+                        <span class="cov0" title="0">s.log.Warn("Get logo", "currency", c.CoinName, "err", err)
+</span>                }
+                <span class="cov8" title="1">if logo == "" </span>{
+                        <span class="cov0" title="0">continue</span>
+                }
+                <span class="cov8" title="1">if err := s.currencyRepository.UpdateLogo(ctx, c.CoinName, logo); err != nil </span>{
+                        <span class="cov0" title="0">s.log.Warn("Update logo", "currency", c.CoinName, "err", err)
+</span>                }
+        }
+        <span class="cov8" title="1">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file54" style="display: none">package oracle
+
+import (
+        "context"
+        "fmt"
+        "time"
+
+        "github.com/merloot/market-data/internal/domain/market"
+)
+
+func (s *Service) publishUpdates(
+        ctx context.Context,
+        actual []market.MarketDataHistory,
+) error {
+        <span class="cov8" title="1">if len(actual) == 0 </span>{
+                <span class="cov8" title="1">return nil
+</span>        }
+
+        <span class="cov8" title="1">names := make([]string, len(actual))
+        for i, a := range actual </span>{
+                <span class="cov8" title="1">names[i] = a.Currency
+</span>        }
+
+        <span class="cov8" title="1">since := time.Now().Add(-24 * time.Hour)
+        rows, err := s.marketDataHistoryRepository.GetMarketDataList(ctx, names, since)
+        if err != nil </span>{
+                <span class="cov0" title="0">return fmt.Errorf("Get market data list: %w", err)
+</span>        }
+
+        <span class="cov8" title="1">rowsByName := make(map[string]market.MarketDataRow, len(rows))
+        for _, r := range rows </span>{
+                <span class="cov0" title="0">rowsByName[r.Currency] = r
+</span>        }
+
+        <span class="cov8" title="1">for _, a := range actual </span>{
+                <span class="cov8" title="1">row := rowsByName[a.Currency]
+</span>
+                <span class="cov8" title="1">priceChange := calcChange(row.Price, row.PriceDiff)
+                marketChange := calcChange(row.MarketCap, row.MarketCapDiff)
+</span>
+                <span class="cov8" title="1">if err := s.events.PublishPriceUpdated(ctx, market.PriceUpdated{
+                        CoinName:                 row.Currency,
+                        Price:                    row.Price,
+                        PriceChangePercentage24h: priceChange,
+                }); err != nil </span>{
+                        <span class="cov0" title="0">s.log.Warn("Publish price", "currency", a.Currency, "err", err)
+</span>                }
+
+                <span class="cov8" title="1">if err := s.events.PublishMarketCapUpdated(ctx, market.MarketCapUpdated{
+                        CoinName:                     row.Currency,
+                        MarketCap:                    row.MarketCap,
+                        MarketCapChangePercentage24h: marketChange,
+                }); err != nil </span>{
+                        <span class="cov0" title="0">s.log.Warn("Publish market cap", "currency", a.Currency, "err", err)
+</span>                }
+        }
+        <span class="cov8" title="1">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file55" style="display: none">package oracle
+
+import (
+        "context"
+        "errors"
+        "fmt"
+        "log/slog"
+
+        "github.com/merloot/market-data/internal/realtime"
+)
+
+type Service struct {
+        log                         *slog.Logger
+        currencyRepository          CurrencyRepository
+        marketDataHistoryRepository MarketDataHistoryRepository
+        provider                    MarketDataProvider
+        events                      realtime.EventPublisher
+}
+
+func NewService(
+        log *slog.Logger,
+        currencyRepository CurrencyRepository,
+        marketDataHistoryRepository MarketDataHistoryRepository,
+        provider MarketDataProvider,
+        events realtime.EventPublisher,
+) *Service {
+        <span class="cov8" title="1">return &amp;Service{
+                log:                         log,
+                currencyRepository:          currencyRepository,
+                marketDataHistoryRepository: marketDataHistoryRepository,
+                provider:                    provider,
+                events:                      events,
+</span>        }
+}
+
+func (s *Service) Execute(ctx context.Context) error {
+        <span class="cov8" title="1">currencies, err := s.currencyRepository.List(ctx)
+        if err != nil </span>{
+                <span class="cov0" title="0">return fmt.Errorf("List currencies: %w", err)
+</span>        }
+        <span class="cov8" title="1">if len(currencies) == 0 </span>{
+                <span class="cov8" title="1">s.log.Warn("No currencies to process")
+                return nil
+</span>        }
+
+        <span class="cov8" title="1">var errs []error
+</span>
+        <span class="cov8" title="1">history, err := s.collectHistory(ctx, currencies)
+        if err != nil </span>{
+                <span class="cov0" title="0">s.log.Warn("Collect history partial", "err", err)
+                errs = append(errs, fmt.Errorf("Collect history: %w", err))
+</span>        }
+
+        <span class="cov8" title="1">actual, err := s.collectActual(ctx, currencies)
+        if err != nil </span>{
+                <span class="cov0" title="0">s.log.Warn("Collect actual partial", "err", err)
+                errs = append(errs, fmt.Errorf("Collect actual: %w", err))
+</span>        }
+
+        <span class="cov8" title="1">all := append(history, actual...)
+        if len(all) &gt; 0 </span>{
+                <span class="cov8" title="1">if err := s.marketDataHistoryRepository.Create(ctx, all); err != nil </span>{
+                        <span class="cov0" title="0">s.log.Error("Save failed", "err", err, "count", len(all))
+                        errs = append(errs, fmt.Errorf("Save: %w", err))
+</span>                } else {
+                        <span class="cov8" title="1">s.log.Info("Saved", "count", len(all))
+</span>                }
+        } else {
+                <span class="cov8" title="1">s.log.Warn("Nothing to save")
+</span>        }
+
+        <span class="cov8" title="1">if err := s.publishUpdates(ctx, actual); err != nil </span>{
+                <span class="cov0" title="0">s.log.Warn("Publish updates", "err", err)
+</span>        }
+
+        <span class="cov8" title="1">if err := s.fetchMissingLogos(ctx); err != nil </span>{
+                <span class="cov0" title="0">s.log.Warn("Fetch logos", "err", err)
+</span>        }
+
+        <span class="cov8" title="1">if len(errs) &gt; 0 </span>{
+                <span class="cov0" title="0">return errors.Join(errs...)
+</span>        }
+
+        <span class="cov8" title="1">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file56" style="display: none">package asynq
+
+import (
+        "log/slog"
+
+        "github.com/hibiken/asynq"
+)
+
+type asynqLogger struct {
+        log *slog.Logger
+}
+
+func newAsynqLogger(log *slog.Logger) asynq.Logger {
+        <span class="cov0" title="0">return &amp;asynqLogger{log: log}
+</span>}
+
+func (l *asynqLogger) Debug(args ...any) { <span class="cov0" title="0">l.log.Debug("asynq", "args", args) }</span>
+func (l *asynqLogger) Info(args ...any)  { <span class="cov0" title="0">l.log.Info("asynq", "args", args) }</span>
+func (l *asynqLogger) Warn(args ...any)  { <span class="cov0" title="0">l.log.Warn("asynq", "args", args) }</span>
+func (l *asynqLogger) Error(args ...any) { <span class="cov0" title="0">l.log.Error("asynq", "args", args) }</span>
+func (l *asynqLogger) Fatal(args ...any) { <span class="cov0" title="0">l.log.Error("asynq fatal", "args", args) }</span>
+</pre>
+		
+		<pre class="file" id="file57" style="display: none">package asynq
+
+import (
+        "context"
+        "log/slog"
+
+        "github.com/hibiken/asynq"
+        "github.com/merloot/market-data/internal/worker"
+)
+
+type Worker struct {
+        server *asynq.Server
+        mux    *asynq.ServeMux
+        log    *slog.Logger
+}
+
+func NewWorker(redisAddr string, registry *worker.Registry, log *slog.Logger) (*Worker, error) {
+        <span class="cov0" title="0">srv := asynq.NewServer(
+                asynq.RedisClientOpt{Addr: redisAddr},
+                asynq.Config{
+                        Concurrency: 10,
+                        Queues: map[string]int{
+                                "critical": 6,
+                                "default":  3,
+                                "low":      1,
+                        },
+                        Logger: newAsynqLogger(log),
+                },
+        )
+</span>
+        <span class="cov0" title="0">mux := asynq.NewServeMux()
+        for _, t := range registry.Types() </span>{
+                <span class="cov0" title="0">taskType := t
+                mux.HandleFunc(taskType, func(ctx context.Context, t *asynq.Task) error </span>{
+                        <span class="cov0" title="0">return registry.Handle(ctx, taskType, t.Payload())
+</span>                })
+                <span class="cov0" title="0">log.Info("Asynq handler registered", "type", taskType)</span>
+        }
+
+        <span class="cov0" title="0">return &amp;Worker{server: srv, mux: mux, log: log}, nil</span>
+}
+
+func (w *Worker) Run(ctx context.Context) error {
+        <span class="cov0" title="0">w.log.Info("Asynq worker starting")
+</span>
+        <span class="cov0" title="0">errCh := make(chan error, 1)
+        go func() </span>{
+                <span class="cov0" title="0">errCh &lt;- w.server.Run(w.mux)
+</span>        }()
+
+        <span class="cov0" title="0">select </span>{
+        case &lt;-ctx.Done():
+                <span class="cov0" title="0">w.log.Info("Asynq worker stopping")
+                w.server.Shutdown()
+                return ctx.Err()</span>
+        case err := &lt;-errCh:
+                <span class="cov0" title="0">return err</span>
+        }
+}
+</pre>
+		
+		<pre class="file" id="file58" style="display: none">package worker
+
+import (
+        "context"
+        "fmt"
+        "log/slog"
+)
+
+type Registry struct {
+        handlers map[string]Handler
+        log      *slog.Logger
+}
+
+func NewRegistry(log *slog.Logger, handlers ...Handler) (*Registry, error) {
+        <span class="cov8" title="1">m := make(map[string]Handler, len(handlers))
+        for _, h := range handlers </span>{
+                <span class="cov8" title="1">t := h.Type()
+                if t == "" </span>{
+                        <span class="cov0" title="0">return nil, fmt.Errorf("Handler %T: empty type", h)
+</span>                }
+                <span class="cov8" title="1">if _, exists := m[t]; exists </span>{
+                        <span class="cov8" title="1">return nil, fmt.Errorf("Duplicate handler for type %q", t)
+</span>                }
+                <span class="cov8" title="1">m[t] = h
+                log.Info("Handle registered", "type", t)</span>
+        }
+        <span class="cov8" title="1">return &amp;Registry{handlers: m, log: log}, nil</span>
+}
+
+func (r *Registry) Handle(ctx context.Context, taskType string, payload []byte) error {
+        <span class="cov8" title="1">h, ok := r.handlers[taskType]
+        if !ok </span>{
+                <span class="cov8" title="1">return fmt.Errorf("No handler for type %q", taskType)
+</span>        }
+        <span class="cov8" title="1">return h.Handle(ctx, payload)</span>
+}
+
+func (r *Registry) Types() []string {
+        <span class="cov0" title="0">types := make([]string, 0, len(r.handlers))
+        for t := range r.handlers </span>{
+                <span class="cov0" title="0">types = append(types, t)
+</span>        }
+        <span class="cov0" title="0">return types</span>
+}
+</pre>
+		
+		<pre class="file" id="file59" style="display: none">package river
+
+import "encoding/json"
+
+type oracleArgs struct {
+        Payload json.RawMessage `json:"payload"`
+}
+
+func (oracleArgs) Kind() string { <span class="cov0" title="0">return "market-data-oracle" }</span>
+</pre>
+		
+		<pre class="file" id="file60" style="display: none">package river
+
+import (
+        "context"
+        "errors"
+        "fmt"
+        "log/slog"
+        "time"
+
+        "github.com/jackc/pgx/v5"
+        "github.com/jackc/pgx/v5/pgxpool"
+        "github.com/merloot/market-data/internal/worker"
+        "github.com/riverqueue/river"
+        "github.com/riverqueue/river/riverdriver/riverpgxv5"
+)
+
+type Worker struct {
+        client *river.Client[pgx.Tx]
+        log    *slog.Logger
+}
+
+type oracleWorker struct {
+        river.WorkerDefaults[oracleArgs]
+        registry *worker.Registry
+        log      *slog.Logger
+}
+
+func (w *oracleWorker) Work(ctx context.Context, job *river.Job[oracleArgs]) error {
+        <span class="cov0" title="0">w.log.Info("River job receiver", "type", job.Kind)
+        return w.registry.Handle(ctx, job.Kind, job.Args.Payload)
+</span>}
+
+func NewWorker(
+        ctx context.Context,
+        dsn string,
+        registry *worker.Registry,
+        log *slog.Logger,
+) (*Worker, func(), error) {
+        <span class="cov0" title="0">pool, err := pgxpool.New(ctx, dsn)
+        if err != nil </span>{
+                <span class="cov0" title="0">return nil, nil, fmt.Errorf("Pool: %w", err)
+</span>        }
+
+        <span class="cov0" title="0">types := make(map[string]bool)
+        workers := river.NewWorkers()
+        for _, t := range registry.Types() </span>{
+                <span class="cov0" title="0">types[t] = true
+</span>
+                // TODO
+                <span class="cov0" title="0">if types["market-data-oracle"] </span>{
+                        <span class="cov0" title="0">river.AddWorker(workers, &amp;oracleWorker{
+                                registry: registry,
+                                log:      log,
+                        })
+                        log.Info("River handler registered", "type", t)
+</span>                }
+        }
+
+        <span class="cov0" title="0">client, err := river.NewClient(riverpgxv5.New(pool), &amp;river.Config{
+                Workers: workers,
+                Queues: map[string]river.QueueConfig{
+                        river.QueueDefault: {MaxWorkers: 10},
+                },
+        })
+        if err != nil </span>{
+                <span class="cov0" title="0">pool.Close()
+                return nil, nil, fmt.Errorf("River client: %w", err)
+</span>        }
+
+        <span class="cov0" title="0">return &amp;Worker{client: client, log: log}, pool.Close, nil</span>
+}
+
+func (w *Worker) Run(ctx context.Context) error {
+        <span class="cov0" title="0">w.log.Info("River worker starting", "ctxErr", ctx.Err())
+</span>
+        <span class="cov0" title="0">startErrCh := make(chan error, 1)
+        go func() </span>{
+                <span class="cov0" title="0">startErrCh &lt;- w.client.Start(ctx)
+</span>        }()
+
+        <span class="cov0" title="0">&lt;-ctx.Done()
+        w.log.Info("River worker stopping", "ctxErr", ctx.Err())
+</span>
+        <span class="cov0" title="0">stopCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+        defer cancel()
+</span>
+        <span class="cov0" title="0">if err := w.client.Stop(stopCtx); err != nil &amp;&amp; !errors.Is(err, context.Canceled) </span>{
+                <span class="cov0" title="0">w.log.Error("River client stop", "err", err)
+</span>        }
+
+        <span class="cov0" title="0">return ctx.Err()</span>
+}
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>
