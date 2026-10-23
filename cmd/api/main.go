@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/joho/godotenv"
+	goredis "github.com/redis/go-redis/v9"
 
 	"fmt"
 
@@ -23,6 +24,9 @@ import (
 	"github.com/merloot/market-data/internal/marketservice"
 	"github.com/merloot/market-data/internal/provider/coingecko"
 	"github.com/merloot/market-data/internal/provider/coinmarketcap"
+	"github.com/merloot/market-data/internal/realtime"
+	"github.com/merloot/market-data/internal/realtime/memory"
+	redisrealtime "github.com/merloot/market-data/internal/realtime/redis"
 	"github.com/merloot/market-data/internal/storage/postgres"
 )
 
@@ -133,6 +137,12 @@ func run() error {
 
 	v1Svc := newMarketDataV1Service(currencyRepo, historyRepo)
 
+	subscriber, cleanup, err := buildSubscriber(cfg, log)
+	if err != nil {
+		return err
+	}
+	defer cleanup()
+
 	deps := &httpapi.Deps{
 		Debug: &debug.Deps{
 			MarketService: debugSvc,
@@ -140,6 +150,7 @@ func run() error {
 		},
 		V1: &v1.Deps{
 			MarketService: v1Svc,
+			Subscriber:    subscriber,
 			Log:           log,
 		},
 		Log: log,
@@ -179,4 +190,18 @@ func run() error {
 
 	log.Info("api stopped")
 	return nil
+}
+
+func buildSubscriber(cfg *config.Config, log *slog.Logger) (realtime.EventSubscriber, func(), error) {
+	switch cfg.Realtime.Backend {
+	case "memory":
+		_, sub := memory.New()
+		return sub, func() {}, nil
+	case "redis":
+		rdb := goredis.NewClient(&goredis.Options{Addr: cfg.Redis.Addr})
+		log.Info("realtime backend", "backend", "redis", "addr", cfg.Redis.Addr)
+		return redisrealtime.NewSubscriber(rdb), func() { rdb.Close() }, nil
+	default:
+		return nil, nil, fmt.Errorf("Unknown realtime backend: %q", cfg.Realtime.Backend)
+	}
 }
