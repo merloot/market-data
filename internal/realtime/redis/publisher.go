@@ -9,6 +9,11 @@ import (
 	goredis "github.com/redis/go-redis/v9"
 )
 
+const (
+	MarketCapUpdatedChannel = "marketcap.updated"
+	PriceUpdatedChannel     = "price.updated"
+)
+
 type Publisher struct {
 	client *goredis.Client
 }
@@ -18,26 +23,22 @@ func NewPublisher(client *goredis.Client) *Publisher {
 }
 
 func (p *Publisher) PublishPriceUpdated(ctx context.Context, event market.PriceUpdated) error {
-	payload, err := json.Marshal(event)
-	if err != nil {
-		return fmt.Errorf("Marshal: %w", err)
-	}
-
-	if err := p.client.Publish(ctx, "price.updated", payload).Err(); err != nil {
-		return fmt.Errorf("Publish: %w", err)
-	}
-
-	return nil
+	return p.publish(ctx, PriceUpdatedChannel, event)
 }
 
 func (p *Publisher) PublishMarketCapUpdated(ctx context.Context, event market.MarketCapUpdated) error {
+	return p.publish(ctx, MarketCapUpdatedChannel, event)
+}
+
+func (p *Publisher) publish(ctx context.Context, channel string, event any) error {
 	payload, err := json.Marshal(event)
 	if err != nil {
 		return fmt.Errorf("Marshal: %w", err)
 	}
 
-	if err := p.client.Publish(ctx, "marketcap.updated", payload).Err(); err != nil {
+	if err := p.client.Publish(ctx, channel, payload).Err(); err != nil {
 		return fmt.Errorf("Publish: %w", err)
 	}
+
 	return nil
 }
