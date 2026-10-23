@@ -14,22 +14,19 @@ import (
 var _ realtime.EventPublisher = (*redisreal.Publisher)(nil)
 
 func TestPublisher_PublishPriceUpdated(t *testing.T) {
-	t.Parallel()
-
-	client, cleanup := setupRedis(t)
-	defer cleanup()
+	testFlush(t)
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	sub := client.Subscribe(ctx, redisreal.PriceUpdatedChannel)
+	sub := testClient.Subscribe(ctx, redisreal.PriceUpdatedChannel)
 	defer sub.Close()
 
 	if _, err := sub.Receive(ctx); err != nil {
 		t.Fatalf("subscribe: %v", err)
 	}
 
-	p := redisreal.NewPublisher(client)
+	p := redisreal.NewPublisher(testClient)
 
 	if err := p.PublishPriceUpdated(ctx, market.PriceUpdated{
 		CoinName:                 "BTC",
@@ -57,22 +54,19 @@ func TestPublisher_PublishPriceUpdated(t *testing.T) {
 }
 
 func TestPublisher_PublishMarketCapUpdated(t *testing.T) {
-	t.Parallel()
-
-	client, cleanup := setupRedis(t)
-	defer cleanup()
+	testFlush(t)
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	sub := client.Subscribe(ctx, redisreal.MarketCapUpdatedChannel)
+	sub := testClient.Subscribe(ctx, redisreal.MarketCapUpdatedChannel)
 	defer sub.Close()
 
 	if _, err := sub.Receive(ctx); err != nil {
 		t.Fatalf("subscribe: %v", err)
 	}
 
-	p := redisreal.NewPublisher(client)
+	p := redisreal.NewPublisher(testClient)
 
 	if err := p.PublishMarketCapUpdated(ctx, market.MarketCapUpdated{
 		CoinName:                     "ETH",

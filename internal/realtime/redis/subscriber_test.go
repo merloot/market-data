@@ -2,26 +2,25 @@ package redis_test
 
 import (
 	"context"
-	"encoding/json"
 	"sync"
 	"testing"
 	"time"
 
 	"github.com/merloot/market-data/internal/domain/market"
+	"github.com/merloot/market-data/internal/realtime"
 	redisreal "github.com/merloot/market-data/internal/realtime/redis"
 )
 
+var _ realtime.EventSubscriber = (*redisreal.Subscriber)(nil)
+
 func TestSubscriber_SubscribePriceUpdated(t *testing.T) {
-	t.Parallel()
+	testFlush(t)
 
-	client, cleanup := setupRedis(t)
-	defer cleanup()
-
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	sub := redisreal.NewSubscriber(client)
-	pub := redisreal.NewPublisher(client)
+	sub := redisreal.NewSubscriber(testClient)
+	pub := redisreal.NewPublisher(testClient)
 
 	ch, stop, err := sub.SubscribePriceUpdated(ctx)
 	if err != nil {
@@ -37,34 +36,27 @@ func TestSubscriber_SubscribePriceUpdated(t *testing.T) {
 		t.Fatalf("publish: %v", err)
 	}
 
-	select {
-	case payload := <-ch:
-		var got market.PriceUpdated
-		if err := json.Unmarshal(payload, &got); err != nil {
-			t.Fatalf("unmarshal: %v", err)
-		}
-		if got.CoinName != "BTC" {
-			t.Errorf("coin = %q, want BTC", got.CoinName)
-		}
-		if got.Price != 50000 {
-			t.Errorf("price = %v, want 50000", got.Price)
-		}
-	case <-time.After(3 * time.Second):
-		t.Fatal("timeout waiting for message")
+	got := waitMessage(t, ch, 2*time.Second)
+
+	if got.CoinName != "BTC" {
+		t.Errorf("coin = %q, want BTC", got.CoinName)
+	}
+	if got.Price != 50000 {
+		t.Errorf("price = %v, want 50000", got.Price)
+	}
+	if got.PriceChangePercentage24h != 5.5 {
+		t.Errorf("change = %v, want 5.5", got.PriceChangePercentage24h)
 	}
 }
 
 func TestSubscriber_SubscribeMarketCapUpdated(t *testing.T) {
-	t.Parallel()
+	testFlush(t)
 
-	client, cleanup := setupRedis(t)
-	defer cleanup()
-
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	sub := redisreal.NewSubscriber(client)
-	pub := redisreal.NewPublisher(client)
+	sub := redisreal.NewSubscriber(testClient)
+	pub := redisreal.NewPublisher(testClient)
 
 	ch, stop, err := sub.SubscribeMarketCapUpdated(ctx)
 	if err != nil {
@@ -80,31 +72,24 @@ func TestSubscriber_SubscribeMarketCapUpdated(t *testing.T) {
 		t.Fatalf("publish: %v", err)
 	}
 
-	select {
-	case payload := <-ch:
-		var got market.MarketCapUpdated
-		if err := json.Unmarshal(payload, &got); err != nil {
-			t.Fatalf("unmarshal: %v", err)
-		}
-		if got.CoinName != "ETH" {
-			t.Errorf("coin = %q, want ETH", got.CoinName)
-		}
-	case <-time.After(3 * time.Second):
-		t.Fatal("timeout waiting for message")
+	got := waitMessage(t, ch, 2*time.Second)
+
+	if got.CoinName != "ETH" {
+		t.Errorf("coin = %q, want ETH", got.CoinName)
+	}
+	if got.MarketCap != 400000000000 {
+		t.Errorf("marketCap = %v, want 4e11", got.MarketCap)
 	}
 }
 
 func TestSubscriber_MultipleMessages(t *testing.T) {
-	t.Parallel()
+	testFlush(t)
 
-	client, cleanup := setupRedis(t)
-	defer cleanup()
-
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	sub := redisreal.NewSubscriber(client)
-	pub := redisreal.NewPublisher(client)
+	sub := redisreal.NewSubscriber(testClient)
+	pub := redisreal.NewPublisher(testClient)
 
 	ch, stop, err := sub.SubscribePriceUpdated(ctx)
 	if err != nil {
@@ -123,19 +108,13 @@ func TestSubscriber_MultipleMessages(t *testing.T) {
 	}
 
 	var mu sync.Mutex
-	var received []string
+	received := make([]string, 0, 3)
 
 	for i := 0; i < 3; i++ {
-		select {
-		case payload := <-ch:
-			var got market.PriceUpdated
-			_ = json.Unmarshal(payload, &got)
-			mu.Lock()
-			received = append(received, got.CoinName)
-			mu.Unlock()
-		case <-time.After(3 * time.Second):
-			t.Fatalf("timeout after %d messages", i)
-		}
+		got := waitMessage(t, ch, 2*time.Second)
+		mu.Lock()
+		received = append(received, got.CoinName)
+		mu.Unlock()
 	}
 
 	if len(received) != 3 {
@@ -144,14 +123,11 @@ func TestSubscriber_MultipleMessages(t *testing.T) {
 }
 
 func TestSubscriber_ContextCancel(t *testing.T) {
-	t.Parallel()
-
-	client, cleanup := setupRedis(t)
-	defer cleanup()
+	testFlush(t)
 
 	ctx, cancel := context.WithCancel(context.Background())
 
-	sub := redisreal.NewSubscriber(client)
+	sub := redisreal.NewSubscriber(testClient)
 
 	ch, stop, err := sub.SubscribePriceUpdated(ctx)
 	if err != nil {
@@ -161,26 +137,16 @@ func TestSubscriber_ContextCancel(t *testing.T) {
 
 	cancel()
 
-	select {
-	case _, ok := <-ch:
-		if ok {
-			t.Error("channel should be closed after context cancel")
-		}
-	case <-time.After(2 * time.Second):
-		t.Fatal("channel not closed after context cancel")
-	}
+	waitClosed(t, ch, 2*time.Second)
 }
 
 func TestSubscriber_Cleanup(t *testing.T) {
-	t.Parallel()
+	testFlush(t)
 
-	client, cleanup := setupRedis(t)
-	defer cleanup()
-
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	sub := redisreal.NewSubscriber(client)
+	sub := redisreal.NewSubscriber(testClient)
 
 	ch, stop, err := sub.SubscribePriceUpdated(ctx)
 	if err != nil {
@@ -189,27 +155,17 @@ func TestSubscriber_Cleanup(t *testing.T) {
 
 	stop()
 
-	select {
-	case _, ok := <-ch:
-		if ok {
-			t.Error("channel should be closed after cleanup")
-		}
-	case <-time.After(2 * time.Second):
-		t.Fatal("channel not closed after cleanup")
-	}
+	waitClosed(t, ch, 2*time.Second)
 }
 
 func TestSubscriber_Isolation(t *testing.T) {
-	t.Parallel()
+	testFlush(t)
 
-	client, cleanup := setupRedis(t)
-	defer cleanup()
-
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	sub := redisreal.NewSubscriber(client)
-	pub := redisreal.NewPublisher(client)
+	sub := redisreal.NewSubscriber(testClient)
+	pub := redisreal.NewPublisher(testClient)
 
 	priceCh, stopPrice, err := sub.SubscribePriceUpdated(ctx)
 	if err != nil {
@@ -225,8 +181,33 @@ func TestSubscriber_Isolation(t *testing.T) {
 	}
 
 	select {
-	case payload := <-priceCh:
-		t.Errorf("unexpected message in price channel: %s", payload)
+	case got := <-priceCh:
+		t.Errorf("unexpected message in price channel: %+v", got)
+	case <-time.After(500 * time.Millisecond):
+	}
+}
+
+func TestSubscriber_JSONDecodeError_Skipped(t *testing.T) {
+	testFlush(t)
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	sub := redisreal.NewSubscriber(testClient)
+
+	ch, stop, err := sub.SubscribePriceUpdated(ctx)
+	if err != nil {
+		t.Fatalf("subscribe: %v", err)
+	}
+	defer stop()
+
+	if err := testClient.Publish(ctx, redisreal.PriceUpdatedChannel, "not json").Err(); err != nil {
+		t.Fatalf("publish raw: %v", err)
+	}
+
+	select {
+	case got := <-ch:
+		t.Errorf("unexpected message: %+v", got)
 	case <-time.After(500 * time.Millisecond):
 	}
 }
