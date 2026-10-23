@@ -129,7 +129,7 @@ func TestPublisher_LastPrice(t *testing.T) {
 func TestPublisher_LastMarketCap(t *testing.T) {
 	t.Parallel()
 
-	pub,_ := memory.New()
+	pub, _ := memory.New()
 	ctx := context.Background()
 
 	if _, ok := pub.LastMarketCap("ETH"); ok {
