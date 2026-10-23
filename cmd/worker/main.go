@@ -139,7 +139,8 @@ func buildWorker(
 func buildPublisher(cfg *config.Config, rdb *goredis.Client) (realtime.EventPublisher, error) {
 	switch cfg.Realtime.Backend {
 	case "memory":
-		return memory.NewPublisher(), nil
+		pub, _ := memory.New()
+		return pub, nil
 	case "redis":
 		return redisrealtime.NewPublisher(rdb), nil
 	default:
