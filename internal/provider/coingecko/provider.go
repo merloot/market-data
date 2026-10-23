@@ -45,7 +45,7 @@ func (c *Provider) GetLogo(ctx context.Context, currency string) (string, error)
 	return "", nil
 }
 
-func (c *Provider) CheckCurrencyData(ctx context.Context, currencies []market.CurrencyToFind) (map[string]market.CurrencyData, error) {
+func (c *Provider) CheckCurrencyData(ctx context.Context, currencies []string) (map[string]market.CurrencyData, error) {
 	return map[string]market.CurrencyData{}, nil
 }
 
@@ -91,7 +91,7 @@ func (c *Provider) GetMarketDataList(ctx context.Context, currencies []string) (
 
 	result := make(map[string]market.MarketData, len(raw))
 	for _, item := range raw {
-		result[item.Symbol] = market.MarketData{
+		result[item.ID] = market.MarketData{
 			CurrentPrice:      item.CurrentPrice,
 			MarketCap:         item.MarketCap,
 			CirculatingSupply: item.CirculatingSupply,
@@ -102,8 +102,8 @@ func (c *Provider) GetMarketDataList(ctx context.Context, currencies []string) (
 	return result, nil
 }
 
-func (c *Provider) GetMarketDataChart(ctx context.Context, currency market.Currency, days int) (market.MarketDataChart, error) {
-	url := fmt.Sprintf("%s/coins/%s/market_chart?vs_currency=usd&days=%d", c.baseUrl, currency.CoinGecko, days)
+func (c *Provider) GetMarketDataChart(ctx context.Context, currency string, days int) (market.MarketDataChart, error) {
+	url := fmt.Sprintf("%s/coins/%s/market_chart?vs_currency=usd&days=%d", c.baseUrl, currency, days)
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	if err != nil {
@@ -137,6 +137,6 @@ func (c *Provider) GetMarketDataChart(ctx context.Context, currency market.Curre
 	}, nil
 }
 
-func (c *Provider) GetMarketDataChartRange(ctx context.Context, currency market.Currency, from, to time.Time) (market.MarketDataChart, error) {
+func (c *Provider) GetMarketDataChartRange(ctx context.Context, currency string, from, to time.Time) (market.MarketDataChart, error) {
 	return market.MarketDataChart{}, nil
 }

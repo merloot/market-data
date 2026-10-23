@@ -12,9 +12,8 @@ import (
 
 func (p *Provider) GetMarketDataList(
 	ctx context.Context,
-	currencies []string,
+	ids []string,
 ) (map[string]market.MarketData, error) {
-	ids := currencies
 	if len(ids) == 0 {
 		return map[string]market.MarketData{}, nil
 	}
@@ -48,13 +47,13 @@ func (p *Provider) GetMarketDataList(
 
 func convertMarketDataList(raw marketDataListResponse) map[string]market.MarketData {
 	result := make(map[string]market.MarketData, len(raw.Data))
-	for coinName, item := range raw.Data {
+	for id, item := range raw.Data {
 		usd, ok := item.Quote["USD"]
 		if !ok {
 			continue
 		}
-		result[coinName] = market.MarketData{
-			Currency:          coinName,
+		result[id] = market.MarketData{
+			Currency:          id,
 			CurrentPrice:      usd.Price,
 			MarketCap:         usd.MarketCap,
 			CirculatingSupply: item.CirculatingSupply,

@@ -33,7 +33,7 @@ func New(ctx context.Context, cfg config.DatabaseConfig, opts ...Options) (*Repo
 	poolConfig.ConnConfig.ConnectTimeout = cfg.ConnectionTimeout
 	poolConfig.HealthCheckPeriod = time.Minute
 	poolConfig.ConnConfig.Tracer = &tracelog.TraceLog{
-		Logger: newPgxLogger(o.logger),
+		Logger:   newPgxLogger(o.logger),
 		LogLevel: tracelog.LogLevelDebug,
 	}
 
@@ -41,7 +41,6 @@ func New(ctx context.Context, cfg config.DatabaseConfig, opts ...Options) (*Repo
 	if err != nil {
 		return nil, fmt.Errorf("Create pool: %w", err)
 	}
-
 
 	repo := &Repo{pool: pool, log: o.logger}
 

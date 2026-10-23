@@ -89,7 +89,7 @@ func (s *Service) collectActual(
 ) ([]market.MarketDataHistory, error) {
 	list, err := s.provider.GetMarketDataList(ctx, currencies)
 	if err != nil {
-		return nil, fmt.Errorf("Get market data list: %w", err)
+		s.log.Warn("get market data list partial", "err", err)
 	}
 
 	var history []market.MarketDataHistory
@@ -100,13 +100,16 @@ func (s *Service) collectActual(
 		}
 
 		history = append(history, market.MarketDataHistory{
-			Currency:          c.CoinGecko,
+			Currency:          c.CoinName,
 			Price:             data.CurrentPrice,
 			MarketCap:         data.MarketCap,
 			CirculatingSupply: data.CirculatingSupply,
 			TotalSupply:       data.TotalSupply,
 			Timestamp:         data.LastUpdated,
 		})
+	}
+	if len(history) == 0 {
+		return nil, fmt.Errorf("get market data list: %w", err)
 	}
 	return history, nil
 }

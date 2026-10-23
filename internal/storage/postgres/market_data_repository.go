@@ -121,7 +121,7 @@ func (r *MarketDataHistoryRepository) GetMarketDataList(
 			FROM
 				market_data_history mdh
 			WHERE mdh.currency = c.coin_name
-			AND timestamp >= $1
+			AND timestamp <= $1
 			ORDER BY
 				mdh.timestamp DESC
 			LIMIT

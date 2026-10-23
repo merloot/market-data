@@ -36,26 +36,42 @@ func (s *Service) GetLogo(ctx context.Context, c market.Currency) (string, error
 	return p.GetLogo(ctx, c.CoinName)
 }
 
+// TODO: implement
 func (s *Service) CheckCurrencyData(ctx context.Context, currencies []market.CurrencyToFind) (map[string]market.CurrencyData, error) {
-	grouped := groupToFind(currencies)
-	return fanOut(ctx, grouped, func(ctx context.Context, provider string, items []market.CurrencyToFind) (map[string]market.CurrencyData, error) {
-		p, err := s.impl(provider)
-
-		if err != nil {
-			return nil, err
-		}
-		return p.CheckCurrencyData(ctx, items)
-	})
+	return nil, nil
 }
 
-func (s *Service) GetMarketDataList(ctx context.Context, currencies []market.Currency) (map[string]market.MarketData, error) {
+func (s *Service) GetMarketDataList(
+	ctx context.Context,
+	currencies []market.Currency,
+) (map[string]market.MarketData, error) {
 	grouped := groupByCurrencies(currencies)
-	return fanOut(ctx, grouped, func(ctx context.Context, provider string, codes []string) (map[string]market.MarketData, error) {
+
+	return fanOut(ctx, grouped, func(ctx context.Context, provider string, items []market.Currency) (map[string]market.MarketData, error) {
 		p, err := s.impl(provider)
 		if err != nil {
 			return nil, err
 		}
-		return p.GetMarketDataList(ctx, codes)
+
+		ids, idToCurrency := idsAndIndex(provider, items)
+		if len(ids) == 0 {
+			return map[string]market.MarketData{}, nil
+		}
+
+		byID, err := p.GetMarketDataList(ctx, ids)
+		if err != nil {
+			return nil, err
+		}
+
+		result := make(map[string]market.MarketData, len(byID))
+		for id, data := range byID {
+			c, ok := idToCurrency[id]
+			if !ok {
+				continue
+			}
+			result[c.CoinName] = data
+		}
+		return result, nil
 	})
 }
 
@@ -65,7 +81,8 @@ func (s *Service) GetMarketDataChart(ctx context.Context, currency market.Curren
 		return market.MarketDataChart{}, err
 	}
 
-	return p.GetMarketDataChart(ctx, currency, days)
+	id := idForProvider(currency.Provider, currency)
+	return p.GetMarketDataChart(ctx, id, days)
 }
 
 func (s *Service) GetMarketDataChartRange(ctx context.Context, currency market.Currency, from, to time.Time) (market.MarketDataChart, error) {
@@ -73,5 +90,7 @@ func (s *Service) GetMarketDataChartRange(ctx context.Context, currency market.C
 	if err != nil {
 		return market.MarketDataChart{}, err
 	}
-	return p.GetMarketDataChartRange(ctx, currency, from, to)
+
+	id := idForProvider(currency.Provider, currency)
+	return p.GetMarketDataChartRange(ctx, id, from, to)
 }

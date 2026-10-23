@@ -44,7 +44,7 @@ func (c *Provider) GetLogo(ctx context.Context, currency string) (string, error)
 	return "", nil
 }
 
-func (c *Provider) CheckCurrencyData(ctx context.Context, currencies []market.CurrencyToFind) (map[string]market.CurrencyData, error) {
+func (c *Provider) CheckCurrencyData(ctx context.Context, currencies []string) (map[string]market.CurrencyData, error) {
 	return map[string]market.CurrencyData{}, nil
 }
 

@@ -1,13 +1,16 @@
 package coinmarketcap
 
-import "time"
+import (
+	"encoding/json"
+	"time"
+)
 
 type marketDataListResponse struct {
 	Data map[string]marketDataItem `json:"data"`
 }
 
 type marketDataItem struct {
-	ID                string           `json:"id"`
+	ID                json.Number      `json:"id"`
 	CirculatingSupply float64          `json:"circulating_supply"`
 	TotalSupply       float64          `json:"total_supply"`
 	LastUpdated       time.Time        `json:"last_updated"`
