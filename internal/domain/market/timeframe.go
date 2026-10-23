@@ -148,4 +148,3 @@ func calculateCustomBucket(from, to time.Time) Bucket {
 		return Bucket1d
 	}
 }
-
