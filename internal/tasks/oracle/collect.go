@@ -108,8 +108,5 @@ func (s *Service) collectActual(
 			Timestamp:         data.LastUpdated,
 		})
 	}
-	if len(history) == 0 {
-		return nil, fmt.Errorf("get market data list: %w", err)
-	}
 	return history, nil
 }

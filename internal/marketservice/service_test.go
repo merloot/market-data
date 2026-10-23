@@ -13,20 +13,20 @@ func TestService_GetMarketDataList_MergesProviders(t *testing.T) {
 	t.Parallel()
 
 	cg := &fakeProvider{
-		name:       "coingecko",
-		marketData: map[string]market.MarketData{"btc": {CurrentPrice: 50000}},
+		name:       market.ProviderCoinGecko,
+		marketData: map[string]market.MarketData{"bitcoin": {CurrentPrice: 50000, Currency: "bitcoin"}},
 	}
 
 	cmc := &fakeProvider{
-		name:       "coinmarketcap",
-		marketData: map[string]market.MarketData{"eth": {CurrentPrice: 3000}},
+		name:       market.ProviderCoinmarketcap,
+		marketData: map[string]market.MarketData{"1": {CurrentPrice: 3000, Currency: "1"}},
 	}
 
 	svc := marketservice.NewService(cg, cmc)
 
 	got, err := svc.GetMarketDataList(context.Background(), []market.Currency{
-		{Provider: "coingecko", CoinName: "btc"},
-		{Provider: "coinmarketcap", CoinName: "eth"},
+		{CoinName: "btc", CoinGecko: "bitcoin", Provider: market.ProviderCoinGecko},
+		{CoinName: "eth", CoinMarketCap: "1", Provider: market.ProviderCoinmarketcap},
 	})
 
 	if err != nil {
@@ -44,20 +44,20 @@ func TestService_GetMarketDataList_PartialFailure(t *testing.T) {
 	t.Parallel()
 
 	ok := &fakeProvider{
-		name:       "coingecko",
-		marketData: map[string]market.MarketData{"btc": {CurrentPrice: 500}},
+		name:       market.ProviderCoinGecko,
+		marketData: map[string]market.MarketData{"bitcoin": {CurrentPrice: 500, Currency: "bitcoin",},},
 	}
 
 	broken := &fakeProvider{
-		name: "coinmarketcap",
+		name: market.ProviderCoinmarketcap,
 		err:  errors.New("Api is down"),
 	}
 
 	svc := marketservice.NewService(ok, broken)
 
 	got, err := svc.GetMarketDataList(context.Background(), []market.Currency{
-		{Provider: "coingecko", CoinName: "btc"},
-		{Provider: "coinmarketcap", CoinName: "eth"},
+		{CoinName: "BTC", CoinGecko: "bitcoin", Provider: market.ProviderCoinGecko},
+		{CoinName: "ETH", CoinMarketCap: "1", Provider: market.ProviderCoinmarketcap},
 	})
 
 	if err == nil {
@@ -86,16 +86,16 @@ func TestService_GetMarketDataListGroupByProvider(t *testing.T) {
 	t.Parallel()
 
 	cg := &fakeProvider{
-		name:       "coingecko",
+		name:       market.ProviderCoinGecko,
 		marketData: map[string]market.MarketData{},
 	}
 
 	svc := marketservice.NewService(cg)
 
 	_, _ = svc.GetMarketDataList(context.Background(), []market.Currency{
-		{CoinName: "btc", Provider: "coingecko"},
-		{CoinName: "eth", Provider: "coingecko"},
-		{CoinName: "sol", Provider: "coingecko"},
+		{CoinName: "btc", Provider: market.ProviderCoinGecko, CoinGecko: "btc"},
+		{CoinName: "eth", Provider: market.ProviderCoinGecko, CoinGecko: "eth"},
+		{CoinName: "sol", Provider: market.ProviderCoinGecko, CoinGecko: "sol"},
 	})
 
 	if len(cg.gotCodes) != 3 {

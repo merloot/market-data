@@ -50,11 +50,7 @@ func (c *Provider) CheckCurrencyData(ctx context.Context, currencies []string) (
 }
 
 func (c *Provider) GetMarketDataList(ctx context.Context, currencies []string) (map[string]market.MarketData, error) {
-	ids := make([]string, len(currencies))
-
-	copy(ids, currencies)
-
-	url := fmt.Sprintf("%s/coins/markets?vs_currency=usd&ids=%s", c.baseUrl, strings.Join(ids, ","))
+	url := fmt.Sprintf("%s/coins/markets?vs_currency=usd&ids=%s", c.baseUrl, strings.Join(currencies, ","))
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	if err != nil {

@@ -25,9 +25,19 @@ func (r *Registry) Tasks(ctx context.Context) ([]Task, error) {
 	for _, b := range r.builders {
 		built, err := b.Build(ctx)
 		if err != nil {
-			return nil, fmt.Errorf("Builder %q: %w", b.Name(), err)
+			return nil, fmt.Errorf("builder %q: %w", b.Name(), err)
 		}
-		r.log.Info("Tasks builder", "builder", b.Name(), "count", len(built))
+
+		for _, t := range built {
+			if t.Type == "" {
+				return nil, fmt.Errorf("builder %q: task %q has empty Type", b.Name(), t.Name)
+			}
+			if t.Spec == "" {
+				return nil, fmt.Errorf("builder %q: task %q has empty Spec", b.Name(), t.Name)
+			}
+		}
+
+		r.log.Info("tasks built", "builder", b.Name(), "count", len(built))
 		tasks = append(tasks, built...)
 	}
 	return tasks, nil

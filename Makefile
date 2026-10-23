@@ -2,11 +2,22 @@
 # Makefile — market-data
 # ============================================================
 
+.DEFAULT_GOAL := help
+
 .PHONY: help
 help: ## Показать все команды
 	@echo "Доступные команды:"
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
-		awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-25s\033[0m %s\n", $$1, $$2}'
+		awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-28s\033[0m %s\n", $$1, $$2}'
+
+# ============================================================
+# Переменные
+# ============================================================
+
+BIN_DIR        := bin
+MIGRATIONS_DIR := internal/storage/postgres/migrations
+API_URL        := http://localhost:8080
+WS_URL         := ws://localhost:8080
 
 # ============================================================
 # Разработка
@@ -27,7 +38,6 @@ run-scheduler: ## Запустить scheduler
 # ============================================================
 
 .PHONY: build build-api build-worker build-scheduler build-migrate build-seed
-BIN_DIR := bin
 
 build: build-api build-worker build-scheduler build-migrate build-seed ## Собрать все бинарники
 
@@ -56,6 +66,7 @@ build-seed: ## Собрать seed
 # ============================================================
 
 .PHONY: test test-race test-cover test-integration
+
 test: ## Запустить все тесты
 	go test ./... -count=1
 
@@ -76,7 +87,6 @@ test-integration: ## Только интеграционные тесты (testc
 # ============================================================
 
 .PHONY: migrate-up migrate-down migrate-status migrate-version migrate-create
-MIGRATIONS_DIR := internal/storage/postgres/migrations
 
 migrate-up: ## Применить все миграции
 	goose -dir $(MIGRATIONS_DIR) postgres "$(DATABASE_URL)" up
@@ -118,7 +128,6 @@ redis-marketcap: ## Подписаться на marketcap.updated
 # ============================================================
 
 .PHONY: curl-health curl-currencies curl-info curl-chart curl-sse
-API_URL := http://localhost:8080
 
 curl-health: ## Проверить /healthz
 	curl -s $(API_URL)/healthz
@@ -134,6 +143,19 @@ curl-chart: ## График за 24h (BTC)
 
 curl-sse: ## SSE-поток (Ctrl+C для выхода)
 	curl -N $(API_URL)/v1/stream/sse
+
+# ============================================================
+# WebSocket
+# ============================================================
+
+.PHONY: ws-connect ws-connect-wscat
+ws-connect: ## Подключиться к WS (websocat)
+	@which websocat > /dev/null || (echo "Установи websocat: cargo install websocat"; exit 1)
+	websocat $(WS_URL)/v1/stream/ws
+
+ws-connect-wscat: ## Подключиться к WS (wscat)
+	@which wscat > /dev/null || (echo "Установи wscat: npm install -g wscat"; exit 1)
+	wscat -c $(WS_URL)/v1/stream/ws
 
 # ============================================================
 # Утилиты
@@ -159,42 +181,13 @@ clean: ## Удалить артефакты
 	rm -rf $(BIN_DIR) coverage.out coverage.html
 
 # ============================================================
-# Docker (если нужно)
+# Docker
 # ============================================================
 
-.PHONY: docker-up docker-down docker-logs
+.PHONY: docker-up docker-down docker-down-v docker-logs docker-ps docker-restart
+
 docker-up: ## Поднять Postgres + Redis
 	docker compose up -d
-
-docker-down: ## Остановить
-	docker compose down
-
-docker-logs: ## Логи контейнеров
-	docker compose logs -f
-
-# ============================================================
-# Полный цикл
-# ============================================================
-
-.PHONY: dev
-dev: ## Полный цикл: миграции + сиды + запуск API
-	$(MAKE) migrate-up
-	$(MAKE) seed
-	$(MAKE) run-api
-
-.PHONY: check
-check: tidy vet test-race ## Проверка перед коммитом
-	@echo "✅ Всё чисто"
-
-
-	# ============================================================
-# Docker — инфраструктура
-# ============================================================
-
-.PHONY: docker-up docker-down docker-logs docker-ps docker-restart
-docker-up: ## Поднять Postgres + Redis
-	docker compose up -d
-	@echo "Ждём healthcheck..."
 	@sleep 3
 	@docker compose ps
 
@@ -213,11 +206,8 @@ docker-ps: ## Статус контейнеров
 docker-restart: ## Перезапустить
 	docker compose restart
 
-# ============================================================
-# Docker — приложение
-# ============================================================
-
 .PHONY: docker-build docker-run-api docker-run-worker docker-run-scheduler
+
 docker-build: ## Собрать образ приложения
 	docker build -t market-data:latest .
 
@@ -240,15 +230,14 @@ docker-run-scheduler: docker-build ## Запустить scheduler в Docker
 		market-data:latest /usr/local/bin/scheduler
 
 # ============================================================
-# Docker — миграции / сиды
+# Полный цикл
 # ============================================================
 
-.PHONY: docker-migrate docker-seed
-docker-migrate: ## Миграции в Docker
-	goose -dir internal/storage/postgres/migrations postgres \
-		"postgres://user:pass@localhost:5432/market_data_go?sslmode=disable" up
+.PHONY: dev check
+dev: ## Миграции + сиды + запуск API
+	$(MAKE) migrate-up
+	$(MAKE) seed
+	$(MAKE) run-api
 
-docker-seed: ## Сиды в Docker
-	docker run --rm --network host \
-		-e DATABASE_URL="$(DATABASE_URL)" \
-		market-data:latest /usr/local/bin/seed
+check: tidy vet test-race ## Проверка перед коммитом
+	@echo "✅ Всё чисто"
