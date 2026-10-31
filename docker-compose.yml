@@ -71,8 +71,7 @@ services:
     ports:
       - "9187:9187"
     environment:
-      DATA_SOURCE_NAME:
-        "postgres://${POSTGRES_USER:-user}:${POSTGRES_PASSWORD:-pass}@host.docker.internal:5432/${POSTGRES_DB:-market_data_go}?sslmode=disable"
+      DATA_SOURCE_NAME: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@host.docker.internal:${POSTGRES_PORT:-5432}/${POSTGRES_DB}?sslmode=disable"
     # depends_on:
     #   postgres:
     #     condition: service_healthy
