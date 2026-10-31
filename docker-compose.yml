@@ -48,6 +48,16 @@ services:
     environment:
       GF_SECURITY_ADMIN_PASSWORD: admin
 
+  postgres-exporter:
+    image: quay.io/prometheuscommunity/postgres-exporter:v0.15.0
+    container_name: market-data-postgres-exporter
+    ports:
+      - "9187:9187"
+    environment:
+      DATA_SOURCE_NAME: "postgres://${POSTGRES_USER:-user}:${POSTGRES_PASSWORD:-pass}@postgres:5432/${POSTGRES_DB:-market_data_go}?sslmode=disable"
+    depends_on:
+      postgres:
+        condition: service_healthy
 volumes:
   pgdata:
   redisdata:
