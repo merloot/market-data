@@ -22,6 +22,7 @@ import (
 	v1 "github.com/merloot/market-data/internal/httpapi/v1"
 	"github.com/merloot/market-data/internal/httpapi/v1/marketdata"
 	"github.com/merloot/market-data/internal/marketservice"
+	providermetrics"github.com/merloot/market-data/internal/provider/metrics"
 	"github.com/merloot/market-data/internal/provider/coingecko"
 	"github.com/merloot/market-data/internal/provider/coinmarketcap"
 	"github.com/merloot/market-data/internal/realtime"
@@ -131,7 +132,10 @@ func run() error {
 
 	cg := coingecko.New(cfg.Provider.Coingecko.ApiKey)
 	cmc := coinmarketcap.New(cfg.Provider.Coinmarketcap.ApiKey)
-	marketSvc := marketservice.NewService(cg, cmc)
+
+	cgM := providermetrics.New(cg)
+	cmcM:= providermetrics.New(cmc)
+	marketSvc := marketservice.NewService(cgM, cmcM)
 
 	debugSvc := marketSvc
 
