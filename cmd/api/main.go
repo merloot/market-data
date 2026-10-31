@@ -121,7 +121,7 @@ func run() error {
 
 	initCtx := context.Background()
 
-	repo, err := postgres.New(initCtx, cfg.Database, postgres.WithLogger(log))
+	repo, err := postgres.New(initCtx, cfg.Database, postgres.WithLogger(log),postgres.WithMetrics())
 	if err != nil {
 		return err
 	}

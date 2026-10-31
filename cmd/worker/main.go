@@ -52,6 +52,7 @@ func run() error {
 	repo, err := postgres.New(initCtx, cfg.Database,
 		postgres.WithLogger(log),
 		postgres.WithPingRetries(5),
+		postgres.WithMetrics(),
 	)
 	if err != nil {
 		return fmt.Errorf("Postgres: %w", err)
