@@ -6,7 +6,10 @@ import (
 	"log/slog"
 	"net"
 	"net/http"
+	"strconv"
 	"time"
+
+	"github.com/merloot/market-data/internal/observability"
 )
 
 type responseWriter struct {
@@ -56,6 +59,21 @@ func Recovery(log *slog.Logger) func(http.Handler) http.Handler {
 				}
 			}()
 			next.ServeHTTP(w, r)
+		})
+	}
+}
+
+func Metrics() func(http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			start := time.Now()
+			rw := &responseWriter{ResponseWriter: w, status: http.StatusOK}
+
+			next.ServeHTTP(rw, r)
+
+			status := strconv.Itoa(rw.status)
+			observability.HTTPRequests.WithLabelValues(r.Method, r.URL.Path, status).Inc()
+			observability.HTTPDuration.WithLabelValues(r.Method, r.URL.Path).Observe(time.Since(start).Seconds())
 		})
 	}
 }
