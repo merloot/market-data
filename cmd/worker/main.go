@@ -5,18 +5,21 @@ import (
 	"errors"
 	"fmt"
 	"log/slog"
+	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
 
 	"github.com/joho/godotenv"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	goredis "github.com/redis/go-redis/v9"
 
 	"github.com/merloot/market-data/internal/config"
 	"github.com/merloot/market-data/internal/marketservice"
 	"github.com/merloot/market-data/internal/provider/coingecko"
 	"github.com/merloot/market-data/internal/provider/coinmarketcap"
+	providermetrics "github.com/merloot/market-data/internal/provider/metrics"
 	"github.com/merloot/market-data/internal/realtime"
 	"github.com/merloot/market-data/internal/realtime/memory"
 	redisrealtime "github.com/merloot/market-data/internal/realtime/redis"
@@ -51,6 +54,7 @@ func run() error {
 	repo, err := postgres.New(initCtx, cfg.Database,
 		postgres.WithLogger(log),
 		postgres.WithPingRetries(5),
+		postgres.WithMetrics(),
 	)
 	if err != nil {
 		return fmt.Errorf("Postgres: %w", err)
@@ -61,11 +65,14 @@ func run() error {
 	defer rdb.Close()
 
 	cg := coingecko.New(cfg.Provider.Coingecko.ApiKey)
-	coinmarketcap := coinmarketcap.New(cfg.Provider.Coinmarketcap.ApiKey)
+	cmc := coinmarketcap.New(cfg.Provider.Coinmarketcap.ApiKey)
+
+	cgM := providermetrics.New(cg)
+	cmcM := providermetrics.New(cmc)
 
 	currencyRepository := postgres.NewCurrencyRepository(repo)
 	marketDataHistoryRepository := postgres.NewMarketDataHistoryRepository(repo)
-	provider := marketservice.NewService(cg, coinmarketcap)
+	provider := marketservice.NewService(cgM, cmcM)
 
 	publisher, err := buildPublisher(cfg, rdb)
 	if err != nil {
@@ -101,13 +108,53 @@ func run() error {
 	runCtx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
 
-	log.Info("Worker starting", "backend", cfg.Queue.Backend)
-	if err := w.Run(runCtx); err != nil && !errors.Is(err, context.Canceled) {
-		return fmt.Errorf("Run: %w", err)
+	metricsAddr := ":9091"
+	metricsSrv := &http.Server{
+		Addr:              metricsAddr,
+		Handler:           newMetricsMux(),
+		ReadHeaderTimeout: 5 * time.Second,
 	}
 
-	log.Info("Worker stopped")
+	errCh := make(chan error, 2)
+	go func() {
+		log.Info("worker starting", "backend", cfg.Queue.Backend)
+		if err := w.Run(runCtx); err != nil && !errors.Is(err, context.Canceled) {
+			errCh <- fmt.Errorf("worker: %w", err)
+		}
+	}()
+
+	go func() {
+		log.Info("metrics server starting", "addr", metricsAddr)
+		if err := metricsSrv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+			errCh <- fmt.Errorf("metrics server: %w", err)
+		}
+	}()
+
+	select {
+	case err := <-errCh:
+		return err
+	case <-runCtx.Done():
+		log.Info("shutdown signal received")
+	}
+
+	shutdownCxt, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	if err := metricsSrv.Shutdown(shutdownCxt); err != nil {
+		log.Error("metrics server shutdown failed", "err", err)
+	}
+	log.Info("worker shutdown")
 	return nil
+}
+
+func newMetricsMux() *http.ServeMux {
+	mux := http.NewServeMux()
+	mux.Handle("GET /metrics", promhttp.Handler())
+	mux.HandleFunc("GET /healthz", func(w http.ResponseWriter, _ *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		_, _ = w.Write([]byte("ok"))
+	})
+	return mux
 }
 
 func buildWorker(

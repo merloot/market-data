@@ -1,0 +1,55 @@
+{
+  "annotations": {"list": []},
+  "editable": true,
+  "panels": [
+    {
+      "title": "HTTP RPS",
+      "type": "timeseries",
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0},
+      "targets": [
+        {
+          "expr": "rate(marketdata_http_requests_total[1m])",
+          "legendFormat": "{{method}} {{path}} {{status}}"
+        }
+      ]
+    },
+    {
+      "title": "HTTP p95 latency",
+      "type": "timeseries",
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0},
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.95, rate(marketdata_http_request_duration_seconds_bucket[5m]))",
+          "legendFormat": "{{method}} {{path}}"
+        }
+      ]
+    },
+    {
+      "title": "Provider requests",
+      "type": "timeseries",
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8},
+      "targets": [
+        {
+          "expr": "rate(marketdata_provider_requests_total[1m])",
+          "legendFormat": "{{provider}} {{method}} {{status}}"
+        }
+      ]
+    },
+    {
+      "title": "DB pool",
+      "type": "timeseries",
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8},
+      "targets": [
+        {"expr": "pgx_pool_acquired_connections", "legendFormat": "acquired"},
+        {"expr": "pgx_pool_idle_connections", "legendFormat": "idle"}
+      ]
+    }
+  ],
+  "refresh": "10s",
+  "schemaVersion": 39,
+  "tags": ["marketdata"],
+  "time": {"from": "now-1h", "to": "now"},
+  "timezone": "browser",
+  "title": "Market Data",
+  "uid": "marketdata"
+}

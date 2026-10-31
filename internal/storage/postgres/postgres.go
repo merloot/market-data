@@ -2,13 +2,16 @@ package postgres
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log/slog"
 	"time"
 
+	pgxpool_prometheus "github.com/cmackenzie1/pgxpool-prometheus"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/jackc/pgx/v5/tracelog"
 	"github.com/merloot/market-data/internal/config"
+	"github.com/prometheus/client_golang/prometheus"
 )
 
 type Repo struct {
@@ -47,7 +50,18 @@ func New(ctx context.Context, cfg config.DatabaseConfig, opts ...Options) (*Repo
 	if err := repo.pingWithRetry(ctx, cfg.ConnectionTimeout, o.pingRetries); err != nil {
 		pool.Close()
 		return nil, fmt.Errorf("Ping: %w", err)
+	}
 
+	if o.metrics {
+		collector := pgxpool_prometheus.NewPgxPoolStatsCollector(pool, "marketdata")
+		if err := prometheus.Register(collector); err != nil {
+			var already prometheus.AlreadyRegisteredError
+			if !errors.As(err, &already) {
+				repo.log.Warn("pgxpool metrics register failed", "err", err)
+			}
+		} else {
+			repo.log.Info("pgxpool metrics registered")
+		}
 	}
 
 	repo.log.Info("Postgres connected", "max_conns", cfg.MaxConns, "min_cons", cfg.MinConns)
